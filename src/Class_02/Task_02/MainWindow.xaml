@@ -1,0 +1,25 @@
+﻿<Window x:Class="Task_02.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task_02"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel x:Name="layoutPnl">
+            <Button x:Name="myButton" Width="120" Height="40" Content="Кнопка" HorizontalAlignment="Center" Background="Blue" />
+            <Button x:Name="myBtn">
+                <Button.Content>Кнопка</Button.Content>
+                <Button.Width>120</Button.Width>
+                <Button.Height>40</Button.Height>
+                <Button.HorizontalAlignment>
+                    <HorizontalAlignment>Center</HorizontalAlignment>
+                </Button.HorizontalAlignment>
+                <Button.Background>
+                    <SolidColorBrush Opacity="0.5" Color="Red" />
+                </Button.Background>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
