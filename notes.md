@@ -14,6 +14,9 @@
     - [Взаимодействие кода C# и XAML](#взаимодействие-кода-c-и-xaml)
     - [Создание элементов в коде C#](#создание-элементов-в-коде-c)
   - [Сложные свойства и конвертеры типов](#сложные-свойства-и-конвертеры-типов)
+    - [Сложные свойства в WPF](#сложные-свойства-в-wpf)
+    - [Конвертеры типов в WPF](#конвертеры-типов-в-wpf)
+    - [Конвертеры значений](#конвертеры-значений)
   - [Пространства имен из C# в XAML](#пространства-имен-из-c-в-xaml)
 
 ## Введение в WPF
@@ -512,6 +515,101 @@ public abstract class Brush
 ```
 
 Преимуществом такого подхода является то, что у объектов мы можем установить дополнительные параметры.
+
+#### Сложные свойства в WPF
+<dfn title="сложное свойство">Сложные свойства</dfn> (Complex Properties) в WPF — это свойства, которые не могут быть представлены простым типом данных, таким как строка или целое число. Они часто используются для установки значений, которые требуют более сложной структуры, например, цвета, точки или геометрические фигуры. В XAML сложные свойства обычно устанавливаются с помощью элементов свойств, которые позволяют определить несколько атрибутов внутри одного свойства.
+
+Пример установки сложного свойства — задание цвета фона кнопки с использованием элемента `Button.Background`:
+```xml
+<Button>
+    <Button.Background>
+        <SolidColorBrush Color="Blue" Opacity="0.5" />
+    </Button.Background>
+</Button>
+```
+
+В этом примере свойство `Background` кнопки является сложным, поскольку оно требует определения цвета и прозрачности заливки.
+
+#### Конвертеры типов в WPF
+<dfn title="конвертер типов">Конвертеры типов</dfn> (TypeConverters) — это специальные объекты в WPF, которые преобразуют значения строк из кода XAML в соответствующие типы свойств объектов, используемых в коде C#. Они необходимы для того, чтобы свойства могли быть установлены с помощью строковых значений в XAML, а затем преобразованы в необходимый тип данных.
+
+Например, если вы хотите задать цвет заливки кнопки с помощью строки "Blue", конвертер типа поможет преобразовать эту строку в объект `Brush`, который может быть использован для заливки фона кнопки.
+
+Пример использования конвертера типа
+```xml
+<Button Background="Blue" />
+```
+
+В этом случае конвертер типа автоматически преобразует строку "Blue" в объект `SolidColorBrush` с соответствующим цветом.
+
+Чтобы создать собственный конвертер типа, необходимо реализовать интерфейс `TypeConverter`. Этот интерфейс требует реализации методов `ConvertFrom` и `ConvertTo`, которые отвечают за преобразование строковых значений в нужный тип и обратно:
+```cs
+public class CustomTypeConverter : TypeConverter
+{
+    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+    {
+        if (sourceType == typeof(string))
+            return true;
+        return base.CanConvertFrom(context, sourceType);
+    }
+
+    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+    {
+        if (value is string strValue)
+        {
+            // Преобразуйте строку в нужный тип
+            return CustomType.Parse(strValue);
+        }
+        return base.ConvertFrom(context, culture, value);
+    }
+
+    public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+    {
+        if (destinationType == typeof(string))
+            return true;
+        return base.CanConvertTo(context, destinationType);
+    }
+
+    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+    {
+        if (destinationType == typeof(string))
+        {
+            // Преобразуйте объект в строку
+            return value.ToString();
+        }
+        return base.ConvertTo(context, culture, value, destinationType);
+    }
+}
+```
+
+Эта реализация позволяет преобразовывать строковые значения в пользовательский тип и обратно, что делает возможным использование этого типа в XAML с помощью строковых значений.
+
+#### Конвертеры значений
+<dfn title="конвертер значений">Конвертеры значений</dfn> (ValueConverters) — это еще один тип конвертеров в WPF, которые используются для преобразования данных между источником и целевым объектом в привязках данных. Они позволяют преобразовывать данные в более удобочитаемый или подходящий для отображения формат, например, преобразование числовых кодов в строки или дат в определенный формат.
+
+Пример использования конвертера значений:
+```cs
+public class DateToStringConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is DateTime date)
+        {
+            return date.ToString("dd MMMM yyyy");
+        }
+        return value;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is string strValue)
+        {
+            return DateTime.Parse(strValue);
+        }
+        return value;
+    }
+}
+```
 
 ### Пространства имен из C# в XAML
 По умолчанию в WPF в XAML подключается предустановленный набор пространств имен *xml*. Но мы можем задействовать любые другие пространства имен и их функциональность в том числе и стандартные пространства имен платформы .NET, например, `System` или `System.Collections`. Например, по умолчанию в определении элемента Window подключается локальное пространство имен:
