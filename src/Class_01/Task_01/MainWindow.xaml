@@ -1,0 +1,26 @@
+﻿<Window x:Class="Task_01.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task_01"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid x:Name="layout">
+        <StackPanel x:Name="panel" Margin="20" MaxWidth="300">
+            <Button x:Name="buttonXaml" Width="100" Height="30" Content="Button XAML" />
+            <TextBlock>Логин</TextBlock>
+            <TextBox x:Name="loginTxb"></TextBox>
+            <TextBlock>Пароль</TextBlock>
+            <PasswordBox x:Name="passTxb"></PasswordBox>
+            <Button x:Name="myButton" Width="120" Height="40" Content="Кнопка">
+                <Button.HorizontalAlignment>
+                    <HorizontalAlignment>Center</HorizontalAlignment>
+                </Button.HorizontalAlignment>
+                <Button.Background>
+                    <SolidColorBrush Opacity="0.5" Color="Red" />
+                </Button.Background>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
