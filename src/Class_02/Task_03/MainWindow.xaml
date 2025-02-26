@@ -1,0 +1,64 @@
+﻿<Window x:Class="Task_03.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task_03"
+
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="800">
+    <Window.Resources>
+        <col:ArrayList x:Key="days">
+            <sys:String>Понедельник</sys:String>
+            <sys:String>Вторник</sys:String>
+            <sys:String>Среда</sys:String>
+            <sys:String>Четверг</sys:String>
+            <sys:String>Пятница</sys:String>
+            <sys:String>Суббота</sys:String>
+            <sys:String>Воскресенье</sys:String>
+        </col:ArrayList>
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <ListBox>
+                <local:Car Brand="Toyota" Name="Camry" Price="4150000" />
+                <local:Car Brand="BMW" Name="X5" Price="9900000" />
+                <local:Car Brand="Kia" Name="Sportage" Price="3950000" />
+            </ListBox>
+
+            <ListBox>
+                <ListBoxItem>
+                    <ListBoxItem.Content>
+                        <local:Car Brand="Toyota" Name="Camry" Price="4150000" />
+                    </ListBoxItem.Content>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <ListBoxItem.Content>
+                        <local:Car Brand="BMW" Name="X5" Price="9900000" />
+                    </ListBoxItem.Content>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <ListBoxItem.Content>
+                        <local:Car Brand="Kia" Name="Sportage" Price="3950000" />
+                    </ListBoxItem.Content>
+                </ListBoxItem>
+            </ListBox>
+
+            <ListBox>
+                <ListBoxItem>Понедельник</ListBoxItem>
+                <ListBoxItem>Вторник</ListBoxItem>
+                <ListBoxItem>Среда</ListBoxItem>
+                <ListBoxItem>Четверг</ListBoxItem>
+                <ListBoxItem>Пятница</ListBoxItem>
+                <ListBoxItem>Суббота</ListBoxItem>
+                <ListBoxItem>Воскресенье</ListBoxItem>
+            </ListBox>
+
+            <ListBox x:Name="listDays" ItemsSource="{StaticResource days}" />
+
+        </StackPanel>
+    </Grid>
+</Window>
