@@ -804,7 +804,30 @@ xmlns:sys="clr-namespace:System;assembly=mscorlib"
 
 Контейнеры компоновки позволяют эффективно распределить доступное пространство между элементами, найти для него наиболее предпочтительные размеры.
 
-Все выше перечисленные контейнеры компоновки наследуются от абстрактного класса `Panel`.
+Все выше перечисленные контейнеры компоновки наследуются от абстрактного класса `Panel`, а само дерево наследования можно представить следующим образом:
+
+```mermaid
+flowchart BT
+    WrapPanel --> P([Panel])
+    StackPanel --> P
+    DockPanel --> P
+    Grid --> P
+    UniformGrid --> P
+    Canvas --> P
+    P --> FrameworkElement
+    FrameworkElement --> UIElement
+    UIElement --> V([Visual])
+    V --> DependencyObject
+    DependencyObject --> DO([DispatcherObject])
+    DO --> Object
+```
+
+где:
+```mermaid
+flowchart
+    Concrete[Конкретный класс]
+    Abstract([Абстрактный класс])
+```
 
 В WPF при компоновке и расположении элементов внутри окна нам надо придерживаться следующих принципов:
 
