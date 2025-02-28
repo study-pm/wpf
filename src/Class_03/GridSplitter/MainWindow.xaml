@@ -1,0 +1,47 @@
+﻿<Window x:Class="GridSplitter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GridSplitter"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="button">
+            <Style.Setters>
+                <Setter Property="Background" Value="DarkCyan" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontFamily" Value="Verdana" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Margin" Value="5" />
+            </Style.Setters>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource button}" x:Key="btn">
+            <Style.Setters>
+                <Setter Property="Background" Value="DarkMagenta" />
+                <Setter Property="MaxHeight" Value="30" />
+                <Setter Property="MaxWidth" Value="100" />
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <UniformGrid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource btn}">Left</Button>
+            <Button Grid.Column="2" Style="{StaticResource btn}">Right</Button>
+            <GridSplitter Grid.Column="1" Grid.RowSpan="3" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+            <GridSplitter Grid.ColumnSpan="3" Grid.Row="1" ShowsPreview="True" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+            <Button Grid.Column="0" Grid.Row="2" Style="{StaticResource button}">Left</Button>
+            <Button Grid.Column="2" Grid.Row="2" Style="{StaticResource button}">Right</Button>
+        </Grid>
+    </UniformGrid>
+</Window>

@@ -1,0 +1,77 @@
+﻿<Window x:Class="StackPanel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StackPanel"
+        mc:Ignorable="d"
+        Title="StackPanel" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="DarkBlue"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style.Setters>
+        </Style>
+        <Style TargetType="Button" x:Key="button">
+            <Style.Setters>
+                <Setter Property="Background" Value="DarkCyan" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontFamily" Value="Verdana" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Margin" Value="5" />
+            </Style.Setters>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource button}" x:Key="btn">
+            <Style.Setters>
+                <Setter Property="Background" Value="DarkMagenta" />
+                <Setter Property="MaxHeight" Value="30" />
+                <Setter Property="MaxWidth" Value="100" />
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock>Orientation Default/Vertical</TextBlock>
+        <StackPanel Grid.Row="1">
+            <Button Style="{StaticResource btn}">Default</Button>
+            <Button Style="{StaticResource btn}" HorizontalAlignment="Left">Left</Button>
+            <Button Style="{StaticResource btn}" HorizontalAlignment="Center">Center</Button>
+            <Button Style="{StaticResource btn}" HorizontalAlignment="Right">Right</Button>
+            <Button Style="{StaticResource btn}" HorizontalAlignment="Stretch">Stretch</Button>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <Button Style="{StaticResource button}">Default</Button>
+            <Button Style="{StaticResource button}" HorizontalAlignment="Left">Left</Button>
+            <Button Style="{StaticResource button}" HorizontalAlignment="Center">Center</Button>
+            <Button Style="{StaticResource button}" HorizontalAlignment="Right">Right</Button>
+            <Button Style="{StaticResource button}" HorizontalAlignment="Stretch">Stretch</Button>
+        </StackPanel>
+        <TextBlock Grid.Column="1">Orientation Horizontal</TextBlock>
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+            <Button Style="{StaticResource btn}">Default</Button>
+            <Button Style="{StaticResource btn}" VerticalAlignment="Top">Top</Button>
+            <Button Style="{StaticResource btn}" VerticalAlignment="Center">Center</Button>
+            <Button Style="{StaticResource btn}" VerticalAlignment="Bottom">Bottom</Button>
+            <Button Style="{StaticResource btn}" VerticalAlignment="Stretch">Stretch</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+            <Button Style="{StaticResource button}">Default</Button>
+            <Button Style="{StaticResource button}" VerticalAlignment="Top">Top</Button>
+            <Button Style="{StaticResource button}" VerticalAlignment="Center">Center</Button>
+            <Button Style="{StaticResource button}" VerticalAlignment="Bottom">Bottom</Button>
+            <Button Style="{StaticResource button}" VerticalAlignment="Stretch">Stretch</Button>
+        </StackPanel>
+    </Grid>
+</Window>
