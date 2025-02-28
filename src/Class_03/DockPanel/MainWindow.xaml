@@ -73,7 +73,13 @@
             <Button Style="{StaticResource button}" DockPanel.Dock="Left">Left</Button>
             <Button Style="{StaticResource button}" DockPanel.Dock="Right">Right</Button>
             <Button Style="{StaticResource button}" DockPanel.Dock="Bottom">Bottom</Button>
-            <Button Style="{StaticResource button}">LastFillChild</Button>
+            <Button Style="{StaticResource button}">
+                <WrapPanel>
+                    <TextBlock Foreground="Blue">Last</TextBlock>
+                    <TextBlock Foreground="Red">Fill</TextBlock>
+                    <TextBlock FontWeight="Bold">Child</TextBlock>
+                </WrapPanel>
+            </Button>
         </DockPanel>
     </Grid>
 </Window>
