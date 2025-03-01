@@ -53,6 +53,21 @@
       - [`VerticalAlignment`](#verticalalignment)
     - [Отступы / `Margin`](#отступы--margin)
     - [`Panel.ZIndex`](#panelzindex)
+- [Элементы управления](#элементы-управления)
+  - [Обзор элементов управления и их свойств](#обзор-элементов-управления-и-их-свойств)
+  - [Основные свойства элементов управления](#основные-свойства-элементов-управления)
+    - [`Name`](#name)
+    - [`FieldModifier`](#fieldmodifier)
+    - [`Visibility`](#visibility)
+    - [Свойства настройки шрифтов](#свойства-настройки-шрифтов)
+    - [`Cursor`](#cursor)
+    - [`FlowDirection`](#flowdirection)
+    - [Цвета фона и шрифта](#цвета-фона-и-шрифта)
+  - [Позиционирование контента](#позиционирование-контента)
+    - [Content Alignment](#content-alignment)
+    - [Padding](#padding)
+  - [Обработчики событий](#обработчики-событий)
+  - [Элементы управления содержимым](#элементы-управления-содержимым)
 
 ## Введение в WPF
 
@@ -1764,4 +1779,425 @@ public class DataGridCellsPanel : System.Windows.Controls.VirtualizingPanel
     <Button Width="60" Height="30" Panel.ZIndex="1" Margin="45 45 0 0">Два</Button>
     <Button Width="60" Height="30" Panel.ZIndex="0" Margin="75 75 0 0">Три</Button>
 </Grid>
+```
+
+## Элементы управления
+
+### Обзор элементов управления и их свойств
+Чтобы как-то взаимодействовать с пользователем, получать от пользователя ввод с клавиатуры или мыши и использовать введенные данные в программе, нам нужны элементы управления. WPF предлагает нам богатый стандартный набор элементов управления
+
+Все элементы управления могут быть условно разделены на несколько подгрупп:
+
+- **Элементы управления содержимым**, например кнопки (`Button`), метки (`Label`).
+
+- **Специальные контейнеры**, которые содержат другие элементы, но в отличие от элементов `Grid` или `Canvas` не являются контейнерами компоновки — `ScrollViewer`,`GroupBox`.
+
+- **Декораторы**, чье предназначение создание определенного фона вокруг вложенных элементов, например, `Border` или `Viewbox`.
+
+- **Элементы управления списками**, например, `ListBox`, `ComboBox`.
+
+- **Текстовые элементы управления**, например, `TextBox`, `RichTextBox`.
+
+- **Элементы, основанные на диапазонах значений**, например, `ProgressBar`, `Slider`.
+
+- **Элементы для работ с датами**, например, `DatePicker` и `Calendar`.
+
+- **Остальные элементы управления**, которые не вошли в предыдущие подгруппы, например, `Image`.
+
+Все элементы управления наследуются от общего класса **`System.Window.Controls.Control`** и имеют ряд общих свойств. А общую иерархию элементов управления можно представить следующим образом:
+
+```mermaid
+flowchart BT
+    All[All Controls]--> Control
+    S([Shape]) --> FrameworkElement
+    Control --> FrameworkElement
+    P([Panel]) --> FrameworkElement
+    FrameworkElement --> UIElement
+    UIElement --> V([Visual])
+    V --> DependencyObject
+    DependencyObject --> DO([DispatcherObject])
+    DO --> Object
+```
+
+где:
+```mermaid
+flowchart
+    Concrete[Конкретный класс]
+    Abstract([Абстрактный класс])
+```
+
+Вкратце рассмотрим, что представляют все эти типы в иерархии.
+
+- `System.Threading.DispatcherObject`
+
+    *[STA]: Single-Thread Affinity
+    В основе WPF лежит модель STA (Single-Thread Affinity), согласно которой за пользовательский интерфейс отвечает один поток. И чтобы пользовательский интерфейс мог взаимодействовать с другими потоками, WPF использует концепцию <dfn title="диспетчер">диспетчера</dfn> — специального объекта, управляющего обменом сообщениями, через которые взаимодействуют потоки. Наследование типов от класса `DispatcherObject` позволяет получить доступ к подобному объекту-диспетчеру и и другим функциям по управлению параллелизмом.
+
+- `System.Windows.DependencyObject`
+
+    Наследование от этого класса позволяет взаимодействовать с элементами в приложении через их специальную модель свойств, которые называются *свойствами зависимостей* (dependency properties). Эта модель упрощает применение ряда особенностей WPF, например, привязки данных. Так, система свойств зависимостей отслеживает зависимости между значениями свойств, автоматически проверяет их и изменяет при изменении зависимости.
+
+- `System.Windows.Media.Visual`
+
+    Класс `Visual` содержит инструкции, которые отвечают за отрисовку, визуализацию объекта.
+
+- `System.Windows.UIElement`
+
+    Класс `UIElement` добавляет возможности по компоновке элемента, обработку событий и получение ввода.
+
+- `System.Windows.FrameworkElement`
+
+    Класс `FrameworkElement` добавляет поддержку привязки данных, анимации, стилей. Также добавляет ряд свойств, связанных с компоновкой (выравнивание, отступы) и ряд других.
+
+- `System.Windows.Controls.Control`
+
+    Класс `Control` представляет элемент управления, с которым взаимодействует пользователь. Этот класс добавляет ряд дополнительных свойств для поддержки элементами шрифтов, цветов фона, шрифта, а также добавляет поддержку шаблонов — специального механизма в WPF, который позволяет изменять стандартное представление элемента, кастомизировать его.
+
+    И далее от класса `Control` наследуются непосредственно конкретные элементы управления или их базовые классы, которые получают весь функционал, добавляемый к типам в этой иерархии классов.
+
+Рассмотрим некоторые из основных свойств, которые наследуются элементами управления.
+
+### Основные свойства элементов управления
+
+#### `Name`
+Данное свойство определяет имя элемента управления, через которое впоследствии можно будет обращаться к данному элементу, как в коде, так и в *xaml* разметке. Например, в xaml-коде у нас определена следующая кнопка:
+```xml
+<Button x:Name="button1" Width="60" Height="30" Content="Текст" Click="button1_Click" />
+```
+
+Здесь у нас задан атрибут `Click` с названием метода обработчика `button1_Click`, который будет определен в файле кода C# и будет вызываться по нажатию кнопки. Тогда в связанном файле кода C# мы можем обратиться к этой кнопке:
+```cs
+private void button1_Click(object sender, RoutedEventArgs e)
+{
+    button1.Content = "Привет!";
+}
+```
+
+Поскольку свойство `Name` имеет значение `button1`, то через это значение мы можем обратиться к кнопке в коде.
+
+#### `FieldModifier`
+Свойство `FieldModifier` задает модификатор доступа к объекту:
+```xml
+<StackPanel>
+    <Button x:FieldModifier="private" x:Name="button1" Content="Hello World" />
+    <Button x:FieldModifier="internal" x:Name="button2" Content="Hello WPF" />
+</StackPanel>
+```
+
+В качестве значения используются стандартные модификатора доступа языка C#: `private`, `protected`, `internal`, `protected internal` и `public`. В данном случае объявление кнопок с модификаторами будет равноценно следующему их определению в коде:
+```cs
+private Button button1;
+internal Button button2;
+```
+
+Если для элемента не определен атрибут `x:FieldModifier`, то по умолчанию он равен "protected internal".
+
+#### `Visibility`
+Это свойство устанавливает параметры видимости элемента и может принимать одно из трех значений:
+
+- **`Visible`** — элемент виден и участвует в компоновке.
+
+- **`Collapsed`** — элемент не виден и не участвует в компоновке.
+
+- **`Hidden`** — элемент не виден, но при этом участвует в компоновке.
+
+Различия между `Collapsed` и `Hidden` можно продемонстрировать на примере:
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <StackPanel Grid.Column="0" Background="Lavender">
+        <Button Visibility="Collapsed" Content="Панель Collapsed" />
+        <Button Height="20" Content="Visible Button" />
+    </StackPanel>
+    <StackPanel Grid.Column="1" Background="LightGreen">
+        <Button Visibility="Hidden" Content="Панель Hidden" />
+        <Button Height="20" Content="Visible Button" />
+    </StackPanel>
+</Grid>
+```
+
+#### Свойства настройки шрифтов
+- **`FontFamily`** — определяет семейство шрифта (например, Arial, Verdana и т.д.)
+
+- **`FontSize`** — определяет высоту шрифта
+
+- **`FontStyle`** — определяет наклон шрифта, принимает одно из трех значений — **`Normal`**, **`Italic`**, **`Oblique`**.
+
+- **`FontWeight`** — определяет толщину шрифта и принимает ряд значений, как **`Black`**, **`Bold`** и др.
+
+- **`FontStretch`** — определяет, как будет растягивать или сжимать текст, например, значение **`Condensed`** сжимает текст, а **`Expanded`** — растягивает.
+
+Например:
+```xml
+<Button Content="Hello World!" FontFamily="Verdana" FontSize="13" FontStretch="Expanded" />
+```
+
+#### `Cursor`
+Это свойство позволяет нам получить или установить курсор для элемента управления в одно из значений, например, **`Hand`**, **`Arrow`**, **`Wait`** и др. Например, установка курсора в коде c#: `button1.Cursor=Cursors.Hand;`
+
+#### `FlowDirection`
+Данное свойство задает направление текста. Если оно равно `RightToLeft`, то текст начинается с правого края, если — `LeftToRight`, то с левого.
+
+```xml
+<StackPanel>
+    <TextBlock FlowDirection="RightToLeft">RightToLeft</TextBlock>
+    <TextBlock FlowDirection="LeftToRight">LeftToRight</TextBlock>
+</StackPanel>
+```
+
+#### Цвета фона и шрифта
+Свойства **`Background`** и **`Foreground`** задают соответственно цвет фона и текста элемента управления.
+
+Простейший способ задания цвета в коде xaml: `Background="#ffffff"`. В качестве значения свойство `Background` (`Foreground`) может принимать запись в виде шестнадцатеричного значения в формате `#rrggbb`, где `rr` — красная составляющая, `gg` — зеленая составляющая, а `bb` — синяя. Также можно задать цвет в формате `#aarrggbb`.
+
+Либо можно использовать названия цветов напрямую:
+```xml
+<Button Width="60" Height="30" Background="LightGray" Foreground="DarkRed" Content="Цвет" />
+```
+
+Однако при компиляции будет создаваться объект `SolidColorBrush`, который и будет задавать цвет элемента. То есть определение кнопки выше фактически будет равноценно следующему:
+```xml
+<Button Width="60" Height="30" Content="Цвет">
+    <Button.Background>
+        <SolidColorBrush Color="LightGray" />
+    </Button.Background>
+    <Button.Foreground>
+        <SolidColorBrush Color="DarkRed" />
+    </Button.Foreground>
+</Button>
+```
+
+`SolidColorBrush` представляет собой кисть, покрывающую элемент одним цветом. Позже мы подробнее поговорим о цветах. А пока надо знать, что эти записи эквивалентны, кроме того, вторая форма определения цвета позволяет задать другие кисти — например, градиент.
+
+Это надо также учитывать при установке или получении цвета элемента в коде c#:
+```xml
+button1.Background = new SolidColorBrush(Colors.Red);
+button1.Foreground = new SolidColorBrush(Color.FromRgb(0,255, 0));
+```
+
+Класс `Colors` предлагает ряд встроенный цветовых констант, которыми мы можем воспользоваться. А если мы захотим конкретизировать настройки цвета с помощью значений RGB, то можно использовать метод **`Color.FromRgb`**.
+
+### Позиционирование контента
+
+#### Content Alignment
+Выравнивание содержимого внутри элемента задается свойствами **`HorizontalContentAlignment`** (выравнивание по горизонтали) и **`VerticalContentAlignment`** (выравнивание по вертикали), аналогичными свойствам `VerticalAlignment`/`HorizontalAlignment`. Свойство `HorizontalContentAlignment` принимает значения `Left`, `Right`, `Center` (положение по центру), `Stretch` (растяжение по всей ширине). Например:
+```xml
+<StackPanel>
+    <Button Margin="5" HorizontalContentAlignment="Left" Content="Left" Height="90" Width="500" />
+    <Button Margin="5" HorizontalContentAlignment="Right" Content="Right" Height="90" Width="500" />
+    <Button Margin="5" HorizontalContentAlignment="Center" Content="Center" Height="90" Width="500" />
+</StackPanel>
+```
+
+`VerticalContentAlignment` принимает значения `Top` (положение в верху), `Bottom` (положение внизу), `Center` (положение по центру), `Stretch` (растяжение по всей высоте).
+
+#### Padding
+С помощью свойства `Padding` мы можем установить отступ содержимого элемента:
+```xml
+<StackPanel>
+    <Button x:Name="button1" Padding="50 30 0 40" HorizontalContentAlignment="Left">
+        Hello World
+    </Button>
+    <Button x:Name="button2" Padding="60 20 0 30" HorizontalContentAlignment="Center">
+        Hello World
+    </Button>
+</StackPanel>
+```
+
+Свойство `Padding` задается в формате `Padding="отступ_слева отступ_сверху отступ_справа отступ_снизу"`.
+
+Если со всех четырех сторон предполагается один и тот же отступ, то, как и в случае с `Margin`, мы можем задать одно число:
+```xml
+<Button x:Name="button2" Padding="20"  Content="Hello World" />
+```
+
+Важно понимать, от какой точки задается отступ. В случае с первой кнопкой в ней контент выравнивается по левому краю, поэтому отступ слева будет предполагать отступ от левого края элемента `Button`. А вторая кнопка располагается по центру. Поэтому для нее отступ слева предполагает отступ от той точки, в которой содержимое бы находилось при центрировании без применения `Padding`.
+
+Комбинация значений свойств `HorizontalContentAlignment`/`VerticalContentAlignment` и `Padding` позволяет оптимальным образом задать расположение содержимого.
+
+### Обработчики событий
+Для добавления обработчика для какого-либо события объекта необходимо в открывающем теге элемента написать имя события и через знак «=» имя функции-обработчика, либо выбрать команду «Новый обработчик события»:
+
+При выборе команды «Новый обработчик события» в CS-файле, относящемся к  XAML-файлу, будет добавлена соответствующая функция:
+```cs
+private void MenuItem_Click(object sender, RoutedEventArgs e)
+{
+
+}
+```
+
+В обработчике можно обратиться по имени к любому объекту, для которого в  XAML-файле было определено имя с помощью атрибута `Name` или `x:Name`:
+```xml
+<MenuItem Name="mi_open" Header="_Открыть" Click="MenuItem_Click" />
+```
+```cs
+private void MenuItem_Click(object sender, RoutedEventArgs e)
+{
+  mi_open.Background = Brushes.LightGreen;
+}
+```
+
+С помощью объекта `sender`, переданного в качестве параметра, можно получить доступ к элементу управления, для которого возникло обрабатываемое событие, даже в случае, если для него не задано имя:
+```cs
+private void CheckBox_Click(object sender, RoutedEventArgs e)
+{
+  ((FrameworkElement)sender).Visibility = System.Windows.Visibility.Hidden;
+}
+private void CheckBox_Click(object sender, RoutedEventArgs e)
+{
+  MessageBox.Show(((CheckBox)sender).IsChecked.ToString());
+}
+```
+
+В первом примере объект `sender` был приведен к базовому классу `FrameworkElement` для доступа к базовым свойствам, присущим всем элементам управления. Во втором случае объект `sender` был приведен к классу `CheckBox` для доступа к специфическим свойствам данного элемента управления.
+
+Если для нескольких элементов управления определен один обработчик какого-либо события, то для определения выбранного элемента управления в коде обработчика можно использовать свойство `Tag`, доступное для всех элементов управления:
+```cs
+private void MenuItem_Click(object sender, RoutedEventArgs e)
+{
+if (((FrameworkElement)sender).Tag.ToString() == "open") MessageBox.Show("Выбрана команда 'Открыть'");
+else
+if (((FrameworkElement)sender).Tag.ToString() == "save") MessageBox.Show("Выбрана   команда 'Сохранить'");
+}
+```
+
+Наиболее часто используемые события:
+
+| Событие | Описание
+-- | --
+`Click` | Происходит при нажатии на элемент управления
+`MouseMove` | Происходит, когда указатель мыши совершает движение по этому элементу
+`MouseEnter` | Происходит, когда указатель мыши входит в границы данного элемента
+`MouseLeave` | Происходит, когда указатель мыши покидает границы данного элемента
+`MouseDown` | Происходит при нажатии кнопки мыши, если указатель мыши находится на элементе
+`MouseUp` | Происходит, когда кнопка мыши отпускается на элементе
+`MouseWheel` | Происходит при прокрутке пользователем колесика мыши, если указатель мыши находится на элементе
+`KeyDown` | Происходит при нажатии клавиши, если элемент имеет фокус
+`KeyUp` | Происходит при отжатии клавиши, если элемент имеет фокус
+
+### Элементы управления содержимым
+<dfn title="элемент управления содержимым">Элементы управления содержимым</dfn> (content controls) представляют такие элементы управления, которые содержат в себе другой элемент. Все элементы управления содержимым наследуются от класса **`ContentControl`**, который в свою очередь наследуется от класса `System.Window.Controls.Control`.
+
+```mermaid
+flowchart BT
+    CC[Content Control]--> Control
+    Control --> FrameworkElement
+    FrameworkElement --> UIElement
+    UIElement --> V([Visual])
+    V --> DependencyObject
+    DependencyObject --> DO([DispatcherObject])
+    DO --> Object
+```
+
+где:
+```mermaid
+flowchart
+    Concrete[Конкретный класс]
+    Abstract([Абстрактный класс])
+```
+
+
+К элементам управления содержимым относятся такие элементы как `Button`, `Label`, `ToggleButton`, `ToolTip`, `RadioButton`, `CheckBox`, `GroupBox`, `TabItem`, `Expander`, `ScrollViewer`. Также элементом управления содержимым является и главный элемент окна — `Window`.
+
+Отличительной чертой всех этих элементов является наличие свойства **`Content`**, которое и устанавливает вложенный элемент. В этом элементы управления содержимым схожи с контейнерами компоновки. Только контейнеры могут иметь множество вложенных элементов, а элементы управления содержимым только один.
+
+Свойство `Content` может представлять любой объект, который может относиться к одному из двух типов:
+
+- Объект класса, не наследующего от `UIElement`. Для такого объекта вызывается метод `ToString()`, который возвращает строковое преставление объекта. Затем эта строка устанавливается в качестве содержимого.
+
+- Объект класса, наследующего от `UIElement`. Для такого объекта вызывается метод `UIElement.OnRender()`, который выполняет отрисовку внутри элемента управления содержимым.
+
+Рассмотрим на примере кнопки, которая является элементом управления содержимым:
+```xml
+<Button Content="Hello World!" />
+```
+
+В качестве содержимого устанавливается обычная строка. Этот же пример мы можем в XAML прописать иначе:
+```xml
+<Button>
+    <Button.Content>
+        Hello World!
+    </Button.Content>
+</Button>
+```
+
+Либо мы можем использовать сокращенное неявное определения свойства `Content`:
+```xml
+<Button>
+    Hello World!
+</Button>
+```
+
+Возьмем другой пример. Определим кнопку с именем `button1`:
+```xml
+<Window x:Class="ControlsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlsApp"
+        mc:Ignorable="d"
+        Title="Элементы управления" Height="250" Width="300">
+    <StackPanel>
+        <Button x:Name="button1" />
+    </StackPanel>
+</Window>
+```
+
+А в файле коде `MainWindow.xaml.cs` присвоим ее свойству `Content` какой-либо объект:
+```cs
+using System;
+using System.Windows;
+
+namespace ControlsApp
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            double d = 5.6;
+            button1.Content = d;
+        }
+    }
+}
+```
+
+В итоге число конвертируется в строку и устанавливается в качесте содержимого.
+
+Иначе все будет работать, если мы в качестве содержимого используем объект, унаследованный от `UIElement`:
+```xml
+<Button x:Name="button1">
+    <Button Content="Hello" />
+</Button>
+```
+
+Для создания той же кнопки через код C# мы бы могли прописать следующее выражение:
+```cs
+button1.Content = new Button { Content = "Hello" };
+```
+
+В отличие от контейнеров компоновки для элементов управления содержимым мы можем задать только один вложенный элемент. Если же нам надо вложить в элемент управления содержимым несколько элементов, то мы можем использовать те же контейнеры компоновки:
+```xml
+<Button x:Name="button1">
+    <StackPanel>
+        <TextBlock Text="Набор кнопок" />
+        <Button Background="Red" Height="20" Content="Red" />
+        <Button Background="Yellow" Height="20" Content="Yellow" />
+        <Button Background="Green" Height="20" Content="Green" />
+    </StackPanel>
+</Button>
+```
+
+То же самое мы могли бы прописать через код C#:
+```cs
+StackPanel stackPanel = new StackPanel();
+stackPanel.Children.Add(new TextBlock { Text = "Набор кнопок" });
+stackPanel.Children.Add(new Button { Content = "Red", Height = 20, Background = new SolidColorBrush(Colors.Red) });
+stackPanel.Children.Add(new Button { Content = "Yellow", Height = 20, Background = new SolidColorBrush(Colors.Yellow) });
+stackPanel.Children.Add(new Button { Content = "Green", Height = 20, Background = new SolidColorBrush(Colors.Green) });
+button1.Content = stackPanel;
 ```
