@@ -48,6 +48,7 @@
   - [Canvas](#canvas)
   - [UniformGrid](#uniformgrid)
   - [TabPanel](#tabpanel)
+  - [ToolBarOverflowPanel](#toolbaroverflowpanel)
   - [ToolBarPanel](#toolbarpanel)
   - [Основные свойства компоновки элементов](#основные-свойства-компоновки-элементов)
     - [Ширина и высота](#ширина-и-высота)
@@ -1821,6 +1822,61 @@ public class TabPanel : System.Windows.Controls.Panel
 ```
 
 В этом примере `TabPanel` используется внутри шаблона для `TabControl`, чтобы расположить заголовки вкладок. Однако это более продвинутый способ настройки внешнего вида и поведения `TabControl`, а не прямое использование `TabPanel` в коде или XAML для создания пользовательского интерфейса.
+
+### ToolBarOverflowPanel
+
+Определение:
+```cs
+public class ToolBarOverflowPanel : System.Windows.Controls.Panel
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.toolbaroverflowpanel?view=windowsdesktop-9.0
+
+`ToolBarOverflowPanel` — это класс в WPF, который используется для обработки ситуации, когда элементы в панели инструментов (`ToolBar`) не помещаются в доступное пространство. В этом случае избыточные элементы автоматически перемещаются в выпадающее меню, которое отображается на панели инструментов в виде стрелки.
+
+Основные функции `ToolBarOverflowPanel`:
+
+1. **Обработка переполнения**: Когда на панели инструментов не хватает места для всех элементов, `ToolBarOverflowPanel` берет на себя управление избыточными элементами и отображает их в выпадающем меню.
+
+2. **Выпадающее меню**: Пользователь может кликнуть на стрелку в конце панели инструментов, чтобы открыть выпадающее меню и получить доступ к элементам, которые не поместились на панели.
+
+3. **Интеграция с `ToolBar`**: `ToolBarOverflowPanel` тесно связан с элементом управления `ToolBar`, обеспечивая автоматическую обработку переполнения и возможность доступа к скрытым элементам через меню.
+
+Таким образом, `ToolBarOverflowPanel` является важным компонентом для создания удобных и функциональных панелей инструментов в приложениях WPF, позволяя эффективно управлять большим количеством элементов на ограниченном пространстве.
+
+Пример использования ToolBarOverflowPanel
+```xml
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ToolBarOverflowPanel Sample" Height="300" Width="300">
+    <Window.Resources>
+        <Style TargetType="ToolBar">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolBar">
+                        <Border Background="LightGray">
+                            <DockPanel>
+                                <ToolBarPanel DockPanel.Dock="Left" IsItemsHost="True" />
+                                <ToolBarOverflowPanel DockPanel.Dock="Right" />
+                            </DockPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <ToolBar>
+        <Button Content="Кнопка 1" />
+        <Button Content="Кнопка 2" />
+        <Button Content="Кнопка 3" />
+        <!-- Добавьте много кнопок сюда -->
+        <Button Content="Кнопка 10" />
+    </ToolBar>
+</Window>
+```
+
+В этом примере `ToolBarOverflowPanel` используется внутри шаблона для `ToolBar`, чтобы обрабатывать элементы, которые не поместились на панели инструментов. Однако в реальных приложениях это происходит автоматически без необходимости прямого указания `ToolBarOverflowPanel` в XAML.
 
 ### ToolBarPanel
 
