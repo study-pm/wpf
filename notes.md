@@ -47,6 +47,7 @@
     - [GridSplitter](#gridsplitter)
   - [Canvas](#canvas)
   - [UniformGrid](#uniformgrid)
+  - [TabPanel](#tabpanel)
   - [Основные свойства компоновки элементов](#основные-свойства-компоновки-элементов)
     - [Ширина и высота](#ширина-и-высота)
     - [Выравнивание](#выравнивание)
@@ -1750,6 +1751,72 @@ myGrid.Children.Add(txt);
 `UniformGrid` относится к пространству имен `System.Windows.Controls.Primitives`, потому что это базовый компонент, который обеспечивает простой и универсальный способ упорядочивания содержимого в сетке, где все ячейки имеют одинаковый размер. Хотя `UniformGrid` является производным от `Panel`, его включение в `System.Windows.Controls.Primitives` обусловлено его ролью базового компонента, который может быть использован для построения более сложных элементов управления или макетов.
 
 В отличие от других панелей в `System.Windows.Controls`, которые предназначены для более сложных и специализированных макетов, `UniformGrid` предоставляет базовую функциональность, которая может быть полезна при создании различных пользовательских элементов управления или макетов. Это делает его частью базовых примитивов, которые могут быть расширены или использованы в различных контекстах, что и определяет его принадлежность к `System.Windows.Controls.Primitives`.
+
+### TabPanel
+
+Определение:
+```cs
+public class TabPanel : System.Windows.Controls.Panel
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.tabpanel?view=windowsdesktop-9.0
+
+`TabPanel` — это класс из пространства имен `System.Windows.Controls.Primitives`, который используется для организации макета вкладок в элементе управления `TabControl`. Он обеспечивает базовую функциональность для расположения заголовков вкладок и переключения между ними.
+
+Основная задача `TabPanel` — управлять расположением заголовков вкладок в верхней части `TabControl`, что позволяет пользователям переключаться между вкладками. Это достигается за счет того, что `TabPanel` наследуется от `Panel` и переопределяет методы макета для правильного расположения заголовков.
+
+`TabPanel` не используется напрямую в коде или XAML для создания пользовательского интерфейса, а скорее является внутренним компонентом, который используется `TabControl` для организации своих вкладок. Таким образом, `TabPanel` является важной частью реализации `TabControl`, но не является самостоятельным элементом, который можно использовать отдельно.
+
+В отличие от других панелей, таких как `Grid`, `StackPanel` или `UniformGrid`, которые используются для создания различных макетов в приложениях WPF, `TabPanel` специально предназначен для работы с вкладками и не используется для общих целей макета.
+
+Использование `TabPanel` можно увидеть в контексте настройки шаблона для `TabControl`. Например, вы можете определить шаблон для `TabControl`, где `TabPanel` используется для расположения заголовков вкладок.
+
+Пример использования TabPanel в ControlTemplate:
+```xml
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TabControl Template Sample" Height="300" Width="300">
+    <Window.Resources>
+        <Style TargetType="TabControl">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TabPanel Grid.Row="0" Margin="2">
+                                <TabPanel.ItemContainerStyle>
+                                    <Style TargetType="TabItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="TabItem">
+                                                    <Border Margin="2" Background="LightGray">
+                                                        <ContentPresenter ContentSource="Header" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </TabPanel.ItemContainerStyle>
+                            </TabPanel>
+                            <ContentPresenter Grid.Row="1" Margin="2" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <TabControl>
+        <TabItem Header="Вкладка 1">Содержимое вкладки 1</TabItem>
+        <TabItem Header="Вкладка 2">Содержимое вкладки 2</TabItem>
+    </TabControl>
+</Window>
+```
+
+В этом примере `TabPanel` используется внутри шаблона для `TabControl`, чтобы расположить заголовки вкладок. Однако это более продвинутый способ настройки внешнего вида и поведения `TabControl`, а не прямое использование `TabPanel` в коде или XAML для создания пользовательского интерфейса.
 
 ### Основные свойства компоновки элементов
 Элементы WPF обладают набором свойств, которые помогают позиционировать данные элементы. Рассмотрим некоторые из этих свойств.
