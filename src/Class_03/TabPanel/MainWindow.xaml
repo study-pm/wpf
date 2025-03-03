@@ -1,0 +1,21 @@
+﻿<Window x:Class="TabPanel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TabPanel"
+        mc:Ignorable="d"
+        Title="TabPanel" Height="450" Width="450">
+    <TabControl>
+        <TabItem Header="Вкладка 1">Содержимое вкладки 1</TabItem>
+        <TabItem Header="Вкладка 2">Содержимое вкладки 2</TabItem>
+        <TabItem Header="Вкладка 3">Содержимое вкладки 3</TabItem>
+        <TabItem Header="Вкладка 4">Содержимое вкладки 4</TabItem>
+        <TabItem Header="Вкладка 5">Содержимое вкладки 5</TabItem>
+        <TabItem Header="Вкладка 6">Содержимое вкладки 6</TabItem>
+        <TabItem Header="Вкладка 7">Содержимое вкладки 7</TabItem>
+        <TabItem Header="Вкладка 8">Содержимое вкладки 8</TabItem>
+        <TabItem Header="Вкладка 9">Содержимое вкладки 9</TabItem>
+        <TabItem Header="Вкладка 10">Содержимое вкладки 10</TabItem>
+    </TabControl>
+</Window>
