@@ -72,6 +72,7 @@
     - [Наиболее часто используемые события](#наиболее-часто-используемые-события)
     - [Подключение обработчиков](#подключение-обработчиков)
       - [Декларативный подход](#декларативный-подход)
+      - [Императивный подход](#императивный-подход)
   - [Позиционирование контента](#позиционирование-контента)
     - [Content Alignment](#content-alignment)
     - [Padding](#padding)
@@ -2265,6 +2266,49 @@ if (((FrameworkElement)sender).Tag.ToString() == "open") MessageBox.Show("Выб
 else
 if (((FrameworkElement)sender).Tag.ToString() == "save") MessageBox.Show("Выбрана   команда 'Сохранить'");
 }
+```
+
+##### Императивный подход
+Иногда может возникнуть необходимость организовать подписку на событие напрямую из отделенного кода. Для добавления обработчика в список обработчиков события используется синтаксис C# `+=` (эквивалентен вызову аксессора `add` для события):
+```cs
+using System;
+using System.Windows;
+using System.Windows.Input;
+
+
+namespace WpfTutorialSamples.XAML
+{
+	public partial class EventsSample : Window
+	{
+		public EventsSample()
+		{
+			InitializeComponent();
+			pnlMainGrid.MouseUp += new MouseButtonEventHandler(pnlMainGrid_MouseUp);
+		}
+
+		private void pnlMainGrid_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
+		}
+
+	}
+}
+```
+
+Опять же для этого необходимо знать, какой именно делегат использовать, и вновь Visual Studio может помочь нам с этим. Как только вы наберёте:
+```cs
+pnlMainGrid.MouseDown +=
+```
+
+Visual Studio подскажет наиболее подходящий:
+
+![Visual Studio New Event Callback](./img/vs_new_event_cb.png)
+
+Далее нужно просто дважды нажать клавишу <kbd>Tab</kbd>, чтобы принять сгенерированный Visual Studio подходящий обработчик событий. При подобной организации подписки необходимость осуществлять её в XAML отпадает (хотя по-прежнему возможна).
+
+В современном C# часто используется более краткий синтаксис, не требующий указания делегата:
+```cs
+pnlMainGrid.MouseUp += pnlMainGrid_MouseUp;
 ```
 
 ### Позиционирование контента
