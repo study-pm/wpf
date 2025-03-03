@@ -1,0 +1,22 @@
+﻿<Window x:Class="ToolBarOverflowPanel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ToolBarOverflowPanel"
+        mc:Ignorable="d"
+        Title="ToolBarOverflowPanel" Height="300" Width="300">
+    
+    <ToolBar Width="150" Height="30">
+        <Button Content="Кнопка 1" />
+        <Button Content="Кнопка 2" />
+        <Button Content="Кнопка 3" />
+        <Button Content="Кнопка 4" />
+        <Button Content="Кнопка 5" />
+        <Button Content="Кнопка 6" />
+        <Button Content="Кнопка 7" />
+        <Button Content="Кнопка 8" />
+        <Button Content="Кнопка 9" />
+        <Button Content="Кнопка 10" />
+    </ToolBar>
+</Window>
