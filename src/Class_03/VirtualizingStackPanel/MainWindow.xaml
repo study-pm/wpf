@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VirtualizingStackPanel"
         mc:Ignorable="d"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="VirtualizingStackPanel Sample" Height="300" Width="300">
+        Title="VirtualizingStackPanel" Height="300" Width="300">
     <Window.Resources>
         <x:Array x:Key="data" Type="sys:String">
             <sys:String>Элемент 1</sys:String>
