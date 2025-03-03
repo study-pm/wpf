@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniformGrid", "UniformGrid\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridSplitter", "GridSplitter\GridSplitter.csproj", "{917E580B-ECB6-437D-823A-9E76DCCAF418}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualizingStackPanel", "VirtualizingStackPanel\VirtualizingStackPanel.csproj", "{B61DA52A-1FF5-4C87-B0F7-B426030F1153}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{917E580B-ECB6-437D-823A-9E76DCCAF418}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{917E580B-ECB6-437D-823A-9E76DCCAF418}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{917E580B-ECB6-437D-823A-9E76DCCAF418}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B61DA52A-1FF5-4C87-B0F7-B426030F1153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B61DA52A-1FF5-4C87-B0F7-B426030F1153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B61DA52A-1FF5-4C87-B0F7-B426030F1153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B61DA52A-1FF5-4C87-B0F7-B426030F1153}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

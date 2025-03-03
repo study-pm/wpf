@@ -1,0 +1,133 @@
+﻿<Window x:Class="VirtualizingStackPanel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VirtualizingStackPanel"
+        mc:Ignorable="d"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="VirtualizingStackPanel Sample" Height="300" Width="300">
+    <Window.Resources>
+        <x:Array x:Key="data" Type="sys:String">
+            <sys:String>Элемент 1</sys:String>
+            <sys:String>Элемент 2</sys:String>
+            <sys:String>Элемент 3</sys:String>
+            <sys:String>Элемент 4</sys:String>
+            <sys:String>Элемент 5</sys:String>
+            <sys:String>Элемент 6</sys:String>
+            <sys:String>Элемент 7</sys:String>
+            <sys:String>Элемент 8</sys:String>
+            <sys:String>Элемент 9</sys:String>
+            <sys:String>Элемент 10</sys:String>
+            <sys:String>Элемент 11</sys:String>
+            <sys:String>Элемент 12</sys:String>
+            <sys:String>Элемент 13</sys:String>
+            <sys:String>Элемент 14</sys:String>
+            <sys:String>Элемент 15</sys:String>
+            <sys:String>Элемент 16</sys:String>
+            <sys:String>Элемент 17</sys:String>
+            <sys:String>Элемент 18</sys:String>
+            <sys:String>Элемент 19</sys:String>
+            <sys:String>Элемент 20</sys:String>
+            <sys:String>Элемент 21</sys:String>
+            <sys:String>Элемент 22</sys:String>
+            <sys:String>Элемент 23</sys:String>
+            <sys:String>Элемент 24</sys:String>
+            <sys:String>Элемент 25</sys:String>
+            <sys:String>Элемент 26</sys:String>
+            <sys:String>Элемент 27</sys:String>
+            <sys:String>Элемент 28</sys:String>
+            <sys:String>Элемент 29</sys:String>
+            <sys:String>Элемент 30</sys:String>
+            <sys:String>Элемент 31</sys:String>
+            <sys:String>Элемент 32</sys:String>
+            <sys:String>Элемент 33</sys:String>
+            <sys:String>Элемент 34</sys:String>
+            <sys:String>Элемент 35</sys:String>
+            <sys:String>Элемент 36</sys:String>
+            <sys:String>Элемент 37</sys:String>
+            <sys:String>Элемент 38</sys:String>
+            <sys:String>Элемент 39</sys:String>
+            <sys:String>Элемент 40</sys:String>
+            <sys:String>Элемент 41</sys:String>
+            <sys:String>Элемент 42</sys:String>
+            <sys:String>Элемент 43</sys:String>
+            <sys:String>Элемент 44</sys:String>
+            <sys:String>Элемент 45</sys:String>
+            <sys:String>Элемент 46</sys:String>
+            <sys:String>Элемент 47</sys:String>
+            <sys:String>Элемент 48</sys:String>
+            <sys:String>Элемент 49</sys:String>
+            <sys:String>Элемент 50</sys:String>
+            <sys:String>Элемент 51</sys:String>
+            <sys:String>Элемент 52</sys:String>
+            <sys:String>Элемент 53</sys:String>
+            <sys:String>Элемент 54</sys:String>
+            <sys:String>Элемент 55</sys:String>
+            <sys:String>Элемент 56</sys:String>
+            <sys:String>Элемент 57</sys:String>
+            <sys:String>Элемент 58</sys:String>
+            <sys:String>Элемент 59</sys:String>
+            <sys:String>Элемент 60</sys:String>
+            <sys:String>Элемент 61</sys:String>
+            <sys:String>Элемент 62</sys:String>
+            <sys:String>Элемент 63</sys:String>
+            <sys:String>Элемент 64</sys:String>
+            <sys:String>Элемент 65</sys:String>
+            <sys:String>Элемент 66</sys:String>
+            <sys:String>Элемент 67</sys:String>
+            <sys:String>Элемент 68</sys:String>
+            <sys:String>Элемент 69</sys:String>
+            <sys:String>Элемент 70</sys:String>
+            <sys:String>Элемент 71</sys:String>
+            <sys:String>Элемент 72</sys:String>
+            <sys:String>Элемент 73</sys:String>
+            <sys:String>Элемент 74</sys:String>
+            <sys:String>Элемент 75</sys:String>
+            <sys:String>Элемент 76</sys:String>
+            <sys:String>Элемент 77</sys:String>
+            <sys:String>Элемент 78</sys:String>
+            <sys:String>Элемент 79</sys:String>
+            <sys:String>Элемент 80</sys:String>
+            <sys:String>Элемент 81</sys:String>
+            <sys:String>Элемент 82</sys:String>
+            <sys:String>Элемент 83</sys:String>
+            <sys:String>Элемент 84</sys:String>
+            <sys:String>Элемент 85</sys:String>
+            <sys:String>Элемент 86</sys:String>
+            <sys:String>Элемент 87</sys:String>
+            <sys:String>Элемент 88</sys:String>
+            <sys:String>Элемент 89</sys:String>
+            <sys:String>Элемент 90</sys:String>
+            <sys:String>Элемент 91</sys:String>
+            <sys:String>Элемент 92</sys:String>
+            <sys:String>Элемент 93</sys:String>
+            <sys:String>Элемент 94</sys:String>
+            <sys:String>Элемент 95</sys:String>
+            <sys:String>Элемент 96</sys:String>
+            <sys:String>Элемент 97</sys:String>
+            <sys:String>Элемент 98</sys:String>
+            <sys:String>Элемент 99</sys:String>
+            <sys:String>Элемент 100</sys:String>
+        </x:Array>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <ListBox Height="250" ItemsSource="{StaticResource data}"
+             VirtualizingStackPanel.IsVirtualizing="True"
+             VirtualizingStackPanel.VirtualizationMode="Recycling" />
+        </StackPanel>
+        <ListBox Grid.Column="1" Height="250" ItemsSource="{StaticResource data}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+    </Grid>
+</Window>
