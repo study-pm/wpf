@@ -2648,6 +2648,14 @@ win.Show();
 ```
 
 ##### Класс Page
+Определение:
+```cs
+[System.Windows.Markup.ContentProperty("Content")]
+public class Page : System.Windows.FrameworkElement, System.Windows.Markup.IAddChild
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.page?view=windowsdesktop-9.0
+
 Подобно `Window`, класс `Page` допускает наличие только единственного вложенного элемента. Однако класс `Page` не является элементом управления содержимым: он на самом деле унаследован непосредственно от класса `FrameworkElement`. Вдобавок класс `Page` является более простым и отлаженным, чем класс `Window`. Он имеет небольшой набор дополнительных свойств, которые позволяют настраивать его внешний вид, взаимодействовать с контейнером только определенным, ограниченным образом и применять навигацию. Все эти свойства перечислены ниже:
 
 - **`Background`**
