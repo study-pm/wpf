@@ -1,0 +1,22 @@
+﻿<Window x:Class="FrameNavigation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FrameNavigation"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <TextBlock>Main Window Area</TextBlock>
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Frame x:Name="frame1" Source="Pages/AuthPg.xaml" NavigationUIVisibility="Automatic"
+                   Margin="3" BorderBrush="LimeGreen" BorderThickness="2" Padding="20"></Frame>
+            <Frame x:Name="frame2" Source="Pages/RegisterPg.xaml" JournalOwnership="OwnsJournal"
+                   Margin="3" BorderBrush="Blue" BorderThickness="2" Padding="20" Grid.Column="1"></Frame>
+        </Grid>
+    </StackPanel>
+</Window>

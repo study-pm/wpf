@@ -1,0 +1,39 @@
+﻿<Page x:Class="PageNavigation.Pages.AuthPg"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:PageNavigation.Pages"
+      mc:Ignorable="d"
+      d:DesignHeight="400" d:DesignWidth="250"
+      Title="AuthPg" WindowTitle="Authentication">
+
+    <Grid>
+        <StackPanel MaxWidth="200">
+            <Label Margin="0 5" Padding="0 5">Login</Label>
+            <TextBox Margin="0 5" Padding="5"></TextBox>
+            <Label Margin="0 5" Padding="0 5">Password</Label>
+            <PasswordBox Margin="0 5" Padding="5"></PasswordBox>
+            <UniformGrid>
+                <Button x:Name="loginBtn" Margin="0 0 2 0" Padding="5" IsDefault="True" Click="loginBtn_Click">Login</Button>
+                <Button x:Name="registerBtn" Margin="2 0 0 0" Padding="5" Click="registerBtn_Click">Register</Button>
+            </UniformGrid>
+            <UniformGrid>
+                <Button x:Name="closeBtn" Margin="0 0 2 0" Padding="5" IsCancel="True" Click="closeBtn_Click">Close</Button>
+                <Button x:Name="openBtn" Margin="2 0 0 0" Padding="5" Click="openBtn_Click">Open New</Button>
+            </UniformGrid>
+            <TextBlock Margin="5">
+                <Hyperlink Click="Hyperlink_Click">Click!</Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="5">
+                Перейти на <Hyperlink NavigateUri="RegisterPg.xaml">страницу регистрации</Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="5">
+                Искать в <Hyperlink NavigateUri="https://www.google.com">Google</Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="5" TextWrapping="Wrap">
+                Открыть <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://www.google.com">Google в системном браузере</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Page>
