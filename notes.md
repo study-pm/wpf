@@ -75,16 +75,38 @@
     - [Подключение обработчиков](#подключение-обработчиков)
       - [Декларативный подход](#декларативный-подход)
       - [Императивный подход](#императивный-подход)
-  - [Позиционирование контента](#позиционирование-контента)
-    - [Content Alignment](#content-alignment)
-    - [Padding](#padding)
-  - [Обработчики событий](#обработчики-событий-1)
   - [Элементы управления содержимым](#элементы-управления-содержимым)
+    - [Позиционирование контента](#позиционирование-контента)
+      - [Content Alignment](#content-alignment)
+      - [Padding](#padding)
+    - [ButtonBase / Кнопки](#buttonbase--кнопки)
+      - [Button](#button)
+      - [RepeatButton](#repeatbutton)
+      - [ToggleButton](#togglebutton)
+      - [CheckBox](#checkbox)
+      - [RadioButton](#radiobutton)
+    - [HeaderedContentControl / Заголовочное содержимое](#headeredcontentcontrol--заголовочное-содержимое)
+      - [GroupBox](#groupbox)
+      - [Expander](#expander)
+      - [TabItem](#tabitem)
+    - [ListBoxItem / Списочные элементы](#listboxitem--списочные-элементы)
+      - [ListViewItem](#listviewitem)
+      - [ComboBoxItem](#comboboxitem)
+    - [Метка / Label](#метка--label)
+    - [ToolTip / Всплывающая подсказка](#tooltip--всплывающая-подсказка)
+      - [Свойства ToolTip](#свойства-tooltip)
+      - [Свойства ToolTipService](#свойства-tooltipservice)
+      - [Программное создание всплывающей подсказки](#программное-создание-всплывающей-подсказки)
+    - [ScrollViewer. Создание прокрутки](#scrollviewer-создание-прокрутки)
+    - [Окно / Window](#окно--window)
+      - [Важнейшие свойства окна](#важнейшие-свойства-окна)
+    - [Фрейм / Frame](#фрейм--frame)
+    - [Пользовательский элемент управления / UserControl](#пользовательский-элемент-управления--usercontrol)
 - [Навигация](#навигация)
   - [Основные подходы к навигации](#основные-подходы-к-навигации)
   - [Оконная навигация](#оконная-навигация)
     - [Окно](#окно)
-    - [Важнейшие свойства окна](#важнейшие-свойства-окна)
+    - [Важнейшие свойства окна](#важнейшие-свойства-окна-1)
   - [Страничная навигация](#страничная-навигация)
     - [Страничные интерфейсы](#страничные-интерфейсы)
       - [Окно навигации](#окно-навигации)
@@ -1018,14 +1040,14 @@ flowchart
 
 #### StackPanel
 
+Панель `StackPanel` располагает содержащиеся в нем элементы управления либо в вертикальном столбце (по умолчанию), либо в горизонтальной строке (если в атрибут `Orientation` записано значение “Vertical”). Если в панель `StackPanel` добавлено больше элементов управления, чем может быть отображено по ширине/высоте `StackPanel`, лишние элементы обрезаются и не отображаются.
+
 Определение:
 ```cs
 public class StackPanel : System.Windows.Controls.Panel, System.Windows.Controls.Primitives.IScrollInfo
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.stackpanel?view=windowsdesktop-9.0
-
-Панель `StackPanel` располагает содержащиеся в нем элементы управления либо в вертикальном столбце (по умолчанию), либо в горизонтальной строке (если в атрибут `Orientation` записано значение “Vertical”). Если в панель `StackPanel` добавлено больше элементов управления, чем может быть отображено по ширине/высоте `StackPanel`, лишние элементы обрезаются и не отображаются.
 
 При выводе элементов сверху вниз элементы по умолчанию растягиваются по горизонтали. Это поведение можно изменить с помощью свойств `HorizontalAlignment` и `VerticalAlignment`.
 
@@ -1089,14 +1111,14 @@ public class StackPanel : System.Windows.Controls.Panel, System.Windows.Controls
 
 #### WrapPanel
 
+Панель `WrapPanel` выводит дочерние элементы последовательно слева направо (либо сверху вниз, если для атрибута `Orientation` установлено значение “Vertical”) и при достижении границы окна переходит на новую строку (столбец). При изменении размеров окна панель перераспределяет компоненты таким образом, чтобы они находились в окне.
+
 Определение:
 ```cs
 public class WrapPanel : System.Windows.Controls.Panel
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.wrappanel?view=windowsdesktop-9.0
-
-Панель `WrapPanel` выводит дочерние элементы последовательно слева направо (либо сверху вниз, если для атрибута `Orientation` установлено значение “Vertical”) и при достижении границы окна переходит на новую строку (столбец). При изменении размеров окна панель перераспределяет компоненты таким образом, чтобы они находились в окне.
 
 Рассмотрим панель `WrapPanel` со следующим содержимым:
 ```xml
@@ -1165,14 +1187,14 @@ public class WrapPanel : System.Windows.Controls.Panel
 
 #### DockPanel
 
+Панель `DockPanel` пристыковывает дочерние элементы к различным сторонам панели: `Top`, `Bottom`, `Left`, `Right`. Атрибут `LastChildFill` по умолчанию имеет значение `True`, что означает, что последний дочерний элемент управления будет занимать всё оставшееся пространство панели.
+
 Определение:
 ```cs
 public class DockPanel : System.Windows.Controls.Panel
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.dockpanel?view=windowsdesktop-9.0
-
-Панель `DockPanel` пристыковывает дочерние элементы к различным сторонам панели: `Top`, `Bottom`, `Left`, `Right`. Атрибут `LastChildFill` по умолчанию имеет значение `True`, что означает, что последний дочерний элемент управления будет занимать всё оставшееся пространство панели.
 
 Рассмотрим панель `DockPanel` со следующим содержимым:
 ```xml
@@ -1313,14 +1335,14 @@ public static Dock GetDock(UIElement element)
 
 #### VirtualizingPanel
 
+`VirtualizingPanel` — это абстрактный класс в WPF, который предоставляет базовую структуру для панелей, которые виртуализируют свою коллекцию дочерних данных. <dfn title="виртуализация">Виртуализация</dfn> означает создание визуальных контейнеров только для тех элементов, которые видны на экране, а также для нескольких элементов сверху и снизу от видимой области. Это позволяет значительно уменьшить потребление памяти и повысить производительность при работе с большими наборами данных.
+
 Определение:
 ```cs
 public abstract class VirtualizingPanel : System.Windows.Controls.Panel
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.virtualizingpanel?view=windowsdesktop-9.0
-
-`VirtualizingPanel` — это абстрактный класс в WPF, который предоставляет базовую структуру для панелей, которые виртуализируют свою коллекцию дочерних данных. <dfn title="виртуализация">Виртуализация</dfn> означает создание визуальных контейнеров только для тех элементов, которые видны на экране, а также для нескольких элементов сверху и снизу от видимой области. Это позволяет значительно уменьшить потребление памяти и повысить производительность при работе с большими наборами данных.
 
 Основные функции `VirtualizingPanel`:
 
@@ -1389,14 +1411,14 @@ public class VirtualizingStackPanel : System.Windows.Controls.VirtualizingPanel,
 
 ##### DataGridCellsPanel
 
+`DataGridCellsPanel` — это класс в WPF, который используется для организации ячеек и заголовков столбцов внутри элемента управления `DataGrid`. Он отвечает за расположение этих элементов в сетке данных, обеспечивая правильное отображение таблицы с данными.
+
 Определение:
 ```cs
 public class DataGridCellsPanel : System.Windows.Controls.VirtualizingPanel
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.datagridcellspanel?view=windowsdesktop-9.0
-
-`DataGridCellsPanel` — это класс в WPF, который используется для организации ячеек и заголовков столбцов внутри элемента управления `DataGrid`. Он отвечает за расположение этих элементов в сетке данных, обеспечивая правильное отображение таблицы с данными.
 
 Основные функции `DataGridCellsPanel`:
 
@@ -1433,6 +1455,8 @@ public class DataGridCellsPanel : System.Windows.Controls.VirtualizingPanel
 
 #### Grid
 
+Это наиболее мощный и часто используемый контейнер, напоминающий обычную таблицу. Он содержит столбцы и строки, количество которых задает разработчик. Для определения строк используется свойство **`RowDefinitions`**, а для определения столбцов — свойство **`ColumnDefinitions`**.
+
 Определение:
 ```cs
 public class Grid : System.Windows.Controls.Panel, System.Windows.Markup.IAddChild
@@ -1440,7 +1464,7 @@ public class Grid : System.Windows.Controls.Panel, System.Windows.Markup.IAddChi
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.grid?view=windowsdesktop-9.0
 
-Это наиболее мощный и часто используемый контейнер, напоминающий обычную таблицу. Он содержит столбцы и строки, количество которых задает разработчик. Для определения строк используется свойство **`RowDefinitions`**, а для определения столбцов — свойство **`ColumnDefinitions`**:
+Пример:
 ```xml
 <Grid.RowDefinitions>
     <RowDefinition></RowDefinition>
@@ -1703,6 +1727,13 @@ myGrid.Children.Add(txt);
 #### Canvas
 Контейнер `Canvas` является наиболее простым контейнером. Для размещения на нем необходимо указать для элементов точные координаты относительно сторон `Canvas`. Для установки координат элементов используются свойства `Canvas.Left`, `Canvas.Right`, `Canvas.Bottom`, `Canvas.Top`. Например, свойство `Canvas.Left` указывает, на сколько единиц от левой стороны контейнера будет находиться элемент, а свойство `Canvas.Top` — на сколько единиц ниже верхней границы контейнера находится элемент.
 
+Определение:
+```cs
+public class Canvas : System.Windows.Controls.Panel
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.canvas?view=windowsdesktop-9.0
+
 При этом в качестве единиц используются не пиксели, а независимые от устройства единицы, которые помогают эффективно управлять масштабированием элементов. Каждая такая единица равна 1 /96 дюйма, и при стандартной установке в 96 dpi эта независимая от устройства единица будет равна физическому пикселю, так как 1/96 дюйма * 96 dpi (96 точек на дюйм) = 1. В тоже время при работе на других мониторах или при других установленных размеры, установленные в приложении, будут эффективно масштабироваться. Например, при разрешении в 120 dpi одна условная единица будет равна 1,25 пикселя, так как 1/96 дюйма * 120 dpi= 1,25 пикселя.
 
 Если элемент не использует свойства `Canvas.Top` и другие, то по умолчанию свойства `Canvas.Left` и `Canvas.Top` будут равны нулю, то есть он будет находиться в верхнем левом углу.
@@ -1757,7 +1788,16 @@ myGrid.Children.Add(txt);
 ### Базовые примитивы
 
 #### UniformGrid
-Аналогичен контейнеру `Grid` контейнер `UniformGrid`, только в этом случае все столбцы и строки одинакового размера и используется упрощенный синтаксис для их определения. Помещает элементы в невидимую таблицу, устанавливая одинаковый размер для всех ячеек:
+Аналогичен контейнеру `Grid` контейнер `UniformGrid`, только в этом случае все столбцы и строки одинакового размера и используется упрощенный синтаксис для их определения. Помещает элементы в невидимую таблицу, устанавливая одинаковый размер для всех ячеек.
+
+Определение:
+```cs
+public class UniformGrid : System.Windows.Controls.Panel
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.uniformgrid?view=windowsdesktop-9.0
+
+Пример:
 ```xml
 <UniformGrid Rows="2" Columns="2">
     <Button Content="Left Top" />
@@ -1787,14 +1827,14 @@ myGrid.Children.Add(txt);
 
 #### TabPanel
 
+`TabPanel` — это класс из пространства имен `System.Windows.Controls.Primitives`, который используется для организации макета вкладок в элементе управления `TabControl`. Он обеспечивает базовую функциональность для расположения заголовков вкладок и переключения между ними.
+
 Определение:
 ```cs
 public class TabPanel : System.Windows.Controls.Panel
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.tabpanel?view=windowsdesktop-9.0
-
-`TabPanel` — это класс из пространства имен `System.Windows.Controls.Primitives`, который используется для организации макета вкладок в элементе управления `TabControl`. Он обеспечивает базовую функциональность для расположения заголовков вкладок и переключения между ними.
 
 Основная задача `TabPanel` — управлять расположением заголовков вкладок в верхней части `TabControl`, что позволяет пользователям переключаться между вкладками. Это достигается за счет того, что `TabPanel` наследуется от `Panel` и переопределяет методы макета для правильного расположения заголовков.
 
@@ -1853,14 +1893,14 @@ public class TabPanel : System.Windows.Controls.Panel
 
 #### ToolBarOverflowPanel
 
+`ToolBarOverflowPanel` — это класс в WPF, который используется для обработки ситуации, когда элементы в панели инструментов (`ToolBar`) не помещаются в доступное пространство. В этом случае избыточные элементы автоматически перемещаются в выпадающее меню, которое отображается на панели инструментов в виде стрелки.
+
 Определение:
 ```cs
 public class ToolBarOverflowPanel : System.Windows.Controls.Panel
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.toolbaroverflowpanel?view=windowsdesktop-9.0
-
-`ToolBarOverflowPanel` — это класс в WPF, который используется для обработки ситуации, когда элементы в панели инструментов (`ToolBar`) не помещаются в доступное пространство. В этом случае избыточные элементы автоматически перемещаются в выпадающее меню, которое отображается на панели инструментов в виде стрелки.
 
 Основные функции `ToolBarOverflowPanel`:
 
@@ -1908,14 +1948,14 @@ public class ToolBarOverflowPanel : System.Windows.Controls.Panel
 
 #### ToolBarPanel
 
+`ToolBarPanel` — это класс из пространства имен `System.Windows.Controls.Primitives`, который используется для организации элементов внутри элемента управления `ToolBar`. Он наследуется от `StackPanel` и обеспечивает базовую функциональность для расположения кнопок и других элементов управления в панели инструментов.
+
 Определение:
 ```cs
 public class ToolBarPanel : System.Windows.Controls.StackPanel
 ```
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.toolbarpanel?view=windowsdesktop-9.0
-
-`ToolBarPanel` — это класс из пространства имен `System.Windows.Controls.Primitives`, который используется для организации элементов внутри элемента управления `ToolBar`. Он наследуется от `StackPanel` и обеспечивает базовую функциональность для расположения кнопок и других элементов управления в панели инструментов.
 
 Основные функции `ToolBarPanel`:
 
@@ -2320,9 +2360,7 @@ namespace WpfTutorialSamples.XAML
 pnlMainGrid.MouseDown +=
 ```
 
-Visual Studio подскажет наиболее подходящий:
-
-![Visual Studio New Event Callback](./img/vs_new_event_cb.png)
+Visual Studio подскажет наиболее подходящий.
 
 Далее нужно просто дважды нажать клавишу <kbd>Tab</kbd>, чтобы принять сгенерированный Visual Studio подходящий обработчик событий. При подобной организации подписки необходимость осуществлять её в XAML отпадает (хотя по-прежнему возможна).
 
@@ -2330,104 +2368,6 @@ Visual Studio подскажет наиболее подходящий:
 ```cs
 pnlMainGrid.MouseUp += pnlMainGrid_MouseUp;
 ```
-
-### Позиционирование контента
-
-#### Content Alignment
-Выравнивание содержимого внутри элемента задается свойствами **`HorizontalContentAlignment`** (выравнивание по горизонтали) и **`VerticalContentAlignment`** (выравнивание по вертикали), аналогичными свойствам `VerticalAlignment`/`HorizontalAlignment`. Свойство `HorizontalContentAlignment` принимает значения `Left`, `Right`, `Center` (положение по центру), `Stretch` (растяжение по всей ширине). Например:
-```xml
-<StackPanel>
-    <Button Margin="5" HorizontalContentAlignment="Left" Content="Left" Height="90" Width="500" />
-    <Button Margin="5" HorizontalContentAlignment="Right" Content="Right" Height="90" Width="500" />
-    <Button Margin="5" HorizontalContentAlignment="Center" Content="Center" Height="90" Width="500" />
-</StackPanel>
-```
-
-`VerticalContentAlignment` принимает значения `Top` (положение в верху), `Bottom` (положение внизу), `Center` (положение по центру), `Stretch` (растяжение по всей высоте).
-
-#### Padding
-С помощью свойства `Padding` мы можем установить отступ содержимого элемента:
-```xml
-<StackPanel>
-    <Button x:Name="button1" Padding="50 30 0 40" HorizontalContentAlignment="Left">
-        Hello World
-    </Button>
-    <Button x:Name="button2" Padding="60 20 0 30" HorizontalContentAlignment="Center">
-        Hello World
-    </Button>
-</StackPanel>
-```
-
-Свойство `Padding` задается в формате `Padding="отступ_слева отступ_сверху отступ_справа отступ_снизу"`.
-
-Если со всех четырех сторон предполагается один и тот же отступ, то, как и в случае с `Margin`, мы можем задать одно число:
-```xml
-<Button x:Name="button2" Padding="20"  Content="Hello World" />
-```
-
-Важно понимать, от какой точки задается отступ. В случае с первой кнопкой в ней контент выравнивается по левому краю, поэтому отступ слева будет предполагать отступ от левого края элемента `Button`. А вторая кнопка располагается по центру. Поэтому для нее отступ слева предполагает отступ от той точки, в которой содержимое бы находилось при центрировании без применения `Padding`.
-
-Комбинация значений свойств `HorizontalContentAlignment`/`VerticalContentAlignment` и `Padding` позволяет оптимальным образом задать расположение содержимого.
-
-### Обработчики событий
-Для добавления обработчика для какого-либо события объекта необходимо в открывающем теге элемента написать имя события и через знак «=» имя функции-обработчика, либо выбрать команду «Новый обработчик события»:
-
-При выборе команды «Новый обработчик события» в CS-файле, относящемся к  XAML-файлу, будет добавлена соответствующая функция:
-```cs
-private void MenuItem_Click(object sender, RoutedEventArgs e)
-{
-
-}
-```
-
-В обработчике можно обратиться по имени к любому объекту, для которого в  XAML-файле было определено имя с помощью атрибута `Name` или `x:Name`:
-```xml
-<MenuItem Name="mi_open" Header="_Открыть" Click="MenuItem_Click" />
-```
-```cs
-private void MenuItem_Click(object sender, RoutedEventArgs e)
-{
-  mi_open.Background = Brushes.LightGreen;
-}
-```
-
-С помощью объекта `sender`, переданного в качестве параметра, можно получить доступ к элементу управления, для которого возникло обрабатываемое событие, даже в случае, если для него не задано имя:
-```cs
-private void CheckBox_Click(object sender, RoutedEventArgs e)
-{
-  ((FrameworkElement)sender).Visibility = System.Windows.Visibility.Hidden;
-}
-private void CheckBox_Click(object sender, RoutedEventArgs e)
-{
-  MessageBox.Show(((CheckBox)sender).IsChecked.ToString());
-}
-```
-
-В первом примере объект `sender` был приведен к базовому классу `FrameworkElement` для доступа к базовым свойствам, присущим всем элементам управления. Во втором случае объект `sender` был приведен к классу `CheckBox` для доступа к специфическим свойствам данного элемента управления.
-
-Если для нескольких элементов управления определен один обработчик какого-либо события, то для определения выбранного элемента управления в коде обработчика можно использовать свойство `Tag`, доступное для всех элементов управления:
-```cs
-private void MenuItem_Click(object sender, RoutedEventArgs e)
-{
-if (((FrameworkElement)sender).Tag.ToString() == "open") MessageBox.Show("Выбрана команда 'Открыть'");
-else
-if (((FrameworkElement)sender).Tag.ToString() == "save") MessageBox.Show("Выбрана   команда 'Сохранить'");
-}
-```
-
-Наиболее часто используемые события:
-
-| Событие | Описание
--- | --
-`Click` | Происходит при нажатии на элемент управления
-`MouseMove` | Происходит, когда указатель мыши совершает движение по этому элементу
-`MouseEnter` | Происходит, когда указатель мыши входит в границы данного элемента
-`MouseLeave` | Происходит, когда указатель мыши покидает границы данного элемента
-`MouseDown` | Происходит при нажатии кнопки мыши, если указатель мыши находится на элементе
-`MouseUp` | Происходит, когда кнопка мыши отпускается на элементе
-`MouseWheel` | Происходит при прокрутке пользователем колесика мыши, если указатель мыши находится на элементе
-`KeyDown` | Происходит при нажатии клавиши, если элемент имеет фокус
-`KeyUp` | Происходит при отжатии клавиши, если элемент имеет фокус
 
 ### Элементы управления содержимым
 <dfn title="элемент управления содержимым">Элементы управления содержимым</dfn> (content controls) представляют такие элементы управления, которые содержат в себе другой элемент. Все элементы управления содержимым наследуются от класса **`ContentControl`**, который в свою очередь наследуется от класса `System.Window.Controls.Control`.
@@ -2450,6 +2390,15 @@ flowchart
     Abstract([Абстрактный класс])
 ```
 
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.None, Readability=System.Windows.Readability.Unreadable)]
+[System.Windows.Markup.ContentProperty("Content")]
+public class ContentControl : System.Windows.Controls.Control, System.Windows.Markup.IAddChild
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.contentcontrol?view=windowsdesktop-9.0
 
 К элементам управления содержимым относятся такие элементы как `Button`, `Label`, `ToggleButton`, `ToolTip`, `RadioButton`, `CheckBox`, `GroupBox`, `TabItem`, `Expander`, `ScrollViewer`. Также элементом управления содержимым является и главный элемент окна — `Window`.
 
@@ -2552,6 +2501,1372 @@ stackPanel.Children.Add(new Button { Content = "Yellow", Height = 20, Background
 stackPanel.Children.Add(new Button { Content = "Green", Height = 20, Background = new SolidColorBrush(Colors.Green) });
 button1.Content = stackPanel;
 ```
+
+#### Позиционирование контента
+
+##### Content Alignment
+Выравнивание содержимого внутри элемента задается свойствами **`HorizontalContentAlignment`** (выравнивание по горизонтали) и **`VerticalContentAlignment`** (выравнивание по вертикали), аналогичными свойствам `VerticalAlignment`/`HorizontalAlignment`. Свойство `HorizontalContentAlignment` принимает значения `Left`, `Right`, `Center` (положение по центру), `Stretch` (растяжение по всей ширине). Например:
+```xml
+<StackPanel>
+    <Button Margin="5" HorizontalContentAlignment="Left" Content="Left" Height="90" Width="500" />
+    <Button Margin="5" HorizontalContentAlignment="Right" Content="Right" Height="90" Width="500" />
+    <Button Margin="5" HorizontalContentAlignment="Center" Content="Center" Height="90" Width="500" />
+</StackPanel>
+```
+
+`VerticalContentAlignment` принимает значения `Top` (положение в верху), `Bottom` (положение внизу), `Center` (положение по центру), `Stretch` (растяжение по всей высоте).
+
+##### Padding
+С помощью свойства `Padding` мы можем установить отступ содержимого элемента:
+```xml
+<StackPanel>
+    <Button x:Name="button1" Padding="50 30 0 40" HorizontalContentAlignment="Left">
+        Hello World
+    </Button>
+    <Button x:Name="button2" Padding="60 20 0 30" HorizontalContentAlignment="Center">
+        Hello World
+    </Button>
+</StackPanel>
+```
+
+Свойство `Padding` задается в формате `Padding="отступ_слева отступ_сверху отступ_справа отступ_снизу"`.
+
+Если со всех четырех сторон предполагается один и тот же отступ, то, как и в случае с `Margin`, мы можем задать одно число:
+```xml
+<Button x:Name="button2" Padding="20"  Content="Hello World" />
+```
+
+Важно понимать, от какой точки задается отступ. В случае с первой кнопкой в ней контент выравнивается по левому краю, поэтому отступ слева будет предполагать отступ от левого края элемента `Button`. А вторая кнопка располагается по центру. Поэтому для нее отступ слева предполагает отступ от той точки, в которой содержимое бы находилось при центрировании без применения `Padding`.
+
+Комбинация значений свойств `HorizontalContentAlignment`/`VerticalContentAlignment` и `Padding` позволяет оптимальным образом задать расположение содержимого.
+
+#### ButtonBase / Кнопки
+
+В WPF кнопки представлены целым рядом классов, которые наследуются от базового класса `ButtonBase`:
+
+```mermaid
+flowchart BT
+    Button --> BB[Button Base]
+    TB[ToggleButton] --> BB
+    CheckBox --> TB
+    RadioButton --> TB
+    RepeatButton --> BB
+```
+
+Класс `ButtonBase` в WPF является базовым классом для всех элементов управления кнопками. Он наследуется от `ContentControl`, что позволяет ему содержать один объект любого типа, например, строку, изображение или панель.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.Button)]
+public abstract class ButtonBase : System.Windows.Controls.ContentControl, System.Windows.Input.ICommandSource
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.buttonbase?view=windowsdesktop-9.0
+
+Ключевые особенности класса `ButtonBase` включают:
+
+1. **Событие `Click`**: Определяет событие `Click`, которое позволяет обрабатывать пользовательский ввод, например, щелчок мышью или нажатие клавиши <kbd>Enter</kbd>, когда кнопка находится в фокусе.
+
+2. **Поддержка команд**: Реализует интерфейс `ICommandSource`, что позволяет кнопкам быть подключенными к высокоуровневым задачам приложений через команды (копирование, вырезание, вставка и т.п.).
+
+3. **Свойство `ClickMode`**: Определяет, когда кнопка генерирует событие `Click` в ответ на действия мыши. Значения могут быть `ClickMode.Release` (по умолчанию), `ClickMode.Press`, или `ClickMode.Hover`.
+
+4. **Свойства `IsPressed` и `IsInputMethodEnabled`**: Свойство `IsPressed` указывает, нажата ли кнопка, а `IsInputMethodEnabled` всегда установлено в `false` для кнопок.
+
+5. **Наследники**: Классы `Button`, `ToggleButton`, `RepeatButton`, `CheckBox`, и `RadioButton` наследуются от `ButtonBase`, каждый из которых имеет свои особенности и применения.
+
+Эти особенности делают `ButtonBase` фундаментальным классом для создания различных типов кнопок в приложениях WPF.
+
+##### Button
+Элемент `Button` представляет обычную кнопку:
+```xml
+<Button x:Name="button1" Width="60" Height="30" Background="LightGray" />
+```
+
+От класса `ButtonBase` кнопка наследует ряд событий, например, `Click`, которые позволяют обрабатывать пользовательский ввод.
+
+Чтобы связать кнопку с обработчиком события нажатия, нам надо определить в самой кнопке атрибут `Click`. А значением этого атрибута будет название обработчика в коде C#. А затем в самом коде C# определить этот обработчик.
+
+```xml
+<Button x:Name="button1" Content="Отправить запрос" Click="Button_Click" />
+```
+
+И обработчик в коде C#:
+```cs
+private void Button_Click(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show("Кнопка нажата");
+}
+```
+
+Либо можно не задавать обработчик через атрибут, а стандартным образом для C# прописать в коде: `button1.Click+=Button_Click;`
+
+Кнопка имеет такие свойства как **`IsDefault`** и **`IsCancel`**, которые принимают значения `true` и `false`.
+
+Если свойство `IsDefault` установлено в `true`, то при нажатии клавиши <kbd>Enter</kbd> будет вызываться обработчик нажатия этой кнопки.
+
+Аналогично если свойство `IsCancel` будет установлено в `true`, то при нажатии на клавишу <kbd>Esc</kbd> будет вызываться обработчик нажатия этой кнопки.
+
+Например, определим код *xaml*:
+```xml
+<Window x:Class="ControlsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlsApp"
+        mc:Ignorable="d"
+        Title="Элементы управления" Height="250" Width="300">
+    <StackPanel>
+        <Button x:Name="acceptButton" Content="ОК" IsDefault="True" Click="acceptButton_Click" />
+        <Button x:Name="escButton" Content="Выход" IsCancel="True" Click="escButton_Click" />
+    </StackPanel>
+</Window>
+```
+
+А в коде `MainWindow.xaml.cs` определим следующий код C#:
+```cs
+using System.Windows;
+
+namespace ControlsApp
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void acceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Действие выполнено");
+        }
+
+        private void escButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close(); // закрытие окна
+        }
+    }
+}
+```
+
+Теперь при нажатии на клавишу <kbd>Enter</kbd> будет отображаться сообщение, а при нажатии на <kbd>Esc</kbd> будет происходить выход из приложения и закрытие окна.
+
+Отличительные особенности:
+- Событие **`Click`** – нажатие на кнопку. В атрибуте `Click` указывается название функции-обработчика этого события.
+- Свойство **`IsCancel`**.  Возможные значения: `True`, `False`. Если записано  `True`, то кнопка будет срабатывать при нажатии на кнопку <kbd>Esc</kbd> в данном окне, т.е. когда пользователь хочет закрыть окно без выполнения каких-либо действий.
+- Свойство **`IsDefault`**. Возможные значения: `True`, `False`. Если записано  `True`, то кнопка будет срабатывать при нажатии на кнопку <kbd>Enter</kbd> в данном окне, но только если не выделена какая-либо другая кнопка. В отличие от приложения  Windows Forms, в WPF-приложении при открытии окна не происходит автоматического выделения какого-либо элемента. Чтобы выделить первый элемент в окне, необходимо нажать кнопку <kbd>Tab</kbd>. Кнопка со свойством `IsDefault="True"` подсвечивается в окне, как будто она получила фокус. Но на самом деле кнопка не получает фокус, т.к. нажатие на клавишу «Пробел» не приводит к нажатию кнопки, а нажатие клавиши  <kbd>Tab</kbd> приводит к выделению первого элемента на странице, а не элемента, следующего за кнопкой.
+- Свойство **`IsDefaulted`** указывает, является ли кнопка в настоящий момент активной кнопкой по умолчанию, учитывая текущий фокус и обработку клавиши <kbd>Enter</kbd>. Это свойство доступно только для чтения и указывает, будет ли кнопка активирована при нажатии клавиши <kbd>Enter</kbd>.
+
+##### RepeatButton
+Отличительная особенность элемента `RepeatButton` — непрерывная генерация события `Click`, пока нажата кнопка. Интервал генерации события корректируется свойствами **`Delay`** и **`Interval`**.
+
+Сам по себе элемент `RepeatButton` редко используется, однако он может служить основой для создания ползунка в элементах `ScrollBar` и `ScrollViewer`, в которых нажатие на ползунок инициирует постоянную прокрутку.
+
+##### ToggleButton
+Представляет элементарный переключатель. Может находиться в трех состояниях — `true`, `false` и "нулевом" (неотмеченном) состоянии, а его значение представляет значение типа `bool?` в языке C#. Состояние можно установить или получить с помощью свойства **`IsChecked`**. Также добавляет три события — `Checked` (переход в отмеченное состояние), **`Unchecked`** (снятие отметки) и **`Indeterminate`** (если значение равно `null`). Чтобы отрабатывать все три события, надо установить свойство **`IsThreeState="True"`**.
+
+```xml
+<ToggleButton Click="ToggleButton_Click">Закрыть соединение</ToggleButton>
+```
+
+```cs
+private void ToggleButton_Click(object sender, RoutedEventArgs e)
+{
+  MessageBox.Show("Состояние кнопки: " + (sender as System.Windows.Controls.Primitives.ToggleButton).IsChecked)
+}
+```
+
+Отличительные особенности:
+- Событие **`Click`** – нажатие или отжатие кнопки. В атрибуте `Click` указывается название функции-обработчика этого события.
+- Событие **`Checked`** – нажатие кнопки. В атрибуте `Checked` указывается название функции-обработчика этого события.
+- Событие **`Unchecked`** – отжатие кнопки. В атрибуте `Unchecked` указывается название функции-обработчика этого события.
+- Свойство **`IsChecked`** – состояние кнопки. `True` – кнопка нажата, `False` – кнопка отжата.
+
+`ToggleButton`, как правило, сам по себе тоже редко используется, однако при этом он служит основой для создания других более функциональных элементов, таких как `checkbox` и `radiobutton`.
+
+##### CheckBox
+Элемент `CheckBox` представляет собой обычный флажок. Данный элемент является производным от класса `ToggleButton` и поэтому может принимать также три состояния: `Checked`, `Unchecked` и `Indeterminate`.
+
+```xml
+<CheckBox x:Name="CheckBox_CloseAfterComplete">Закрыть окно по завершении</CheckBox>
+```
+
+```cs
+...
+if (CheckBox_CloseAfterComplete.IsChecked == true)
+    MessageBox.Show("IsChecked == true");
+...
+```
+
+Класс `CheckBox` является наследником от класса `ToggleButton` и наследует его свойства и события.
+
+Для обращения к элементу управления из кода программы необходимо в XAML-коде задать для него имя в атрибуте `Name` с префиксом `x`, как это показано в примере выше. Префикс 'x:' означает пространство имен XAML, а не пространство имен WPF.
+
+Чтобы получить или установить определенное состояние, надо использовать свойство `IsChecked`, которое также унаследовано от `ToggleButton`:
+```xml
+<StackPanel x:Name="stackPanel">
+    <CheckBox x:Name="checkBox1" IsThreeState="True" IsChecked="False" Height="20" Content="Неотмечено" />
+    <CheckBox x:Name="checkBox2" IsThreeState="True" IsChecked="True" Height="20" Content="Отмечено" />
+    <CheckBox x:Name="checkBox3" IsThreeState="True" IsChecked="{x:Null}" Height="20" Content="Неопределено"/>
+</StackPanel>
+```
+
+Установка свойства `IsChecked="{x:Null}"` задает неопределенное состояние для элемента `checkbox`. Остальные два состояния задаются с помощью `True` и `False`. В данном примере также привязан к двум флажкам обработчик события `Checked`. Это событие возникает при установке `checkbox` в отмеченное состояние.
+
+А атрибут `IsThreeState="True"` указывает, что флажок может находиться в трех состояниях.
+
+Ключевыми событиями флажка являются события **`Checked`** (генерируется при установке флажка в отмеченное состояние), **`Unchecked`** (генерируется при снятии отметки с флажка) и **`Indeterminate`** (флажок переведен в неопределенное состояние). Например, определим флажок:
+```xml
+<CheckBox x:Name="checkBox" IsChecked="False" Height="20" Content="Флажок"
+    IsThreeState="True"
+    Unchecked="checkBox_Unchecked"
+    Indeterminate="checkBox_Indeterminate"
+    Checked="checkBox_Checked" />
+```
+
+А в файле кода C# пропишем для него обработчики:
+```cs
+private void checkBox_Checked(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show(checkBox.Content.ToString() + " отмечен");
+}
+
+private void checkBox_Unchecked(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show(checkBox.Content.ToString() + " не отмечен");
+}
+
+private void checkBox_Indeterminate(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show(checkBox.Content.ToString() + " в неопределенном состоянии");
+}
+```
+
+Программное добавление флажка:
+```cs
+using System.Windows;
+using System.Windows.Controls;
+
+namespace ControlsApp
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            // создаем флажок
+            CheckBox checkBox2 = new CheckBox { Content = "Новый флажок", MinHeight = 20, IsChecked=true };
+            // установка обработчика
+            checkBox2.Checked += checkBox_Checked;
+            // добавление в StackPanel
+            stackPanel.Children.Add(checkBox2);
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox chBox = (CheckBox)sender;
+            MessageBox.Show(chBox.Content.ToString() + " отмечен");
+        }
+    }
+}
+```
+
+##### RadioButton
+Элемент управления, также производный от `ToggleButton`, представляющий переключатель. Главная его особенность — поддержка групп. Несколько элементов `RadioButton` можно объединить в группы, и в один момент времени мы можем выбрать из этой группы только один переключатель. Например,
+```xml
+<StackPanel x:Name="stackPanel">
+    <RadioButton GroupName="Languages" Content="C#" IsChecked="True" />
+    <RadioButton GroupName="Languages" Content="VB.NET" />
+    <RadioButton GroupName="Languages" Content="C++" />
+    <RadioButton GroupName="Technologies" Content="WPF" IsChecked="True" />
+    <RadioButton GroupName="Technologies" Content="WinForms" />
+    <RadioButton GroupName="Technologies" Content="ASP.NET" />
+</StackPanel>
+```
+
+Чтобы включить элемент в определенную группу, используется свойство `GroupName`. В данном случае у нас две группы — `Languages` и `Technologies`. Мы можем отметить не более одного элемента `RadioButton` в пределах одной группы, зафиксировав тем самым выбор из нескольких возможностей.
+
+Чтобы проследить за выбором того или иного элемента, мы также можем определить у элементов событие `Checked` и его обрабатывать в коде:
+```xml
+<RadioButton GroupName="Languages" Content="VB.NET" Checked="RadioButton_Checked" />
+```
+
+Обработчик в файле кода:
+```cs
+private void RadioButton_Checked(object sender, RoutedEventArgs e)
+{
+    RadioButton pressed = (RadioButton)sender;
+    MessageBox.Show(pressed.Content.ToString());
+}
+```
+
+Программное добавление элемента `RadioButton`:
+```cs
+using System.Windows;
+using System.Windows.Controls;
+
+namespace ControlsApp
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            RadioButton rb = new RadioButton { IsChecked = true, GroupName = "Languages", Content = "JavaScript" };
+            rb.Checked += RadioButton_Checked;
+            stackPanel.Children.Add(rb);
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton pressed = (RadioButton)sender;
+            MessageBox.Show(pressed.Content.ToString());
+        }
+    }
+}
+```
+
+Пример элемента управления `RadioButton` (зависимый переключатель):
+```xml
+<RadioButton GroupName="Boot" x:Name="RadioButton_Boot1">Загрузиться с жесткого диска</RadioButton>
+<RadioButton GroupName="Boot" x:Name="RadioButton_Boot2">Загрузиться с DVD-привода</RadioButton>
+<RadioButton GroupName="Boot" x:Name="RadioButton_Boot3">Установить операционную систему</RadioButton>
+```
+
+```cs
+...
+if (RadioButton_Boot1.IsChecked == true)
+    MessageBox.Show(RadioButton_Boot1.Content.ToString());
+else
+if (RadioButton_Boot2.IsChecked == true)
+    MessageBox.Show(RadioButton_Boot2.Content.ToString());
+else
+if (RadioButton_Boot3.IsChecked == true)
+    MessageBox.Show(RadioButton_Boot3.Content.ToString());
+...
+```
+
+Класс `RadioButton` является наследником от класса `ToggleButton` и наследует его свойства и события.
+
+Отличительные особенности:
+- Свойство **`GroupName`** – название группы зависимых переключателей. В одном окне может быть несколько групп зависимых переключателей с разными названиями групп.
+
+#### HeaderedContentControl / Заголовочное содержимое
+Особая группа элементов управления образована от класса **`HeaderedContentControl`**, который является подклассом `ContentControl`. Эта группа отличается тем, что позволяет задать заголовок содержимому. В эту группу элементов входят `GroupBox` и `Expander`.
+
+`HeaderedContentControl` — это базовый класс в WPF, который наследует от `ContentControl`. Предоставляет базовую реализацию для всех элементов управления, имеющих отдельное содержимое и заголовок. Он позволяет создавать элементы управления, которые имеют как содержимое (`Content`), так и заголовок (`Header`). Это делает его удобным для создания пользовательских элементов управления с заголовками.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.Text)]
+public class HeaderedContentControl : System.Windows.Controls.ContentControl
+```
+
+Описание: https://learn.microsoft.com/ru-ru/dotnet/api/system.windows.controls.headeredcontentcontrol?view=windowsdesktop-8.0
+
+Ключевые свойства
+- **`Header`**: Определяет заголовок элемента управления. Может быть любым объектом, включая текст, изображения или другие элементы управления.
+
+- **`HeaderTemplate`**: Позволяет применить шаблон к заголовку.
+
+- **`HeaderTemplateSelector`**: Используется для выбора шаблона заголовка на основе определенных условий.
+
+- **`HeaderStringFormat`**: Определяет формат строки для заголовка, если он является строкой.
+
+Пример использования:
+```xml
+<HeaderedContentControl Header="Заголовок" Content="Это содержимое" />
+```
+
+В этом примере создается элемент `HeaderedContentControl` с простым текстовым заголовком и содержимым.
+
+
+Несколько элементов управления WPF наследуют от `HeaderedContentControl`, включая:
+
+- `GroupBox`: Используется для группировки элементов с заголовком.
+
+- `TabItem`: Представляет отдельную вкладку в `TabControl`.
+
+- `Expander`: Позволяет скрыть или показать содержимое по нажатию на заголовок.
+
+Пример с `GroupBox`:
+```xml
+<GroupBox Header="Группа элементов">
+    <StackPanel>
+        <CheckBox>Один</CheckBox>
+        <CheckBox>Два</CheckBox>
+        <CheckBox>Три</CheckBox>
+    </StackPanel>
+</GroupBox>
+```
+
+В этом примере `GroupBox` используется для группировки элементов с заголовком.
+
+Пример с `TabItem`:
+```xml
+<TabControl>
+    <TabItem Header="Вкладка 1">
+        <TextBlock>Содержимое вкладки 1</TextBlock>
+    </TabItem>
+    <TabItem Header="Вкладка 2">
+        <TextBlock>Содержимое вкладки 2</TextBlock>
+    </TabItem>
+</TabControl>
+```
+
+В этом примере `TabItem` используется для создания вкладок с заголовками в `TabControl`.
+
+Пример с `Expander`:
+```xml
+<Expander Header="Раскрыть">
+    <TextBlock>Это скрытое содержимое</TextBlock>
+</Expander>
+```
+
+В этом примере `Expander` используется для скрытия и показа содержимого по нажатию на заголовок.
+
+`HeaderedContentControl` обеспечивает гибкую основу для создания пользовательских элементов управления с заголовками, что делает его полезным для различных сценариев в WPF.
+
+##### GroupBox
+Элемент `GroupBox` организует наборы элементов управления в отдельные группы. При этом мы можем определить у группы заголовок:
+```xml
+<GroupBox Header="Выбрать блюдо" Padding="5">
+    <StackPanel>
+        <RadioButton IsChecked="True" Margin="3">Салат Оливье</RadioButton>
+        <RadioButton Margin="3">Котлеты по-киевски</RadioButton>
+        <RadioButton Margin="3">Селедка под шубой</RadioButton>
+        <Button Width="80" Margin="3">Заказать</Button>
+    </StackPanel>
+</GroupBox>
+```
+
+GroupBox включает группу различных элементов, однако, как и всякий элемент управления содержимым, он принимает внутри себя только один контейнер, поэтому сначала мы вкладываем в `GroupBox` общий контейнер, а в него уже все остальные элементы.
+
+Однако заголовок `GroupBox` необязательно представляет простой текст. Мы можем пойти дальше и изменить предыдущий пример, засунув кнопку заказа прямо в заголовок:
+```xml
+<GroupBox Padding="5">
+    <GroupBox.Header>
+        <Button Background="Lavender">Выбрать блюдо</Button>
+    </GroupBox.Header>
+    <StackPanel>
+        <RadioButton IsChecked="True" Margin="3">Салат Оливье</RadioButton>
+        <RadioButton Margin="3">Котлеты по-киевски</RadioButton>
+        <RadioButton Margin="3">Селедка под шубой</RadioButton>
+    </StackPanel>
+</GroupBox>
+```
+
+Осталось добавить обработчик нажатия кнопки `Click` для обработки заказа и можно заказывать блюда.
+
+##### Expander
+Представляет скрытое содержимое, раскрывающееся по нажатию мышкой на указатель в виде стрелки. Причем содержимое опять же может быть самым разным: кнопки, текст, картинки и т.д.
+
+С помощью свойства **`IsExpanded`** можно задать раскрытие узла при старте приложения. По умолчанию узел скрыт. Пример использования:
+```xml
+<StackPanel>
+    <Expander Header="Некрасов">
+        <TextBlock>Однажды в студеную зимнюю пору...</TextBlock>
+    </Expander>
+    <Expander Header="Пушкин">
+        <TextBlock>Онегин был, по мнению многих, ученый малый, но ...</TextBlock>
+    </Expander>
+    <Expander Header="Опрос">
+        <StackPanel>
+            <TextBlock>Отметьте, что вам больше нравится</TextBlock>
+            <CheckBox>WinForms</CheckBox>
+            <CheckBox>WPF</CheckBox>
+            <CheckBox>ASP.NET</CheckBox>
+        </StackPanel>
+    </Expander>
+</StackPanel>
+```
+
+Опять же мы можем изменить заголовок, вложив в него, например, кнопку или изображение:
+```xml
+<Expander>
+    <Expander.Header>
+        <Button Background="Lavender">Опрос</Button>
+    </Expander.Header>
+    <StackPanel>
+        <TextBlock>Выберите технологию</TextBlock>
+        <CheckBox>WinForms</CheckBox>
+        <CheckBox>WPF</CheckBox>
+        <CheckBox>ASP.NET</CheckBox>
+    </StackPanel>
+</Expander>
+```
+
+Если мы хотим обработать открытие экспандера, то нам надо обработать событие `Expanded` (а при обработке закрытия — событие `Collapsed`). Данные события вызываются до самого действия, поэтому мы можем перед открытием, например, динамически устанавливать содержание экспандера:
+```xml
+<Expander Expanded="Expander_Expanded" Collapsed="Expander_Collapsed">
+```
+
+А обработка событий в файле C# могла бы выглядеть так:
+```cs
+private void Expander_Expanded(object sender, RoutedEventArgs e)
+{
+    ((Expander)sender).Content = new Button() { Width = 80, Height = 30, Content = "Привет" };
+}
+
+private void Expander_Collapsed(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show("Экспандер свернут");
+}
+```
+
+В итоге при раскрытии элемента вместо начального содержимого там будет определенная в коде кнопка.
+
+Программное создание `Expander`'a:
+```cs
+StackPanel expanderPanel = new StackPanel();
+expanderPanel.Children.Add(new CheckBox { Content = "WinForms" });
+expanderPanel.Children.Add(new CheckBox { Content = "WPF" });
+expanderPanel.Children.Add(new CheckBox { Content = "ASP.NET" });
+
+Expander expander = new Expander();
+expander.Header = "Выберите технологию";
+expander.Content = expanderPanel;
+```
+
+##### TabItem
+Представляет отдельную вкладку внутри элемента `TabControl`:
+```xml
+<TabControl>
+    <TabItem Header="Вкладка 1">Первая вкладка</TabItem>
+    <TabItem Header="Вкладка 2">Вторая вкладка</TabItem>
+</TabControl>
+```
+
+Элемент `TabItem` является элементом управления содержимым, поэтому в него можно вложить другие элементы:
+```xml
+<TabControl x:Name="products">
+    <TabItem x:Name="smartphonesTab">
+        <TabItem.Header>
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Height="10" Width="10" Fill="Black" />
+                <TextBlock Margin="3">Смартфоны</TextBlock>
+            </StackPanel>
+        </TabItem.Header>
+        <TabItem.Content>
+            <StackPanel>
+                <RadioButton IsChecked="True">iPhone S6</RadioButton>
+                <RadioButton>LG G 4</RadioButton>
+                <RadioButton>Lumia 550</RadioButton>
+            </StackPanel>
+        </TabItem.Content>
+    </TabItem>
+    <TabItem x:Name="tabletsTab">
+        <TabItem.Header>
+            <StackPanel Orientation="Horizontal">
+                <Rectangle Height="10" Width="10" Fill="Black" />
+                <TextBlock Margin="3">Планшеты</TextBlock>
+            </StackPanel>
+        </TabItem.Header>
+    </TabItem>
+</TabControl>
+```
+
+Класс `TabItem` наследуется от класса `HeaderedContentControl`, поэтому кроме свойства `Content`, определяющее содержимое вкладки, имеет также свойство **`Header`**, которое определяет заголовок. И в этот заголовок мы можем вложить различное содержимое.
+
+#### ListBoxItem / Списочные элементы
+
+`ListBoxItem` — это элемент управления в WPF, который представляет собой отдельный элемент внутри `ListBox`. Он является производным от `ContentControl`, что означает, что он может содержать один объект любого типа, включая текст, изображения или другие элементы управления.
+
+Определение:
+```cs
+public class ListBoxItem : System.Windows.Controls.ContentControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.listboxitem?view=windowsdesktop-9.0
+
+Ключевые особенности `ListBoxItem`
+- **Содержимое**: Может содержать любой объект, включая строки, изображения или сложные композиции элементов.
+
+- **Свойства**: Поддерживает различные свойства для настройки внешнего вида, такие как `Background`, `Foreground`, `FontFamily`, и `FontSize`.
+
+- **Стилизация**: Может быть стилизован с помощью шаблонов или стилей для изменения внешнего вида.
+
+Пример использования:
+```xml
+<ListBox SelectedIndex="1">
+  <ListBoxItem Content="Red" />
+  <ListBoxItem Content="Green" />
+  <ListBoxItem Content="Blue" />
+</ListBox>
+```
+
+В качестве содержимого элементов списка можно задавать не только текст, но и другие элементы.
+
+```xml
+<ListBox>
+    <ListBoxItem>Элемент 1</ListBoxItem>
+    <ListBoxItem>Элемент 2</ListBoxItem>
+    <ListBoxItem>
+        <StackPanel Orientation="Horizontal">
+            <Image Source="image.jpg" Width="20" />
+            <TextBlock>Элемент 3</TextBlock>
+        </StackPanel>
+    </ListBoxItem>
+</ListBox>
+```
+
+В этом примере показано, как создать элементы `ListBoxItem` с простым текстом и более сложным содержимым.
+
+Программное создание `ListBoxItem`:
+```cs
+ListBoxItem item = new ListBoxItem();
+item.Content = "Новый элемент";
+listBox1.Items.Add(item);
+```
+
+Этот код создает новый `ListBoxItem` программно и добавляет его в `ListBox`.
+
+Чтобы получить доступ к конкретному `ListBoxItem`, можно использовать `ItemContainerGenerator`:
+```cs
+ListBoxItem lbi = (ListBoxItem)listBox1.ItemContainerGenerator.ContainerFromIndex(0);
+```
+
+Этот код возвращает элемент `ListBoxItem` по его индексу в списке4.
+
+`ListBoxItem` обеспечивает гибкий способ создания и настройки элементов внутри `ListBox`, что делает его полезным для различных сценариев в WPF.
+
+`ListBoxItem`, `ListViewItem`, и `ComboBoxItem` — это элементы управления в WPF, которые используются для представления отдельных элементов внутри соответствующих контейнеров (`ListBox`, `ListView`, и `ComboBox`). Каждый из них имеет свои особенности и используется в разных контекстах.
+
+Все элементы (`ListBoxItem`, `ListViewItem`, и `ComboBoxItem`) являются производными от `ContentControl`, что позволяет им содержать один объект любого типа. Однако, они используются в разных контекстах и имеют свои особенности в зависимости от родительского элемента управления (`ListBox`, `ListView`, или `ComboBox`).
+
+##### ListViewItem
+`ListViewItem` — это элемент управления в WPF, который представляет собой отдельный элемент внутри `ListView`. Он наследует от `ContentControl`, что позволяет ему содержать любой объект, включая текст, изображения или сложные композиции элементов. `ListViewItem` используется внутри `ListView`, который позволяет отображать данные в виде таблицы или сетки.
+
+Пример использования:
+```xml
+<ListView>
+    <ListView.View>
+        <GridView>
+            <GridViewColumn Header="Имя" Width="100" />
+            <GridViewColumn Header="Возраст" Width="50" />
+        </GridView>
+    </ListView.View>
+    <ListViewItem>
+        <GridViewRowPresenter>
+            <GridViewRowPresenter.Columns>
+                <GridViewColumnHeader Content="Иван" />
+                <GridViewColumnHeader Content="25" />
+            </GridViewColumnPresenter.Columns>
+        </GridViewRowPresenter>
+    </ListViewItem>
+</ListView>
+```
+
+Ключевые особенности:
+- **Содержимое**: Может содержать любой объект, включая строки, изображения или другие элементы управления.
+
+- **Привязка** данных: Часто используется с привязкой данных для отображения информации из объектов.
+
+- **Шаблоны**: Может использовать шаблоны (DataTemplate) для настройки внешнего вида содержимого.
+
+Пример использования:
+```xml
+<ListView>
+    <ListViewItem>
+        <StackPanel Orientation="Horizontal">
+            <Image Source="image.jpg" />
+            <TextBlock>Элемент 1</TextBlock>
+        </StackPanel>
+    </ListViewItem>
+    <ListViewItem>Элемент 2</ListViewItem>
+</ListView>
+```
+
+В этом примере показано, как создать элементы ListViewItem с простым текстом и более сложным содержимым.
+
+`ListViewItem` часто используется с привязкой данных для отображения информации из объектов. Для этого можно использовать свойство `View` в `ListView` для определения структуры данных:
+```xml
+<ListView>
+    <ListView.View>
+        <GridView>
+            <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Name}" />
+            <GridViewColumn Header="Возраст" DisplayMemberBinding="{Binding Age}" />
+        </GridView>
+    </ListView.View>
+    <!-- Элементы ListViewItem генерируются автоматически при привязке данных -->
+</ListView>
+```
+
+В этом случае `ListViewItem` генерируется автоматически для каждого объекта в привязанных данных.
+
+Свойства:
+- `IsSelected`: Указывает, выбран ли элемент.
+
+- `Content`: Определяет содержимое элемента.
+
+`ListViewItem` обеспечивает гибкий способ отображения данных в `ListView`, позволяя использовать различные шаблоны и привязки для настройки внешнего вида и поведения.
+
+##### ComboBoxItem
+`ComboBoxItem` — это элемент управления в WPF, который представляет собой отдельный элемент внутри `ComboBox`. Он наследует от `ContentControl`, что позволяет ему содержать любой объект, включая текст, изображения или сложные композиции элементов.
+
+Пример использования:
+```xml
+<ComboBox>
+    <ComboBoxItem>Элемент 1</ComboBoxItem>
+    <ComboBoxItem>
+        <StackPanel Orientation="Horizontal">
+            <Image Source="image.jpg" />
+            <TextBlock>Элемент 2</TextBlock>
+        </StackPanel>
+    </ComboBoxItem>
+</ComboBox>
+```
+
+
+`ComboBoxItem` используется внутри `ComboBox` для представления отдельных элементов выпадающего списка. Он также является элементом управления содержимым и может содержать различные типы данных.
+
+Ключевые особенности:
+- **Содержимое**: Может содержать любой объект, включая строки, изображения или другие элементы управления.
+
+- **Привязка данных**: Часто используется с привязкой данных для отображения информации из объектов.
+
+- **Шаблоны**: Может использовать шаблоны (DataTemplate) для настройки внешнего вида содержимого.
+
+Пример использования:
+```xml
+<ComboBox>
+    <ComboBoxItem>Элемент 1</ComboBoxItem>
+    <ComboBoxItem>
+        <StackPanel Orientation="Horizontal">
+            <Image Source="image.jpg" />
+            <TextBlock>Элемент 2</TextBlock>
+        </StackPanel>
+    </ComboBoxItem>
+</ComboBox>
+```
+
+В этом примере показано, как создать элементы `ComboBoxItem` с простым текстом и более сложным содержимым.
+
+`ComboBoxItem` часто используется с привязкой данных для отображения информации из объектов. Для этого можно использовать свойство `ItemsSource` в `ComboBox` для привязки к коллекции объектов:
+```cs
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+
+        // Пример привязки данных
+        peopleComboBox.ItemsSource = new Person[]
+        {
+            new Person { Name = "Tom", Company = "Microsoft" },
+            new Person { Name = "Bob", Company = "Google" },
+            new Person { Name = "Sam", Company = "JetBrains" }
+        };
+    }
+}
+
+public class Person
+{
+    public string Name { get; set; } = "";
+    public string Company { get; set; } = "";
+    public override string ToString() => $"{Name} ({Company})";
+}
+```
+
+В этом случае `ComboBoxItem` генерируется автоматически для каждого объекта в привязанных данных.
+
+Свойства:
+- `IsEnabled`: Управляет доступностью элемента.
+
+- `IsHighlighted`: Получает значение, указывающее является ли данный заголовок выделенным
+
+- `IsSelected`: Указывает, выбран ли элемент.
+
+- `Content`: Определяет содержимое элемента.
+
+`ComboBoxItem` обеспечивает гибкий способ отображения данных в `ComboBox`, позволяя использовать различные шаблоны и привязки для настройки внешнего вида и поведения.
+
+#### Метка / Label
+Элемент управления `Label` в WPF — это текстовая подпись для элемента управления, которая обеспечивает функциональную и визуальную поддержку ключей доступа (мнемоник). Он наследует от `ContentControl`, что позволяет ему содержать любой объект, включая текст, изображения или другие элементы управления.
+
+Определение:
+```cs
+public class Label : System.Windows.Controls.ContentControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.label?view=windowsdesktop-9.0
+
+Ключевые особенности:
+- **Содержимое**: Может содержать любой объект, включая строки, изображения или сложные композиции элементов.
+
+- **Клавиши доступа**: Поддерживает клавиши доступа, которые позволяют быстро переместить фокус на связанный элемент управления при нажатии определенной клавиши.
+
+- **Связывание с элементом управления**: Свойство `Target` позволяет связать `Label` с элементом управления, который получит фокус при нажатии клавиши доступа.
+
+Пример использования
+```xml
+<TextBox Name="tb" Width="50"/>
+<Label Target="{Binding ElementName=tb}">_File</Label>
+```
+
+В этом примере `Label` связан с `TextBox` и имеет клавишу доступа (_). При нажатии клавиши <kbd>Alt</kbd> + <kbd><i>клавиша доступа</i></kbd> (F в данном случае), фокус будет перенесен на `TextBox`.
+
+Свойства:
+- `Content`: Определяет содержимое элемента.
+
+- `Target`: Указывает элемент управления, который получит фокус при нажатии клавиши доступа.
+
+Таким образом, главной особенностью меток является поддержка мнемонических команд-клавиш быстрого доступа (access keys), которые передают фокус связанному элементу. Например,
+```xml
+<Label Target="{Binding ElementName=TextBox1}">_привет</Label>
+<TextBox Name="TextBox1" Margin="0 30 0 0" Height="30" Width="100"></TextBox>
+```
+
+Теперь, нажав на клавишу "п", мы переведем фокус на связанное текстовое поле. При вызове приложения подчеркивание не отображается, чтобы отображать подчеркивание, надо нажать на клавишу <kbd>Alt</kbd>. Тогда чтобы перевести фокус на связанное текстовое поле необходимо будет нажать сочетание <kbd>Alt</kbd> + "<kbd>п</kbd>". Если не предполагается использование клавиш быстрого доступа, то для вывода обычной текста вместо меток лучше использовать элемент `TextBlock`.
+
+Преимущества над `TextBlock`
+- **Поддержка клавиш доступа**: `Label` поддерживает клавиши доступа, что делает его более удобным для создания интерфейсов, где требуется быстрый доступ к элементам управления с помощью клавиатуры.
+
+- **Связывание с элементом управления**: Может быть связан с элементом управления для передачи фокуса.
+
+Если не требуется поддержка клавиш доступа, для простого отображения текста можно использовать `TextBlock`, который более легковесен и не имеет отступов по умолчанию.
+
+#### ToolTip / Всплывающая подсказка
+ToolTip в WPF — это элемент управления, который отображает всплывающую подсказку при наведении мыши на связанный с ним элемент. Он позволяет предоставить пользователям дополнительную информацию об элементах интерфейса.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.ToolTip)]
+public class ToolTip : System.Windows.Controls.ContentControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.tooltip?view=windowsdesktop-9.0
+
+Ключевые особенности:
+- **Содержимое**: Может содержать любой объект, включая текст, изображения или сложные композиции элементов.
+
+- **Свойства**: Поддерживает различные свойства для настройки внешнего вида и поведения, такие как `Background`, `Foreground`, `HasDropShadow`, и `Placement`.
+
+- **Гибкость**: Позволяет создавать сложные всплывающие подсказки с несколькими элементами и шаблонами.
+
+Пример использования:
+```xml
+<Button ToolTip="Нажмите для действия">Кнопка</Button>
+```
+
+В этом простом примере при наведении мыши на кнопку появляется всплывающая подсказка с текстом.
+
+Для определения всплывающей подсказки у элементов уже есть свойство `ToolTip`, которому можно задать текст, отображаемый при наведении:
+```xml
+<Button Content="Tooltip" ToolTip="Всплывающая подсказка для кнопки" Height="30" Width="80" />
+```
+
+Также мы можем более точно настроить всплывающую подсказку с помощью свойства `Button.ToolTip`:
+```xml
+<Button Content="Tooltip" Height="30" Width="80">
+    <Button.ToolTip>
+        <ToolTip>
+            Всплывающая подсказка для кнопки
+        </ToolTip>
+    </Button.ToolTip>
+</Button>
+```
+
+Всплывающие подсказки можно применять не только кнопкам, но и ко всем другим элементам управления, например, к текстовому блоку:
+```xml
+<StackPanel>
+    <TextBlock Text="TextTooltip 1" ToolTip="Hello Tooltip" />
+    <TextBlock Text="TextTooltip 2">
+        <TextBlock.ToolTip>
+            <ToolTip>
+                Hello WPF
+            </ToolTip>
+        </TextBlock.ToolTip>
+    </TextBlock>
+</StackPanel>
+```
+
+Оба определения всплывающей подсказки будут аналогичны.
+
+Пример со сложным содержимым:
+```xml
+<Button>
+    <Button.ToolTip>
+        <ToolTip>
+            <StackPanel>
+                <TextBlock Text="Подсказка" />
+                <Image Source="image.jpg" />
+            </StackPanel>
+        </ToolTip>
+    </Button.ToolTip>
+    Кнопка
+</Button>
+```
+
+Поскольку `ToolTip` является элементом управления содержимого, то в него можно встроить другие элементы для создания более богатой функциональности. Например:
+```xml
+<StackPanel>
+    <TextBlock Text="Просмотр фотографий" Margin="0 0 0 10" />
+    <RadioButton GroupName="Photos" Content="Мои кошки" Height="20">
+        <RadioButton.ToolTip>
+            <ToolTip Width="200" Height="150">
+                <StackPanel>
+                    <TextBlock Text="Мои кошки" />
+                    <Image Source="cats.jpg" />
+                </StackPanel>
+            </ToolTip>
+        </RadioButton.ToolTip>
+    </RadioButton>
+    <RadioButton GroupName="Photos" Content="Остальные фото" Height="20" ToolTip="Остальное" />
+</StackPanel>
+```
+
+Здесь у нас два переключателя, и на одном из них определен расширенный элемент `ToolTip`: а именно в него вложен элемент `Image`, выводящий изображение, и элемент `TextBlock`. Таким образом, можно создавать всплывающие подсказки с различным наполнением.
+
+Изображение для элемента `Image` в данном случае было добавлено в проект.
+
+##### Свойства ToolTip
+Некоторые полезные свойства элемента `Tooltip`:
+
+- **`HasDropShadow`**: определяет, будет ли всплывающая подсказка отбрасывать тень.
+
+- **`Placement`**: определяет, как будет позиционироваться всплывающая подсказка на окне приложения. По умолчанию ее верхний левый угол позиционируется на указатель мыши.
+
+- **`HorizontalOffset`**/**`VerticalOffset`**: определяет смещение относительно начального местоположения.
+
+- **`PlacementTarget`**: определяет позицию всплывающей подсказки относительно другого элемента управления.
+
+- **`IsOpen`**: определяет видимость подсказки
+
+- **`StaysOpen`**: определяет режим отображения подсказки ()
+
+Применим свойства:
+```xml
+<StackPanel>
+    <RadioButton GroupName="Phones" Content="iPhone 6S">
+        <RadioButton.ToolTip>
+            <ToolTip Background="#60AA4030" Foreground="White" HasDropShadow="False"
+                Placement="Relative" HorizontalOffset="15" VerticalOffset="10">
+                <StackPanel>
+                    <TextBlock>Цена:</TextBlock>
+                    <TextBlock>Связной: 54990 рублей</TextBlock>
+                    <TextBlock>Ситилинк: 539990 рублей</TextBlock>
+                </StackPanel>
+            </ToolTip>
+        </RadioButton.ToolTip>
+    </RadioButton>
+    <RadioButton GroupName="Phones" ToolTipService.Placement="Mouse"
+        ToolTip="Цена: 29990 рублей" Content="Nexus 5X" />
+    <RadioButton GroupName="Phones" ToolTip="Цена: 39990 рублей" Content="Lumia 950" />
+</StackPanel>
+```
+
+![Picture 4.6. ToolTip](./img/66dec107d048d373527220df-4.6.png "ToolTip")
+
+Здесь у нас три переключателя. У первого мы задаем свойства через элемент `ToolTip`. Для второго переключателя мы также можем задать свойства, несмотря на то, что здесь мы всплывающую подсказку задаем просто `ToolTip="Цена: 29990 рублей" Content="Nexus 5X"`. В этом случае мы можем использовать прикрепленные свойства класса **`ToolTipService`**.
+
+##### Свойства ToolTipService
+Для управления поведением всплывающих подсказок можно использовать свойства класса `ToolTipService`:
+
+- `InitialShowDelay`: задает задержку перед отображением всплывающей подсказки.
+
+- `ShowDuration`: устанавливает время отображения всплывающей подсказки.
+
+- `BetweenShowDelay`: устанавливает время, в течение которого пользователь сможет перейти к другому элементу с подсказкой, и для этого элемента не будет работать свойство `InitialShowDelay` (если оно указано).
+
+- `ToolTip`: устанавливает содержимое всплывающей подсказки.
+
+- `HasDropShadow`: определяет, будет ли подсказка отбрасывать тень.
+
+- `ShowOnDisabled`: устанавливает поведение всплывающей подсказки для недоступного элемента (со значением `IsEnabled="True"`). Если это свойство равно `true`, то подсказка отображается для недоступных элементов. По умолчанию равно `false`.
+
+- `Placement` / `HorizontalOffset` / `VerticalOffset` / `PlacementTarget`: те же свойства, что и у элемента `ToolTip`, которые устанавливают положение всплывающей подсказки
+
+```xml
+<Button ToolTip="Подсказка" ToolTipService.ShowDuration="5000" ToolTipService.HasDropShadow="True">Кнопка</Button>
+```
+
+Этот код устанавливает время отображения подсказки в 5 секунд и включает отображение тени.
+
+##### Программное создание всплывающей подсказки
+Допустим, в коде XAML у нас определена следующая кнопка:
+```xml
+<Button x:Name="button1" Content="Hello" />
+```
+
+Тогда в файле кода C# мы могли бы определить всплывающую подсказку для кнопки так:
+```cs
+ToolTip toolTip = new ToolTip();
+StackPanel toolTipPanel = new StackPanel();
+toolTipPanel.Children.Add(new TextBlock { Text = "Заголовок", FontSize=16 });
+toolTipPanel.Children.Add(new TextBlock { Text = "Текст" });
+toolTip.Content = toolTipPanel;
+button1.ToolTip = toolTip;
+```
+
+#### ScrollViewer. Создание прокрутки
+[6713e2c05040133e8429e528](https://metanit.com/sharp/wpf/5.20.php)
+
+Элемент управления `ScrollViewer` в WPF — это составной элемент, который обеспечивает прокрутку содержимого в приложениях. Он инкапсулирует горизонтальные и вертикальные полосы прокрутки (`ScrollBar`) и контейнер для содержимого, что позволяет отображать большие объемы информации в ограниченной области.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.Ignore)]
+[System.Windows.TemplatePart(Name="PART_ScrollContentPresenter", Type=typeof(System.Windows.Controls.ScrollContentPresenter))]
+[System.Windows.TemplatePart(Name="PART_HorizontalScrollBar", Type=typeof(System.Windows.Controls.Primitives.ScrollBar))]
+[System.Windows.TemplatePart(Name="PART_VerticalScrollBar", Type=typeof(System.Windows.Controls.Primitives.ScrollBar))]
+public class ScrollViewer : System.Windows.Controls.ContentControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.scrollviewer?view=windowsdesktop-9.0
+
+Ключевые особенности:
+- **Содержимое**: Может содержать только один дочерний элемент, обычно это контейнер компоновки (`Panel`), который может включать несколько элементов.
+
+- **Прокрутка**: Поддерживает как вертикальную, так и горизонтальную прокрутку.
+
+- **Свойства**: Имеет свойства для управления видимостью полос прокрутки (`HorizontalScrollBarVisibility` и `VerticalScrollBarVisibility`), которые могут быть установлены в `Auto`, `Visible`, `Hidden`, или `Disabled`.
+
+- **Программная прокрутка**: Предоставляет методы для программной прокрутки, такие как `LineUp()`, `LineDown()`, `ScrollToEnd()`, и `ScrollToHome()`.
+
+Пример использования:
+```xml
+<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <StackPanel>
+        <TextBlock TextWrapping="Wrap" Margin="0,0,0,20">Прокрутка включена при необходимости.</TextBlock>
+        <Rectangle Fill="Red" Width="500" Height="500"></Rectangle>
+    </StackPanel>
+</ScrollViewer>
+```
+
+В этом примере `ScrollViewer` содержит `StackPanel` с текстом и большим прямоугольником. Полосы прокрутки появляются автоматически, если содержимое превышает размер окна.
+
+Свойства прокрутки:
+- **`CanContentScroll`**: Если установлено в `true`, прокрутка осуществляется к началу следующего элемента, а не на несколько пикселей.
+
+- **`ScrollChanged`**: Событие, которое возникает при изменении состояния прокрутки.
+
+Как и все элементы управления WPF, `ScrollViewer` можно стилизовать с помощью шаблонов и стилей для изменения внешнего вида.
+
+Таким образом, элемент `ScrollViewer` обеспечивает прокрутку содержимого. Может вмещать в себя только один элемент, поэтому все элементы, помещаемые внутрь `ScrollViewer` необходимо облачить в еще один контейнер. Например:
+```xml
+<Window x:Class="ControlsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlsApp"
+        mc:Ignorable="d"
+        Title="ScrolViewer" Height="250" Width="300">
+    <Grid>
+        <ScrollViewer>
+            <StackPanel>
+                <Button MinHeight="60" Background="Red"/>
+                <Button MinHeight="60" Background="Orange"/>
+                <Button MinHeight="60" Background="Yellow"/>
+                <Button MinHeight="60" Background="Green"/>
+                <Button MinHeight="60" Background="Blue"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
+```
+
+`ScrollViewer` поддерживает как вертикальную, так и горизонтальную прокрутку. Ее можно установить с помощью свойств **`HorizontalScrollBarVisibility`** и **`VerticalScrollBarVisibility`**. Эти свойства принимают одно из следующих значений:
+
+- **`Auto`**: наличие полос прокрутки устанавливается автоматически
+
+- **`Visible`**: полосы прокрутки отображаются в окне приложения
+
+- **`Hidden`**: полосы прокрутки не видно, но прокрутка возможна с помощью клавиш клавиатуры
+
+- **`Disabled`**: полосы прокрутки не используются, а сама прокрутка даже с помощью клавиатуры невозможна
+
+Среди свойств нужно отметить еще **`CanContentScroll`**. Если оно установлено в `True`, то прокрутка осуществляется не на несколько пикселей, а к началу следующего элемента.
+
+Кроме того, прокрутку можно организовать программным способом — с помощью следующих методов элемента `ScrollViewer`:
+
+- **`LineUp()`**, **`LineDown()`**, **`LineRight()`**, **`LineLeft()`**: прокрутка соответственно вверх, вниз, вправо, влево.
+
+- **`ScrollToEnd()`**, **`ScrollToHome()`**: прокрутка в конец окна и в начало.
+
+- **`ScrollToRightEnd()`**, **`ScrollToLeftEnd()`**: прокрутка в правый и левый конец окна.
+
+В качестве примера обернем несколько элементов `RadioButton` в элемент `ScrollViewer`:
+```xml
+<Window x:Class="ControlsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlsApp"
+        mc:Ignorable="d"
+        Title="ScrolViewer" Height="220" Width="300">
+    <StackPanel>
+        <ScrollViewer Name="scroll" CanContentScroll="True" Height="150">
+            <GroupBox Header="Смартфон 2015" Padding="5">
+                <StackPanel>
+                    <RadioButton GroupName="Phones" Margin="4">iPhone 6S</RadioButton>
+                    <RadioButton GroupName="Phones" Margin="4">iPhone 6S Plus</RadioButton>
+                    <RadioButton GroupName="Phones" Margin="4">Lumia 550</RadioButton>
+                    <RadioButton GroupName="Phones" Margin="4">Lumia 950</RadioButton>
+                    <RadioButton GroupName="Phones" Margin="4">Nexus 5X</RadioButton>
+                    <RadioButton GroupName="Phones" Margin="4">Nexus 6P</RadioButton>
+                    <RadioButton GroupName="Phones" Margin="4">Galaxy S6 Edge</RadioButton>
+                </StackPanel>
+            </GroupBox>
+        </ScrollViewer>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="Up" Grid.Column="0" Margin="4" Click="Up_Click" />
+            <Button Content="Down" Grid.Column="1" Margin="4" Click="Down_Click" />
+        </Grid>
+    </StackPanel>
+</Window>
+```
+
+А в файле кода C# пропишем обработчики кнопок, которые будут выполнять программно прокрутку:
+```cs
+using System.Windows;
+
+namespace ControlsApp
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void Up_Click(object sender, RoutedEventArgs e)
+        {
+            scroll.LineUp();
+        }
+
+        private void Down_Click(object sender, RoutedEventArgs e)
+        {
+            scroll.LineDown();
+        }
+    }
+}
+```
+
+![Picture 4.11](./img/66dec107d048d373527220df-4.11.png)
+
+#### Окно / Window
+Класс `Window` в WPF — это фундаментальный элемент, который представляет собой отдельное окно приложения. Он наследует от `ContentControl`, что означает, что может содержать только один дочерний элемент, обычно контейнер компоновки (`Panel`) для организации содержимого окна.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.Ignore)]
+public class Window : System.Windows.Controls.ContentControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.window?view=windowsdesktop-9.0
+
+Ключевые особенности:
+- **Содержимое**: Может содержать любой объект, включая текст, изображения или сложные композиции элементов, но обычно это один контейнер компоновки (`Grid`, `StackPanel`).
+
+- **Свойства**: Имеет свойства для настройки внешнего вида и поведения окна, такие как `Title`, `Icon`, `WindowStyle`, `Topmost`, и `WindowStartupLocation`.
+
+- **Жизненный цикл**: Предоставляет события для управления жизненным циклом окна, включая `Loaded`, `Activated`, `Deactivated`, `Closing`, и `Closed`
+
+Пример использования:
+```xml
+<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Main Window" Height="300" Width="300">
+    <Grid>
+        <!-- Содержимое окна -->
+    </Grid>
+</Window>
+```
+
+В этом примере создается окно с заголовком и содержимым, организованным с помощью `Grid`.
+
+Программное создание окна:
+```cs
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        this.Title = "Main Window";
+        this.Width = 300;
+        this.Height = 300;
+    }
+}
+```
+
+Этот код создает окно программно и устанавливает его свойства.
+
+Класс `Window` является определяет базовый вид окна, предоставляя такие свойства, как рамка (standard border), строка заголовка (title bar) и кнопки управления окном (maximize, minimize and close buttons). Окно в WPF представляет собой сочетание файлов XAML (.xaml) (где корневым элементом является `<Window>`) и файла отделенного кода (CodeBehind) (.cs). При создании нового WPF-приложения Visual Studio (Express) автоматически генерирует окно по умолчанию, выглядящее примерно так:
+```xml
+<Window x:Class="WpfApplication1.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Window1" Height="300" Width="300">
+    <Grid>
+
+    </Grid>
+</Window>
+```
+
+Атрибут *`x:class`* сообщает файлу XAML о том, какой класс необходимо использовать — в данном случае это `Window1`, также автоматически создаваемый Visual Studio. Его можно обнаружить в дереве проекта VS как вложенный узел файла XAML. По умолчанию он выгядит примерно так:
+```cs
+using System;
+using System.Windows;
+using System.Windows.Controls;
+//…more using statements
+
+namespace WpfApplication1
+{
+    /// <summary>
+    /// Interaction logic for Window1.xaml
+    /// </summary>
+    public partial class Window1 : Window
+    {
+        public Window1()
+        {
+            InitializeComponent();
+        }
+    }
+}
+```
+
+Как видно, класс `Window1` определен как частичный (`partial`), поскольку во время выполнения (runtime) он объединяется с файлом XAML для создания полноценного окна. За это как раз ответственен вызов `InitializeComponent()`, который необходим для запуска и успешной работы полнофункционального окна.
+
+Если вернуться к файлу XAML, то можно обратить внимание на несколько интересных атрибутов элемента `Window`, таких как `Title`, который определяет заголовок окна (title bar), а также начальные ширина и высота. Так же, здесь находится несколько определений пространств имен.
+
+Также можно обратить внимание на то, что Visual Studio создаёт элемент `Grid` внутри `Window`. `Grid` является одним из контейнеров WPF, и хотя на его месте может быть любая панель или элемент управления, `Window` может содержать только один элемент в качестве прямого потомка, поэтому использование в этом качестве любого наследника класса `Panel`, который допускает вложение множества элементов, обычно является хорошим выбором.
+
+##### Важнейшие свойства окна
+Класс `Window` имеет несколько атрибутов, которые можно устанавливать для управления внешним видом и поведением окна приложения. Ниже представлен короткий список наиболее интересных:
+
+- **`Icon`** — позволяет определить иконку окна, которая обычно расположена в левом верхнем углу, слева от заголовка.
+
+- **`ResizeMode`** — управляет тем, может ли конечный пользователь изменять размер окна. Значение по умолчанию — `CanResize`, что позволяет пользователю изменять размер окна либо с помощью кнопок "свернуть"/"развернуть", либо перетягиванием за углы курсором мыши. `CanMinimize` позволяет пользователю свернуть окно, но запрещает разворачивать его на весь экран или изменять его размер. `NoResize` — самое строгое правило, которое убирает кнопки "свернуть"/"развернуть" и не позволяет менять размер окна.
+
+- **`ShowInTaskbar`** — по умолчанию имеет значение `true`, но если переназначить его на `false`, то окно не будет представлено в панели задач `Windows`. Это свойство очень полезно, так как позволяет убрать с панели задач второстепенные окна или приложения, которые должны быть свернуты в трей.
+
+- **`SizeToContent`** — определяет, будет ли окно автоматически менять свой размер, приспосабливаясь под содержимое. Значение по умолчанию — `Manual`, что означает, что окно не будет автоматически подстраивать свой размер. Другими опциями являются: `Width`, `Height` и `WidthAndHeight`, которые позволяют настроить автоподстройку размера окна по ширине, высоте, либо по двум параметрам сразу.
+
+- **`Topmost`** — по умолчанию `false`, но при переключении на `true` окно будет оставаться на переднем плане (поверх остальных окон), если его не минимизировать, что в определенных ситуациях может быть полезным.
+
+- **`WindowStartupLocation`** — управляет начальным положением окна. Значение по умолчанию `Manual`, означает, что окно при инициализации будет расположено в соответствии со свойствами окна `Top` и `Left`. Другими опциями являются `CenterOwner`, которая будет располагать окно в центре родительского окна и `CenterScreen`, располагающая окно в центре экрана.
+
+- **`WindowState`** — регулирует начальное состояние окна. Оно может принимать значения `Normal`, `Maximized` или `Minimized`. По умолчанию `Normal`, которое используется в случае, если вы не хотите, чтобы при запуске окно было свернуто или развернулось на весь экран.
+
+Следует иметь в виду, что помимо вышеописанных у `Window` имеется множество других атрибутов.
+
+#### Фрейм / Frame
+Класс `Frame` в WPF — это элемент управления, который позволяет отображать содержимое, такое как страницы (`Page`), внутри окна или другого элемента управления. Он обеспечивает функциональность навигации между страницами, что делает его удобным для создания приложений с несколькими страницами.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.Ignore)]
+[System.Windows.Markup.ContentProperty]
+[System.Windows.TemplatePart(Name="PART_FrameCP", Type=typeof(System.Windows.Controls.ContentPresenter))]
+public class Frame : System.Windows.Controls.ContentControl, System.Windows.Markup.IAddChild, System.Windows.Markup.IUriContext
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.frame?view=windowsdesktop-9.0
+
+Ключевые особенности:
+- **Содержимое**: Может содержать любой элемент, но особенно полезен для отображения страниц (`Page`).
+
+- **Навигация**: Поддерживает навигацию между страницами с помощью свойств `Source`, `Navigate`, и методов `GoBack`, `GoForward`.
+
+- **Журнал навигации**: Хранит записи о предыдущих страницах, что позволяет перемещаться назад и вперед.
+
+Пример использования:
+```xml
+<Window>
+    <Grid>
+        <Frame Name="mainFrame" />
+    </Grid>
+</Window>
+```
+
+```cs
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        mainFrame.Navigate(new Uri("Pages/HomePage.xaml", UriKind.Relative));
+    }
+}
+```
+
+В этом примере `Frame` используется для отображения страницы *HomePage.xaml*.
+
+Свойства и методы:
+- **`Source`**: Устанавливает URI страницы для отображения.
+
+- **`Navigate`**: Переходит к указанной странице.
+
+- **`GoBack`**: Переходит к предыдущей странице.
+
+- **`GoForward`**: Переходит к следующей странице в журнале навигации.
+
+- **`BackStack`**: Возвращает коллекцию записей о предыдущих страницах.
+
+Преимущества:
+- **Упрощает навигацию**: Позволяет легко перемещаться между страницами.
+
+- **Поддерживает журнал навигации**: Хранит историю переходов для навигации назад и вперед.
+
+Таким образом, `Frame` — это мощный инструмент для создания приложений с несколькими страницами, что делает его удобным для разработки сложных интерфейсов в WPF.
+
+#### Пользовательский элемент управления / UserControl
+`UserControl` в WPF — это класс, который позволяет создавать пользовательские элементы управления путем объединения существующих элементов в один контейнер. Он наследует от `ContentControl`, что позволяет ему содержать один дочерний элемент, но обычно используется для группировки нескольких элементов в XAML-коде.
+
+Определение:
+```cs
+public class UserControl : System.Windows.Controls.ContentControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.usercontrol?view=windowsdesktop-9.0
+
+Ключевые особенности:
+- **Композиция**: `UserControl` позволяет создавать сложные элементы управления, объединяя существующие элементы в один контейнер.
+
+- **Разметка и код**: Как и окно WPF, `UserControl` состоит из файла XAML для разметки и файла кода (обычно с расширением .xaml.cs) для логики.
+
+- **Шаблон**: Имеет собственный шаблон, который включает элемент `Border` и `ContentPresenter`, что позволяет настраивать внешний вид.
+
+- **Свойства**: Может иметь свои собственные свойства, такие как `DependencyProperty`, для привязки данных и настройки поведения.
+
+Пример использования:
+```xml
+<UserControl x:Class="MyApp.MyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <TextBlock Text="Это мой пользовательский элемент" />
+    </Grid>
+</UserControl>
+```
+
+В этом примере создается простой `UserControl` с текстом внутри сетки.
+
+Чтобы использовать созданный `UserControl` в окне, необходимо добавить ссылку на пространство имен и использовать его как любой другой элемент:
+```xml
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:MyApp">
+    <uc:MyControl />
+</Window>
+```
+
+Преимущества и ограничения:
+- **Преимущества**: Легко создавать и использовать, аналогично созданию окон WPF.
+
+- **Ограничения**: Не поддерживает изменение внешнего вида с помощью шаблонов (`ControlTemplate`), если не создать собственный шаблон для `UserControl`.
+
+`UserControl` — это удобный способ создания повторно используемых элементов управления в WPF, но для более гибкой настройки внешнего вида рекомендуется использовать `CustomControl`.
 
 ## Навигация
 
