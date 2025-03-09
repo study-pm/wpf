@@ -1,0 +1,276 @@
+﻿<Window x:Class="Content_Control.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Content_Control"
+        xmlns:uc="clr-namespace:Content_Control"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="Auto" Width="Auto">
+    <Window.Resources>
+        <Style TargetType="HeaderedContentControl">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <UniformGrid Rows="2" Columns="3">
+        <ScrollViewer Margin="20">
+            <StackPanel x:Name="stack">
+                <HeaderedContentControl Header="Controls" />
+                <Button Content="Text Content Shorthand" />
+                <Button>
+                    <Button.Content>
+                        Text Content Explicit
+                    </Button.Content>
+                </Button>
+                <Button>
+                    Text Content Implicit
+                </Button>
+                <Button x:Name="numBound"></Button>
+                <Button x:Name="objBound"></Button>
+                <Button>
+                    <Button Content="Inner Button"></Button>
+                </Button>
+                <Button>
+                    <WrapPanel>
+                        <Button Content="Inner Button 1"></Button>
+                        <Button Click="Button_Click">Inner Button 2</Button>
+                        <Button>
+                            <Button.Content>Inner Button 3</Button.Content>
+                        </Button>
+                    </WrapPanel>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <HeaderedContentControl Header="ButtonBase" />
+                <TextBox/>
+                <Button x:Name="exitBtn" IsCancel="True" Click="exitBtn_Click">Exit</Button>
+                <Button x:Name="acceptBtn" IsDefault="True" Click="acceptBtn_Click">Accept</Button>
+                <RepeatButton>Repeat Button</RepeatButton>
+                <ToggleButton Click="ToggleButton_Click">Toggle Button</ToggleButton>
+                <StackPanel x:Name="stackPanel">
+                    <CheckBox x:Name="checkBox1" Height="20" Content="Default" />
+                    <CheckBox x:Name="checkBox2" Height="20" IsChecked="True" Content="Checked" />
+                    <CheckBox x:Name="checkBox3" IsThreeState="True" IsChecked="{x:Null}" Height="20" Content="Unchecked Three State"/>
+                </StackPanel>
+                <GroupBox Header="Programming Languages">
+                    <StackPanel>
+                        <RadioButton GroupName="Languages" Content="C#" IsChecked="True" />
+                        <RadioButton GroupName="Languages" Content="VB.NET" />
+                        <RadioButton GroupName="Languages" Content="C++" />
+                        <RadioButton GroupName="Asf" Content="C++" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Technologies">
+                    <WrapPanel>
+                        <RadioButton GroupName="Technologies" Content="WPF" IsChecked="True" />
+                        <RadioButton GroupName="Technologies" Content="WinForms" />
+                        <RadioButton GroupName="Technologies" Content="ASP.NET" />
+                    </WrapPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Padding="20">
+            <StackPanel>
+                <HeaderedContentControl x:Name="headContCtrl" Header="HeaderedContentControl" Content="Content" />
+                <GroupBox Header="Группа элементов">
+                    <StackPanel>
+                        <CheckBox>Один</CheckBox>
+                        <CheckBox>Два</CheckBox>
+                        <CheckBox>Три</CheckBox>
+                    </StackPanel>
+                </GroupBox>
+                <TabControl>
+                    <TabItem Header="Вкладка 1">
+                        <TextBlock>Содержимое вкладки 1</TextBlock>
+                    </TabItem>
+                    <TabItem Header="Вкладка 2">
+                        <TextBlock>Содержимое вкладки 2</TextBlock>
+                    </TabItem>
+                </TabControl>
+                <Expander Header="Раскрыть">
+                    <TextBlock>Это скрытое содержимое</TextBlock>
+                </Expander>
+                <GroupBox Header="Выбрать блюдо" Padding="5">
+                    <StackPanel>
+                        <RadioButton IsChecked="True" Margin="3">Салат Оливье</RadioButton>
+                        <RadioButton Margin="3">Котлеты по-киевски</RadioButton>
+                        <RadioButton Margin="3">Селедка под шубой</RadioButton>
+                        <Button Width="80" Margin="3">Заказать</Button>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Padding="5">
+                    <GroupBox.Header>
+                        <Button Background="Lavender">Выбрать блюдо</Button>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <RadioButton IsChecked="True" Margin="3">Салат Оливье</RadioButton>
+                        <RadioButton Margin="3">Котлеты по-киевски</RadioButton>
+                        <RadioButton Margin="3">Селедка под шубой</RadioButton>
+                    </StackPanel>
+                </GroupBox>
+                <Expander Header="Некрасов">
+                    <TextBlock>Однажды в студеную зимнюю пору...</TextBlock>
+                </Expander>
+                <Expander Header="Пушкин">
+                    <TextBlock>Онегин был, по мнению многих, ученый малый, но ...</TextBlock>
+                </Expander>
+                <Expander Header="Опрос">
+                    <StackPanel>
+                        <TextBlock>Отметьте, что вам больше нравится</TextBlock>
+                        <CheckBox>WinForms</CheckBox>
+                        <CheckBox>WPF</CheckBox>
+                        <CheckBox>ASP.NET</CheckBox>
+                    </StackPanel>
+                </Expander>
+                <Expander>
+                    <Expander.Header>
+                        <Button Background="Lavender">Опрос</Button>
+                    </Expander.Header>
+                    <StackPanel>
+                        <TextBlock>Выберите технологию</TextBlock>
+                        <CheckBox>WinForms</CheckBox>
+                        <CheckBox>WPF</CheckBox>
+                        <CheckBox>ASP.NET</CheckBox>
+                    </StackPanel>
+                </Expander>
+                <TabControl x:Name="products">
+                    <TabItem x:Name="smartphonesTab">
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Height="10" Width="10" Fill="Black" />
+                                <TextBlock Margin="3">Смартфоны</TextBlock>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <StackPanel>
+                                <RadioButton IsChecked="True">iPhone S6</RadioButton>
+                                <RadioButton>LG G 4</RadioButton>
+                                <RadioButton>Lumia 550</RadioButton>
+                            </StackPanel>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem x:Name="tabletsTab">
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Height="10" Width="10" Fill="Black" />
+                                <TextBlock Margin="3">Планшеты</TextBlock>
+                            </StackPanel>
+                        </TabItem.Header>
+                    </TabItem>
+                </TabControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Padding="20">
+            <StackPanel>
+                <HeaderedContentControl Header="ListBoxItem" />
+                <GroupBox Header="ListBox" Margin="10" BorderThickness="0">
+                    <ListBox SelectedIndex="1">
+                        <ListBoxItem Content="Red" />
+                        <ListBoxItem Content="Green" />
+                        <ListBoxItem Content="Blue" />
+                    </ListBox>
+                </GroupBox>
+                <GroupBox Header="ListBox" Margin="10" BorderThickness="0">
+                    <ListBox>
+                        <ListBoxItem>Элемент 1</ListBoxItem>
+                        <ListBoxItem>Элемент 2</ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="wpf_logo.png" Width="20" />
+                                <TextBlock>Элемент 3</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </GroupBox>
+                <GroupBox Header="ListView" Margin="10" BorderThickness="0">
+                    <ListView>
+                        <ListViewItem>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>Элемент 1</TextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem>Элемент 2</ListViewItem>
+                    </ListView>
+                </GroupBox>
+                <GroupBox Header="ComboBox" Margin="10" BorderThickness="0">
+                    <ComboBox>
+                        <ComboBoxItem>Элемент 1</ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="wpf_logo.png" Height="20" />
+                                <TextBlock>Элемент 2</TextBlock>
+                            </StackPanel>
+                        </ComboBoxItem>
+                    </ComboBox>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Margin="20">
+            <StackPanel>
+                <HeaderedContentControl Header="Label"></HeaderedContentControl>
+                <WrapPanel>
+                    <Label Name="tbLbl" Target="{Binding ElementName=tb}">_File</Label>
+                    <TextBox Name="tb" Width="50"/>
+                </WrapPanel>
+                <HeaderedContentControl Header="ToolTip"></HeaderedContentControl>
+                <Button Content="Tooltip" ToolTip="Всплывающая подсказка для кнопки" Height="30" Width="80" />
+                <Button Content="Tooltip" Height="30" Width="80">
+                    <Button.ToolTip>
+                        <ToolTip>
+                            Всплывающая подсказка для кнопки
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <StackPanel>
+                    <TextBlock Text="TextTooltip 1" ToolTip="Hello Tooltip" />
+                    <TextBlock Text="TextTooltip 2">
+                        <TextBlock.ToolTip>
+                            <ToolTip x:Name="toolTip">
+                                Hello WPF
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                </StackPanel>
+                <Grid>
+                    <Image Source="wpf_logo.png" Stretch="UniformToFill" />
+                    <Rectangle Fill="#80000000" Opacity="0.5" />
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel>
+            <HeaderedContentControl Header="ScrollViewer"></HeaderedContentControl>
+            <ScrollViewer x:Name="scrollV" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="100" Width="250">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,20">Прокрутка включена при необходимости.</TextBlock>
+                    <Rectangle Fill="Red" Width="500" Height="500"></Rectangle>
+                </StackPanel>
+            </ScrollViewer>
+            <HeaderedContentControl Header="UserControl"></HeaderedContentControl>
+            <uc:SendMsg Margin="20" />
+            <Grid>
+                <Image Source="wpf_logo.png" Stretch="UniformToFill" />
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" Opacity="0.5">
+                            <GradientStop Color="Blue"  Offset="0" />
+                            <GradientStop Color="Red" Offset="1" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
+        </StackPanel>
+
+    </UniformGrid>
+</Window>

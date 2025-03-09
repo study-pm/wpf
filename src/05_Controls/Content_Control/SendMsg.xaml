@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="Content_Control.SendMsg"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Content_Control"
+             mc:Ignorable="d"
+             d:DesignHeight="100" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="messageTextBox" Grid.Column="0" Margin="5" />
+        <Button x:Name="sendButton" Grid.Column="1" Margin="5" Content="Отправить" Click="sendButton_Click" />
+    </Grid>
+</UserControl>
