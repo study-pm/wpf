@@ -17,7 +17,22 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <GridSplitter Grid.Column="1"  Grid.Row="0" ShowsPreview="False" Width="10"
+        <Canvas Name="canvas" Width="300" Height="200">
+            <Thumb Canvas.Left="50" Canvas.Top="50"
+                DragStarted="Thumb_DragStarted" DragDelta="Thumb_DragDelta" DragCompleted="Thumb_DragCompleted"
+                   Width="20" Height="20">
+            </Thumb>
+            <Thumb Canvas.Right="50" Canvas.Bottom="50"
+                DragStarted="Thumb_DragStarted" DragDelta="Thumb_DragDelta1" DragCompleted="Thumb_DragCompleted"
+                Width="20" Height="20">
+                <Thumb.Template>
+                    <ControlTemplate TargetType="Thumb">
+                        <Ellipse Width="20" Height="20" Fill="Red" />
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+        <GridSplitter x:Name="gritSplit" Grid.Column="1"  Grid.Row="0" ShowsPreview="True" Width="10"
                       HorizontalAlignment="Center" VerticalAlignment="Stretch"
                       ResizeDirection="Columns" ResizeBehavior="CurrentAndNext"
                       />

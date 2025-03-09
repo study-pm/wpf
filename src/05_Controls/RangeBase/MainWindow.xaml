@@ -13,12 +13,12 @@
             Interval="10" Delay="1000" IsSelectionRangeEnabled="True"
             Value="50" ValueChanged="slider_ValueChanged" />
         <ProgressBar Minimum="0" Maximum="100" Value="50" Height="25" IsIndeterminate="True" />
-        <ScrollBar
+        <ScrollBar x:Name="scrBar"
             Orientation="Vertical"
-            Minimum="0"
-            Maximum="100"
-            SmallChange="1"
-            LargeChange="10" />
+            Minimum="0" Maximum="100"
+            SmallChange="1" LargeChange="10"
+            ViewportSize="100"
+                   />
         <ScrollViewer
             VerticalScrollBarVisibility="Visible"
             HorizontalScrollBarVisibility="Auto"

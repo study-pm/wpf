@@ -24,11 +24,13 @@ namespace Thumb
         public MainWindow()
         {
             InitializeComponent();
+            gritSplit.DragIncrement = 10;
+            gritSplit.KeyboardIncrement = 5;
         }
         private void Thumb_DragStarted(object sender, DragStartedEventArgs e)
         {
             // Обработка начала перетаскивания
-            MessageBox.Show("Перетаскивание начато");
+            // MessageBox.Show("Перетаскивание начато");
         }
 
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
@@ -37,8 +39,18 @@ namespace Thumb
             System.Windows.Controls.Primitives.Thumb thumb = (System.Windows.Controls.Primitives.Thumb)sender;
             Canvas.SetLeft(thumb, Canvas.GetLeft(thumb) + e.HorizontalChange);
             Canvas.SetTop(thumb, Canvas.GetTop(thumb) + e.VerticalChange);
-            MessageBox.Show($"Thumb перемещен на ({e.HorizontalChange}, {e.VerticalChange})");
+            // MessageBox.Show($"Thumb перемещен на ({e.HorizontalChange}, {e.VerticalChange})");
         }
+
+        private void Thumb_DragDelta1(object sender, DragDeltaEventArgs e)
+        {
+            // Обработка изменения положения Thumb
+            System.Windows.Controls.Primitives.Thumb thumb = (System.Windows.Controls.Primitives.Thumb)sender;
+            Canvas.SetRight(thumb, Canvas.GetRight(thumb) - e.HorizontalChange);
+            Canvas.SetBottom(thumb, Canvas.GetBottom(thumb) - e.VerticalChange);
+            // MessageBox.Show($"Thumb перемещен на ({e.HorizontalChange}, {e.VerticalChange})");
+        }
+
 
         private void Thumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
