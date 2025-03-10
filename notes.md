@@ -116,6 +116,8 @@
     - [Slider / Бегунок](#slider--бегунок)
     - [ProgressBar / Индикатор выполнения](#progressbar--индикатор-выполнения)
     - [ScrollBar / Линейка прокрутки](#scrollbar--линейка-прокрутки)
+  - [Thumb / Бегунок](#thumb--бегунок)
+    - [GridSplitter / Разделитель панелей](#gridsplitter--разделитель-панелей)
 - [Навигация](#навигация)
   - [Основные подходы к навигации](#основные-подходы-к-навигации)
   - [Оконная навигация](#оконная-навигация)
@@ -4482,6 +4484,249 @@ scrollBar.LargeChange = 10;
 - Требует ручной настройки для использования вне `ScrollViewer`.
 
 - Может быть менее удобен для использования в сравнении с `ScrollViewer`, который инкапсулирует функциональность `ScrollBar`.
+
+### Thumb / Бегунок
+`Thumb` в WPF — это элемент управления, который позволяет пользователям взаимодействовать с элементами интерфейса, перетаскивая их. Он часто используется внутри других элементов управления, таких как `Slider` и `ScrollBar`, где служит ползунком для изменения значения.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.NeverLocalize)]
+public class Thumb : System.Windows.Controls.Control
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.thumb?view=windowsdesktop-9.0
+
+Основные особенности `Thumb`:
+- **Перетаскивание**: `Thumb` генерирует события `DragStarted`, `DragDelta`, и `DragCompleted`, которые позволяют отслеживать начало, продолжение и окончание операции перетаскивания.
+
+- **Нет фокуса клавиатуры**: `Thumb` не может получать фокус клавиатуры, но может захватывать мышь.
+
+- **Шаблоны**: `Thumb` можно стилизовать с помощью шаблонов (`ControlTemplate`), чтобы изменить его внешний вид.
+
+- **Состояния**: `Thumb` имеет несколько визуальных состояний, таких как нормальное, наведение курсора, нажатие и отключение.
+
+`Thumb` обычно используется внутри других элементов управления, таких как `Slider` и `ScrollBar`. Однако его можно использовать и самостоятельно для создания пользовательских интерфейсов:
+```xml
+<Thumb DragStarted="Thumb_DragStarted" DragDelta="Thumb_DragDelta" DragCompleted="Thumb_DragCompleted">
+    <Thumb.Template>
+        <ControlTemplate TargetType="Thumb">
+            <Ellipse Width="20" Height="20" Fill="Red" />
+        </ControlTemplate>
+    </Thumb.Template>
+</Thumb>
+```
+
+И в коде:
+```cs
+private void Thumb_DragStarted(object sender, DragStartedEventArgs e)
+{
+    // Обработка начала перетаскивания
+}
+
+private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
+{
+    // Обработка изменения положения Thumb
+}
+
+private void Thumb_DragCompleted(object sender, DragCompletedEventArgs e)
+{
+    // Обработка окончания перетаскивания
+}
+```
+
+Этот пример демонстрирует, как использовать `Thumb` для создания пользовательского интерфейса с поддержкой перетаскивания.
+
+Преимущества:
+
+- Позволяет пользователям взаимодействовать с элементами интерфейса, перетаскивая их.
+
+- Может быть стилизован для изменения внешнего вида.
+
+Недостатки:
+
+- Не может получать фокус клавиатуры.
+
+- Требует ручной обработки событий для изменения положения `Thumb`.
+
+`Thumb` является важным компонентом для создания интерактивных элементов управления в WPF, таких как ползунки и полосы прокрутки.
+
+#### GridSplitter / Разделитель панелей
+[66febd4a5040133e8429e2eb](https://metanit.com/sharp/wpf/4.3.php)
+
+`GridSplitter` в WPF — это элемент управления, который позволяет пользователям изменять размеры строк и столбцов внутри элемента `Grid`.  Он используется для создания интерфейсов с динамически регулируемыми панелями, подобно проводнику Windows.
+
+Определение:
+```cs
+[System.Windows.StyleTypedProperty(Property="PreviewStyle", StyleTargetType=typeof(System.Windows.Controls.Control))]
+public class GridSplitter : System.Windows.Controls.Primitives.Thumb
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.gridsplitter?view=windowsdesktop-9.0
+
+Элемент **`GridSplitter`** помогает создавать интерфейсы наподобие элемента `SplitContainer` в WinForms, только более функциональные. Он представляет собой некоторый разделитель между столбцами или строками, путем сдвига которого можно регулировать ширину столбцов и высоту строк. В качестве примера можно привести стандартный интерфейс проводника в Windows, где разделительная полоса отделяет древовидный список папок от панели со списком файлов. Например,
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Button Grid.Column="0" Content="Левая кнопка" />
+    <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
+        HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+    <Button Grid.Column="2" Content="Правая кнопка" />
+</Grid>
+```
+
+Двигая центральную линию, разделяющую правую и левую части, мы можем устанавливать их ширину.
+
+Пример использования `GridSplitter` для вертикального разделения:
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="5" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <TextBlock FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Левая панель</TextBlock>
+
+    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+
+    <TextBlock Grid.Column="2" FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Правая панель</TextBlock>
+</Grid>
+```
+
+Этот пример демонстрирует, как создать две панели с вертикальным разделителем между ними.
+
+Основные особенности `GridSplitter`:
+- **Разделение строк и столбцов**: `GridSplitter` может быть использован как для вертикального, так и для горизонтального разделения, позволяя пользователям изменять размеры строк и столбцов.
+
+- **Позиционирование**: `GridSplitter` должен быть помещен в ячейку `Grid`, и его можно настроить для изменения размера смежных строк или столбцов.
+
+- **Свойства `ResizeDirection` и `ResizeBehavior`**: Свойство `ResizeDirection` определяет, будут ли изменены размеры строк (Rows) или столбцов (Columns). Свойство `ResizeBehavior` позволяет указать, как будет изменен размер соседних ячеек.
+
+- **Ширина и высота**: Для вертикального разделения `GridSplitter` обычно имеет фиксированную ширину, а для горизонтального — фиксированную высоту.
+
+- **`DragIncrement`**: Позволяет задать шаг изменения размера при перетаскивании `GridSplitter` мышкой.
+
+- **`KeyboardIncrement`**: Позволяет задать шаг изменения размера при управлении разделителем стрелками клавиатуры.
+
+- **`ShowsPreview`**: Если установлено в `true`, то изменение границ будет происходить только после того, как перемещение сплитера завершится, и при перемещении сплиттера будет видна его проекция.
+
+- **`PreviewStyle`** позволяет настроить внешний вид индикатора предварительного просмотра, отображаемого при перетаскивании `GridSplitter` с помощью шаблонов стилей
+
+Итак, чтобы использовать элемент `GridSplitter`, нам надо поместить его в ячейку в `Grid`. По сути это обычный элемент, такой же, как кнопка. Как выше, у нас три ячейки (так как три столбца и одна строка), и `GridSplitter` помещен во вторую ячейку. Обычно строка или столбец, в которые помещают элемент, имеет для свойств `Height` или `Width` значение `Auto`.
+
+Пример использования `GridSplitter` для вертикального разделения:
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="5" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <TextBlock FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Левая панель</TextBlock>
+
+    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+    <TextBlock Grid.Column="2" FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Правая панель</TextBlock>
+</Grid>
+```
+
+Этот пример демонстрирует, как создать две панели с вертикальным разделителем между ними.
+
+Если у нас несколько строк, и мы хотим, чтобы разделитель распространялся на несколько строк, то мы можем задать свойство `Grid.RowSpan`:
+```xml
+<Grid.ColumnDefinitions>
+    <ColumnDefinition Width="*" />
+    <ColumnDefinition Width="Auto" />
+    <ColumnDefinition Width="*" />
+</Grid.ColumnDefinitions>
+<Grid.RowDefinitions>
+    <RowDefinition></RowDefinition>
+    <RowDefinition></RowDefinition>
+</Grid.RowDefinitions>
+<GridSplitter Grid.Column="1" Grid.RowSpan="2" ShowsPreview="False" Width="3"
+    HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+```
+
+В случае, если мы задаем горизонтальный разделитель, то тогда соответственно надо использовать свойство `Grid.ColumnSpan`.
+
+Затем нам надо настроить свойства. Во-первых, надо настроить ширину (`Width`) для вертикальных сплитеров и высоту (`Height`) для горизонтальных. Если не задать соответствующее свойство, то сплитер мы не увидим, так как он изначально очень мал.
+
+Затем нам надо задать выравнивание. Если мы хотим, что сплитер заполнял всю высоту доступной области (то есть если у нас вертикальный сплитер), то нам надо установить для свойства **`VerticalAlignment`** значение `Stretch`.
+
+Если же у нас горизонтальный сплитер, то надо установить свойство **`HorizontalAlignment`** в `Stretch`.
+
+Также в примере выше используется свойство **`ShowsPreview`**. Если оно равно `False`, то изменение границ кнопок будет происходить сразу же при перемещении сплитера. Если же оно равно `True`, тогда изменение границ будет происходить только после того, как перемещение сплитера завершится, и при перемещении сплиттера мы увидим его проекцию.
+
+В отличие от элемента `SplitContainer` в WinForms, в WPF можно установить различное количество динамически регулируемых частей окна. Немного усовершенствуем предыдущий пример:
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="Auto"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+    <GridSplitter Grid.Column="1"  Grid.Row="0" ShowsPreview="False" Width="3"
+        HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+    <GridSplitter Grid.Row="1" Grid.ColumnSpan="3" Height="3"
+        HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+    <Canvas Grid.Column="0" Grid.Row="0">
+        <TextBlock>Левая панель</TextBlock>
+    </Canvas>
+    <Canvas Grid.Column="2" Grid.Row="0" Background="LightGreen">
+        <TextBlock>Правая панель</TextBlock>
+    </Canvas>
+    <Canvas Grid.ColumnSpan="3" Grid.Row="2" Background="#dfffff">
+        <TextBlock Canvas.Left="60">Нижняя панель</TextBlock>
+    </Canvas>
+</Grid>
+```
+
+Здесь у нас сразу два сплитера: один между двумя верхними и нижней панелями, а второй — между правой и левой панелями.
+
+`GridSplitter` можно создавать и настраивать программно в коде C#:
+```cs
+Grid grid = new Grid();
+grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(5) });
+grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+TextBlock leftPanel = new TextBlock { Text = "Левая панель", FontSize = 55 };
+Grid.SetColumn(leftPanel, 0);
+grid.Children.Add(leftPanel);
+
+GridSplitter splitter = new GridSplitter { Width = 5, HorizontalAlignment = HorizontalAlignment.Stretch };
+Grid.SetColumn(splitter, 1);
+grid.Children.Add(splitter);
+
+TextBlock rightPanel = new TextBlock { Text = "Правая панель", FontSize = 55 };
+Grid.SetColumn(rightPanel, 2);
+grid.Children.Add(rightPanel);
+```
+
+Этот код создает `Grid` с двумя панелями и вертикальным разделителем между ними.
+
+Преимущества:
+
+- Позволяет пользователям динамически изменять размеры строк и столбцов.
+
+- Может быть использован как для вертикального, так и для горизонтального разделения.
+
+Недостатки:
+
+- Требует ручной настройки свойств `Grid` и `GridSplitter` для корректного функционирования.
+
+- Может быть менее удобен для сложных интерфейсов с несколькими разделителями.
 
 ## Навигация
 
