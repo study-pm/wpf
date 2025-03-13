@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thumb", "Thumb\Thumb.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemsControl", "ItemsControl\ItemsControl.csproj", "{2059416B-0F71-4F46-B758-34CC38846B81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordBox", "PasswordBox\PasswordBox.csproj", "{D673E87E-1C63-44BA-9584-EEFDC269CE44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2059416B-0F71-4F46-B758-34CC38846B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2059416B-0F71-4F46-B758-34CC38846B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2059416B-0F71-4F46-B758-34CC38846B81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D673E87E-1C63-44BA-9584-EEFDC269CE44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D673E87E-1C63-44BA-9584-EEFDC269CE44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D673E87E-1C63-44BA-9584-EEFDC269CE44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D673E87E-1C63-44BA-9584-EEFDC269CE44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
