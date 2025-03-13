@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordBox", "PasswordBox\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarDatePicker", "CalendarDatePicker\CalendarDatePicker.csproj", "{03A929CA-CAD7-4CC7-9AAF-CBDA9AD8BD56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Separator", "Separator\Separator.csproj", "{8AF62A31-0C46-4C86-B40A-412320C19624}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{03A929CA-CAD7-4CC7-9AAF-CBDA9AD8BD56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03A929CA-CAD7-4CC7-9AAF-CBDA9AD8BD56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03A929CA-CAD7-4CC7-9AAF-CBDA9AD8BD56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AF62A31-0C46-4C86-B40A-412320C19624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AF62A31-0C46-4C86-B40A-412320C19624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AF62A31-0C46-4C86-B40A-412320C19624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AF62A31-0C46-4C86-B40A-412320C19624}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
