@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,10 @@ namespace ItemsControl
             new Person {Name="Bob", Age=42},
             new Person{Name="Sam", Age=25}
         };
+
         public ObservableCollection<Phone> Phones { get; set; }
+
+        private ICollectionView _view;
 
         ObservableCollection<string> items = new ObservableCollection<string> { "Item1", "Item2", "Item3" };
         public MainWindow()
@@ -63,6 +67,8 @@ namespace ItemsControl
                 new Phone { Title = "Samsung Galaxy A14", Company = "Samsung", Price = 14990 },
             };
             DataContext = this;
+
+            _view = CollectionViewSource.GetDefaultView(phonesGrid.ItemsSource);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -102,6 +108,33 @@ namespace ItemsControl
                 MessageBox.Show(ex.Message);
             }
         }
+        private void sortButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Установка сортировки
+            _view.SortDescriptions.Clear();
+            _view.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
+        }
+
+        private void filterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Установка фильтра
+            _view.Filter = item =>
+            {
+                if (item is PhoneEditable phone)
+                {
+                    return phone.Company == "Apple";
+                }
+                return false;
+            };
+            _view.Refresh();
+        }
+
+        private void clearFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Сброс фильтра
+            _view.Filter = null;
+            _view.Refresh();
+        }
     }
     public class Person
     {
@@ -118,5 +151,12 @@ namespace ItemsControl
         public string Title { get; set; }
         public string Company { get; set; }
         public int Price { get; set; }
+    }
+    public class PhoneEditable
+    {
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public int Price { get; set; }
+        public bool IsChecked { get; set; }
     }
 }
