@@ -21,6 +21,16 @@
     <UniformGrid>
         <StackPanel x:Name="pane1">
             <HeaderedContentControl Header="ItemsControl" />
+            <ItemsControl>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                 </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <TextBlock>Tom</TextBlock>
+                <TextBlock>Bob</TextBlock>
+                <TextBlock>Alice</TextBlock>
+            </ItemsControl>
             <ItemsControl x:Name="usersList" Margin="10">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

@@ -23,12 +23,11 @@ namespace CalendarDatePicker
         public MainWindow()
         {
             InitializeComponent();
-            calendar1.FirstDayOfWeek = DayOfWeek.Monday;            ;
+            calendar1.FirstDayOfWeek = DayOfWeek.Monday;
         }
         private void calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
             DateTime? selectedDate = calendar1.SelectedDate;
-
             MessageBox.Show(selectedDate.Value.Date.ToShortDateString());
         }
     }
