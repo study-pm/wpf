@@ -121,6 +121,7 @@
     - [GridSplitter / Разделитель панелей](#gridsplitter--разделитель-панелей)
   - [PasswordBox / Пароль](#passwordbox--пароль)
     - [Примечания по безопасности](#примечания-по-безопасности)
+  - [Calendar / Календарь](#calendar--календарь)
 - [Навигация](#навигация)
   - [Основные подходы к навигации](#основные-подходы-к-навигации)
   - [Оконная навигация](#оконная-навигация)
@@ -4833,6 +4834,106 @@ Authenticate(pwdBox.SecurePassword);
 - **Избегайте преобразования в строку**: Преобразование `SecureString` в обычную строку снижает безопасность, так как строка остается в памяти до сборки мусора. Поэтому рекомендуется использовать `SecureString` напрямую в методах аутентификации или других безопасных операциях.
 
 При проектировании приложений с использованием `PasswordBox` важно учитывать архитектуру и подход к обработке паролей, чтобы обеспечить максимальную безопасность данных пользователей.
+
+### Calendar / Календарь
+[67bae19b5040133e8429efba](https://metanit.com/sharp/wpf/5.16.php)
+
+Элементы для работы с данными представлены следующими классами: **`Calendar`** и **`DatePicker`**. `Calendar` представляет собой элемент в виде календаря, тогда как `DatePicker` — текстовое поле для ввода даты с выпадающим календарем после ввода.
+
+Они имеют некоторые общие свойства:
+
+| Свойство | Описание
+-- | --
+**`BlackoutDates`** | Принимает в качестве значения объект **`CalendarDateRange`**, задающий с помощью свойств **`Start`** и **`End`** диапазон дат, которые будут зачеркнуты в календаре.
+**`DisplayDateStart`** и<br>**`DisplayDateEnd`** | Задают соответственно начальную и конечную дату диапазона, который будет отображаться в календаре.
+**`IsTodayHighlighted`** | Отмечает, будет ли выделена текущая дата
+**`SelectedDate(SelectedDates)`** | Задает выделенную дату (диапазон выделенных дат)
+**`FirstDayOfWeek`** | Задает первый день недели
+
+`Calendar` в WPF — это элемент управления, который позволяет пользователям выбирать даты с помощью визуального отображения календаря. Он может быть использован как самостоятельно, так и в составе другого элемента управления, например, `DatePicker`.
+
+Определение:
+```cs
+[System.Windows.TemplatePart(Name="PART_CalendarItem", Type=typeof(System.Windows.Controls.Primitives.CalendarItem))]
+[System.Windows.TemplatePart(Name="PART_Root", Type=typeof(System.Windows.Controls.Panel))]
+public class Calendar : System.Windows.Controls.Control
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.calendar?view=windowsdesktop-9.0
+
+Также `Calendar` имеет еще два важных свойства: `DisplayMode` (формат отображения дат) и `SelectionMode` (способ выделения).
+
+`DisplayMode` может принимать одно из следующих значений:
+
+- **`Month`** (по умолчанию) отображает все дни текущего месяца
+
+- **`Decade`** отображает все года текущего десятилетия
+
+- **`Year`** отображает все месяцы текущего года
+
+`SelectionMode` может принимать одно из следующих значений:
+
+- **`SingleDate`** (по умолчанию) выделяет только одну дату
+
+- **`None`** запрещает выделение
+
+- **`SingleRange`** по нажатию на <kbd>Ctrl</kbd> выделяет несколько последовательно идущих дат
+
+- **`MultipleRange`** по нажатию на <kbd>Ctrl</kbd> выделяет несколько не последовательно идущих диапазонов дат
+
+Например:
+```xml
+<Calendar x:Name="calendar1" FirstDayOfWeek="Monday"
+        SelectedDatesChanged="calendar_SelectedDatesChanged">
+    <Calendar.BlackoutDates>
+        <CalendarDateRange Start="10/5/2013" End="10/8/2013"></CalendarDateRange>
+    </Calendar.BlackoutDates>
+</Calendar>
+```
+
+Обратите внимание, что при задании даты мы сначала пишем месяц, а потом число.
+
+Чтобы использовать в программе выбор даты пользователем, мы можем обработать событие `SelectedDatesChanged` в коде c#:
+```cs
+private void calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+{
+    DateTime? selectedDate = calendar1.SelectedDate;
+
+    MessageBox.Show(selectedDate.Value.Date.ToShortDateString());
+}
+```
+
+Основные особенности:
+- **Отображение календаря**: `Calendar` отображает календарь, похожий на тот, который используется в операционной системе Windows, показывая один месяц с возможностью перехода к соседним месяцам или выбора конкретного месяца из года.
+
+- **Выбор дат**: Пользователи могут выбирать даты в календаре. Свойство `SelectionMode` позволяет настроить режим выбора: `SingleDate` (одна дата), `None` (выбор запрещен), `SingleRange` (один диапазон дат), или `MultipleRange` (несколько диапазонов дат).
+
+- **Отображение дат**: Свойство `DisplayMode` определяет, как будет отображаться календарь: `Month` (месяц), `Year` (год), или `Decade` (десятилетие).
+
+- **Задачи календаря**: `Calendar` позволяет указывать даты, которые нельзя выбрать (`BlackoutDates`), и отображать диапазон дат (`DisplayDateStart` и `DisplayDateEnd`)
+
+Пример создания простого `Calendar` с возможностью выбора нескольких дат:
+```xml
+<Calendar Name="myCalendar" SelectionMode="MultipleRange" />
+```
+
+И обработка события изменения выбранных дат:
+```cs
+private void myCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+{
+    foreach (DateTime date in myCalendar.SelectedDates)
+    {
+        MessageBox.Show(date.ToShortDateString());
+    }
+}
+```
+
+Преимущества использования:
+- **Гибкость**: `Calendar` позволяет настроить режим отображения и выбора дат, что делает его универсальным для различных приложений.
+
+- **Простота использования**: Пользователи могут легко выбирать даты с помощью визуального интерфейса.
+
+- **Возможность интеграции**: Может быть использован как часть `DatePicker` или как самостоятельный элемент
 
 ## Навигация
 
