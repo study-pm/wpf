@@ -124,6 +124,37 @@
   - [Calendar / Календарь](#calendar--календарь)
   - [DatePicker / Выбор дат](#datepicker--выбор-дат)
   - [Separator / Разделитель](#separator--разделитель)
+  - [ItemsControl / Элементы управления коллекциями](#itemscontrol--элементы-управления-коллекциями)
+    - [Основные свойства](#основные-свойства)
+    - [Управление списком](#управление-списком)
+    - [Отображение сложных данных](#отображение-сложных-данных)
+    - [ItemsSource](#itemssource)
+    - [Преимущества и недостатки](#преимущества-и-недостатки-2)
+    - [Selector / Селектор](#selector--селектор)
+      - [Выбор элементов](#выбор-элементов)
+      - [ListBox](#listbox)
+        - [ListView](#listview)
+        - [Выделение элементов](#выделение-элементов)
+      - [TabControl / Создание вкладок](#tabcontrol--создание-вкладок)
+        - [Программное добавление вкладок](#программное-добавление-вкладок)
+        - [Сравнение с другими элементами](#сравнение-с-другими-элементами)
+      - [ComboBox / Выпадающий список](#combobox--выпадающий-список)
+        - [Событие SelectionChanged и обработка выбора объекта](#событие-selectionchanged-и-обработка-выбора-объекта)
+        - [Свойства и события](#свойства-и-события)
+        - [Сравнение с другими элементами](#сравнение-с-другими-элементами-1)
+      - [MutliSelector / Множественное выделение](#mutliselector--множественное-выделение)
+        - [DataGrid / Таблица данных](#datagrid--таблица-данных)
+        - [Некоторые полезные свойства DataGrid](#некоторые-полезные-свойства-datagrid)
+        - [Фильтрация и сортировка](#фильтрация-и-сортировка)
+    - [HeaderedItemsControl / Заголовочные списки](#headereditemscontrol--заголовочные-списки)
+      - [MenuItem / Элемент меню](#menuitem--элемент-меню)
+      - [TreeViewItem / Элемент дерева](#treeviewitem--элемент-дерева)
+      - [ToolBar / Панель инструментов](#toolbar--панель-инструментов)
+    - [MenuBase / Меню](#menubase--меню)
+      - [Menu / Стандартное меню](#menu--стандартное-меню)
+      - [ContextMenu / Контекстное меню](#contextmenu--контекстное-меню)
+    - [TreeView / Древовидный список](#treeview--древовидный-список)
+    - [StatusBar / Строка состояния](#statusbar--строка-состояния)
 - [Навигация](#навигация)
   - [Основные подходы к навигации](#основные-подходы-к-навигации)
   - [Оконная навигация](#оконная-навигация)
@@ -5062,6 +5093,2659 @@ public class Separator : System.Windows.Controls.Control
 ```
 
 Этот подход позволяет создавать разделители без использования `Separator`.
+
+### ItemsControl / Элементы управления коллекциями
+`ItemsControl` в WPF — это базовый элемент управления, который позволяет отображать коллекции данных. Он является родительским классом для многих других элементов управления списками, таких как `ListBox`, `ListView`, и `ComboBox`. `ItemsControl` предоставляет гибкие возможности для форматирования и привязки данных.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.None, Readability=System.Windows.Readability.Unreadable)]
+[System.Windows.Markup.ContentProperty("Items")]
+[System.Windows.StyleTypedProperty(Property="ItemContainerStyle", StyleTargetType=typeof(System.Windows.FrameworkElement))]
+public class ItemsControl : System.Windows.Controls.Control, System.Windows.Controls.Primitives.IContainItemStorage, System.Windows.Markup.IAddChild
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.itemscontrol?view=windowsdesktop-9.0
+
+Эти элементы представлены в WPF довольно широко. Все они являются производными от класса **`ItemsControl`**, который в свою очередь является наследником класса `Control`. Все они содержат коллекцию элементов. Элементы могут быть напрямую добавлены в коллекцию, возможна также привязка некоторого массива данных к коллекции.
+
+Основные особенности `ItemsControl`:
+- **Привязка данных**: `ItemsControl` поддерживает привязку данных через свойства `ItemsSource` и `Items`. Это позволяет связать элемент управления с коллекцией данных и автоматически отображать ее содержимое.
+
+- **Шаблоны**: `ItemsControl` позволяет использовать шаблоны (ItemTemplate) для настройки внешнего вида каждого элемента в списке.
+
+- **Панели компоновки**: Свойство `ItemsPanelTemplate` позволяет указать панель компоновки для элементов, например, `StackPanel`, `WrapPanel`, или `Canvas`.
+
+- **Гибкость**: `ItemsControl` может содержать элементы разных типов, включая строки, объекты `UIElement`, и другие элементы управления.
+
+Пример использования `ItemsControl` с привязкой данных и шаблоном:
+```xml
+<ItemsControl ItemsSource="{Binding MyData}">
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding}" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <WrapPanel />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+</ItemsControl>
+```
+
+Этот пример демонстрирует, как создать `ItemsControl`, который отображает коллекцию строк с помощью шаблона и использует `WrapPanel` для компоновки элементов.
+
+`ItemsControl` можно использовать программно для создания динамических списков:
+```cs
+ItemsControl itemsControl = new ItemsControl();
+itemsControl.ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3" };
+```
+
+Этот код создает `ItemsControl` с динамическим списком строк.
+
+Возьмем простейший элемент-список — **`ListBox`** и определим в файле ***MainWindow.xaml*** следующий интерфейс:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:MetanitApp"
+        mc:Ignorable="d"
+        Name="MainWindow" Height="200" Width="300">
+    <ListBox x:Name="usersList">
+        <sys:String>Tom</sys:String>
+        <sys:String>Bob</sys:String>
+        <sys:String>Sam</sys:String>
+        <sys:String>Alice</sys:String>
+    </ListBox>
+</Window>
+```
+
+Все элементы, размещенные внутри спискового элемента `ListBox`, представляют элементы списка.
+
+#### Основные свойства
+`ItemsControl` предоставляет несколько ключевых свойств для управления и настройки содержимого:
+1. **`Items`**
+
+    **Описание**: Это свойство возвращает коллекцию, используемую для создания содержимого `ItemsControl`. По умолчанию это пустая коллекция.
+
+    **Использование**: Вы можете добавлять элементы напрямую в коллекцию `Items`, но если свойство `ItemsSource` задано, коллекция становится доступной только для чтения и фиксированного размера.
+
+2. **`ItemsSource`**
+
+    **Описание**: Это свойство позволяет привязать коллекцию данных к `ItemsControl`. Любой объект, реализующий `IEnumerable`, может быть использован в качестве источника данных.
+
+    **Использование**: Когда `ItemsSource` задан, элементы управления автоматически создаются для каждого элемента в коллекции. Если `ItemsSource` присвоить `null`, коллекция удаляется и восстанавливается пустая коллекция `Items`.
+
+3. **`ItemTemplate`**
+
+    **Описание**: Это свойство определяет шаблон для каждого элемента в коллекции. Используется для настройки визуального представления элементов.
+
+    **Использование**: В шаблоне можно использовать привязки данных для отображения свойств элементов коллекции.
+
+4. **`ItemsPanel`**
+
+    **Описание**: Это свойство позволяет указать панель компоновки, которая будет использоваться для размещения элементов. По умолчанию используется `StackPanel`.
+
+    **Использование**: Вы можете заменить `StackPanel` на другие панели, такие как `Canvas`, `Grid` или `WrapPanel`, для изменения расположения элементов.
+
+5. **`ItemContainerStyle`**
+
+    **Описание**: Это свойство позволяет задать стиль для контейнера каждого элемента.
+
+    **Использование**: Используется для настройки внешнего вида контейнеров элементов, например, для изменения цвета фона или шрифта.
+
+6. **`AlternationCount`**
+
+    **Описание**: Это свойство определяет количество элементов, которые будут отображаться с одинаковым индексом чередования. Чередование используется для того, чтобы визуально различать соседние элементы в списке.
+
+    **Использование**: Если `AlternationCount` равно 2, то каждый второй элемент будет иметь одинаковый стиль чередования.
+
+7. **`GroupStyle`**
+
+    **Описание**: Это свойство позволяет задать стиль для группировки элементов. Используется, когда элементы сгруппированы по определенным критериям.
+
+    **Использование**: В `GroupStyle` можно указать шаблон для заголовка группы и саму группу. Это полезно для визуального разделения группированных данных.
+
+8. **`GroupStyleSelector`**
+
+    **Описание**: Это свойство позволяет выбрать стиль для группировки элементов динамически на основе условий. Используется, когда необходимо применять разные стили для разных групп.
+
+    **Использование**: `GroupStyleSelector` — это класс, который наследуется от `StyleSelector`, и он позволяет выбрать стиль для каждой группы на основе логики, определенной в классе.
+
+9. **`HasItems`**
+
+    **Описание**: Это свойство указывает, содержит ли `ItemsControl` хотя бы один элемент.
+
+    **Использование**: Это полезно для проверки наличия элементов перед выполнением операций над коллекцией.
+
+10. **`IsGrouping`**
+
+    **Описание**: Это свойство указывает, используется ли группировка для элементов в `ItemsControl`.
+
+    **Использование**: Если `IsGrouping` равно `true`, это означает, что элементы сгруппированы, и можно использовать свойства, связанные с группировкой, такие как `GroupStyle`.
+
+11. **`DisplayMemberPath`**
+
+    **Описание**: Используется для указания свойства объекта, которое будет отображаться в списке. Это свойство позволяет быстро и просто определить, какое свойство объекта данных должно быть показано в элементе управления списком, без необходимости создания сложного шаблона (`ItemTemplate`). `DisplayMemberPath` может быть любым допустимым путем к свойству объекта данных. Это свойство является частью привязки данных и позволяет легко настроить отображение данных в списке.
+
+    **Использование**: Используйте `DisplayMemberPath`, когда вам нужно отобразить только одно свойство объекта данных. Это свойство можно рассматривать как быстрый шаблон, который автоматически генерирует текстовое представление элементов. Если вам нужно отобразить несколько свойств или создать более сложное представление, лучше использовать `ItemTemplate`. `DisplayMemberPath` и `ItemTemplate` не могут использоваться одновременно, так как они конфликтуют друг с другом.
+
+12. **`ItemTemplateSelector`**
+
+    **Описание**: Используется для динамического выбора шаблона для каждого элемента в списке. Это позволяет применять разные шаблоны к разным элементам на основе определенных условий. `ItemTemplateSelector` работает в сочетании с привязкой данных, позволяя создавать сложные и динамические интерфейсы.
+
+    **Использование**: Используйте `ItemTemplateSelector`, когда вам нужно применять разные шаблоны к разным элементам в зависимости от их свойств. Это свойство позволяет динамически выбирать шаблон для каждого элемента, что делает его гибким инструментом для настройки визуального представления данных. Если `ItemTemplate` задан, `ItemTemplateSelector` будет игнорирован. Вы можете использовать либо один из этих подходов, но не оба одновременно.
+
+Эти свойства позволяют гибко настраивать и управлять содержимым `ItemsControl`, что делает его универсальным инструментом для отображения коллекций данных в WPF.
+
+Ниже представлены примеры использования описанных выше свойств:
+
+Использование компоновщика `WrapPanel`:
+```xml
+<ItemsControl>
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <WrapPanel />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Button Content="{Binding}" Margin="5" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+    <system:String>Item #1</system:String>
+    <system:String>Item #2</system:String>
+    <system:String>Item #3</system:String>
+    <system:String>Item #4</system:String>
+    <system:String>Item #5</system:String>
+</ItemsControl>
+```
+
+Использование компоновщика `UniformGrid`:
+```xml
+<ItemsControl>
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <UniformGrid Columns="3" />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Button Content="{Binding}" Margin="5" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+    <system:String>Item #1</system:String>
+    <system:String>Item #2</system:String>
+    <system:String>Item #3</system:String>
+    <system:String>Item #4</system:String>
+    <system:String>Item #5</system:String>
+</ItemsControl>
+```
+
+Чтобы использовать `Canvas`, вам нужно задать координаты для каждого элемента, так как `Canvas` требует явного указания позиции элементов:
+```xml
+<ItemsControl>
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <Canvas />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+    <ItemsControl.ItemContainerStyle>
+        <Style TargetType="ContentPresenter">
+            <Setter Property="Canvas.Left" Value="{Binding Left}" />
+            <Setter Property="Canvas.Top" Value="{Binding Top}" />
+        </Style>
+    </ItemsControl.ItemContainerStyle>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Button Content="{Binding Name}" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+    <!-- В качестве ItemsSource нужно использовать коллекцию объектов с свойствами Left, Top и Name -->
+</ItemsControl>
+```
+
+В этом примере предполагается, что у каждого элемента данных есть свойства `Left`, `Top` и `Name`, которые используются для позиционирования и отображения элементов на `Canvas`.
+
+Пример использования `ItemContainerStyle`:
+```xml
+<ItemsControl ItemsSource="{Binding MyCollection}">
+    <ItemsControl.ItemContainerStyle>
+        <Style TargetType="ContentPresenter">
+            <Setter Property="Background" Value="LightGray" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Margin" Value="5" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Gray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ItemsControl.ItemContainerStyle>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
+```
+
+В этом примере стиль применяется к элементам-контейнерам (ContentPresenter), изменяя их фон и цвет текста. Также добавлен триггер, который меняет фон при наведении мыши.
+
+Важные моменты:
+- **Целевой тип стиля**: В примере выше стиль применяется к `ContentPresenter`, но в зависимости от конкретного элемента управления (например, `ListBox`, `ComboBox`) целевой тип может быть другим (например, `ListBoxItem`, `ComboBoxItem`).
+
+- **Привязка данных**: Если вы используете привязку данных, убедитесь, что ваши данные имеют необходимые свойства для работы с выбранным шаблоном.
+
+- **Шаблон элемента**: Используйте `ItemTemplate` для настройки визуального представления каждого элемента данных.
+
+Если вы используете `ItemsPanel` с другой панелью (например, `Canvas`, `Grid`), вы можете привязать свойства позиционирования в `ItemContainerStyle`. Например, для `Canvas`:
+```xml
+<ItemsControl.ItemContainerStyle>
+    <Style TargetType="ContentPresenter">
+        <Setter Property="Canvas.Left" Value="{Binding Left}" />
+        <Setter Property="Canvas.Top" Value="{Binding Top}" />
+    </Style>
+</ItemsControl.ItemContainerStyle>
+```
+
+В этом случае ваши данные должны иметь свойства `Left` и `Top` для позиционирования элементов на `Canvas`.
+
+Пример использования `AlternationCount`:
+```xml
+<ItemsControl AlternationCount="2" ItemsSource="{Binding MyCollection}">
+    <ItemsControl.ItemContainerStyle>
+        <Style TargetType="ContentPresenter">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ItemsControl.ItemContainerStyle>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
+```
+
+В этом примере:
+
+- `AlternationCount` установлен в 2, что означает, что каждый второй элемент будет иметь другой стиль.
+
+- В `ItemContainerStyle` используются триггеры для установки фона элементов в зависимости от значения `AlternationIndex`. Элементы с `AlternationIndex` равным 0 будут иметь синий фон, а с `AlternationIndex` равным 1 — серый.
+
+Если вы хотите чередовать стили в более длинной последовательности, вы можете установить `AlternationCount` в большее значение. Например, если `AlternationCount` равен 3, вы можете создать три чередующихся стиля:
+```xml
+<ItemsControl AlternationCount="3" ItemsSource="{Binding MyCollection}">
+    <ItemsControl.ItemContainerStyle>
+        <Style TargetType="ContentPresenter">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="2">
+                    <Setter Property="Background" Value="PaleGreen" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ItemsControl.ItemContainerStyle>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
+```
+В этом случае элементы будут чередоваться между тремя стилями: синим, серым и зеленым.
+
+`GroupStyle` — это коллекция объектов `GroupStyle`, которые определяют внешний вид каждой группы. Вот пример использования `GroupStyle`:
+```xml
+<ItemsControl>
+    <ItemsControl.GroupStyle>
+        <GroupStyle>
+            <GroupStyle.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock FontWeight="Bold" FontSize="15" Text="{Binding Name}" />
+                </DataTemplate>
+            </GroupStyle.HeaderTemplate>
+            <GroupStyle.Panel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </GroupStyle.Panel>
+        </GroupStyle>
+    </ItemsControl.GroupStyle>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding ItemName}" />
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
+```
+
+В этом примере каждая группа будет иметь заголовок, отображаемый как жирный текст, а элементы внутри группы будут расположены вертикально.
+
+`GroupStyleSelector` позволяет выбрать стиль для каждой группы динамически. Для этого нужно создать класс, наследующий от `StyleSelector`, и переопределить метод `SelectStyle`.
+
+```cs
+public class GroupStyleSelector : StyleSelector
+{
+    public override Style SelectStyle(object item, DependencyObject container)
+    {
+        var group = item as CollectionViewGroup;
+        if (group.Name == "Work")
+        {
+            return (Style)Application.Current.Resources["WorkGroupStyle"];
+        }
+        else if (group.Name == "Home")
+        {
+            return (Style)Application.Current.Resources["HomeGroupStyle"];
+        }
+        return null;
+    }
+}
+```
+
+Затем в XAML вы можете использовать этот селектор:
+```xml
+<ItemsControl>
+    <ItemsControl.GroupStyleSelector>
+        <local:GroupStyleSelector />
+    </ItemsControl.GroupStyleSelector>
+    <!-- Другие настройки -->
+</ItemsControl>
+```
+
+В этом случае стиль для каждой группы будет выбран на основе имени группы.
+
+Чтобы использовать группировку, вам также нужно добавить группировку в коллекцию данных. Это можно сделать с помощью `CollectionView` и добавления группировки через `PropertyGroupDescription`.
+
+```cs
+CollectionView myView = (CollectionView)CollectionViewSource.GetDefaultView(myItemsControl.ItemsSource);
+myView.GroupDescriptions.Add(new PropertyGroupDescription("GroupProperty"));
+```
+
+В этом примере `GroupProperty` — это свойство в ваших данных, по которому будут сгруппированы элементы.
+
+Важные моменты:
+- **Группировка данных**: Для группировки данных необходимо использовать `CollectionView` и добавить группировку с помощью `PropertyGroupDescription`.
+
+- **Шаблон заголовка**: Используйте `GroupStyle.HeaderTemplate` для настройки внешнего вида заголовка каждой группы.
+
+- **Панель групп**: Используйте `GroupStyle.Panel` для настройки макета элементов внутри каждой группы.
+
+#### Управление списком
+Коллекция объектов внутри элемента-списка доступна в виде свойства **`Items`**. Для управления элементами из этой коллекции мы можем использовать следующие методы:
+
+- **`Add(object item)`**: добавление элемента
+- **`Clear()`**: полная очистка коллекции
+- **`Insert(int index, object item)`**: вставка элемента по определенному индексу в коллекции
+- **`Remove(object item)`**: удаление элемента
+- **`RemoveAt(int index)`**: удаление элемента по индексу
+
+А свойство **`Count`** позволяет узнать, сколько элементов в коллекции.
+
+Например, оставим предыдущий интерфейс и в файле связанного кода ***MainWindow.xaml.cs*** добавим и удалим программно несколько элементов:
+```cs
+using System.Windows;
+namespace MetanitApp
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            usersList.Items.Remove("Sam");      // удаляем элемент "Sam"
+            usersList.Items.RemoveAt(1);        // удаляем второй элемент
+            usersList.Items.Add("Kate");        // Добавляем элемент "Kate"
+            usersList.Items.Insert(0, "Mike"); // Вставляем элемент "Mike" на первое место в списке
+        }
+    }
+}
+```
+
+В данном случае добавляем и удаляем ряд элементов с помощью различных методов и в итоге получим список.
+
+При вызове методов, которые используют индексы, как выше методы `RemoveAt(index)` и `Insert(index, object)`, следует учитывать, что передаваемые индексы должны быть действительны. Естественно мы не можем удалить, к примеру, второй объект, если списке только один объект или вообще нет объектов. В этом случае мы можем проверять длину списка:
+```cs
+if(usersList.Items.Count > 1)    // если в списке больше 1 элемента
+ {
+    usersList.Items.Insert(1, "Mike"); // Вставляем элемент "Mike" на второе место
+    usersList.Items.RemoveAt(2);    // удаляем третий элемент
+}
+```
+
+#### Отображение сложных данных
+Списковые элементы могут отображать не только простые строки или числа, но и сложные данные. Например, создадим в коде новый класс `Person`:
+```cs
+public class Person
+{
+    public string Name { get; set; } = "";
+    public int Age { get; set; }
+
+    public override string ToString()
+    {
+        return $"Name: {Name}  Age: {Age}";
+    }
+}
+```
+
+Теперь создадим в *xaml* набор объектов этого класса `Person` и выведем в их в списке:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:ItemsControl"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="300">
+    <ItemsControl x:Name="usersList">
+        <local:Person Name="Tom" Age="38" />
+        <local:Person Name="Bob" Age="42" />
+        <local:Person Name="Sam" Age="25" />
+        <local:Person Name="Alice" Age="34" />
+    </ItemsControl>
+</Window>
+```
+
+Поскольку мы используем класс, определенный в текущем проекте, то соответственно у нас обязательно должно быть подключено пространство имен проекте. В нашем случае проект (и пространство имен) называется "ItemsControl". Соответственно у нас это пространство имен проецируется на префикс **`local`**:
+```cs
+xmlns:local="clr-namespace:ItemsControl"
+```
+
+В принципе по умолчанию WPF уже его подключает. После этого через префикс "local" можно обращаться к классу Person: "local:Person".
+
+Кроме того, чтобы не возникало проблем с разметкой XAML, желательно сделать перестроение проекта. И в итоге `ItemsControl` выведет все объекты:
+
+По умолчанию списковые элементы выводят то, что возвращает метод `ToString()` объекта. Именно для этой демонстрации и реализован данный метод в классе `Person` выше. Но также с помощью свойства `DisplayMemberPath` можно установить свойство объекта, значение которого будет отображаться в списке. Например, отобразим только имя:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MetanitApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="300">
+    <ItemsControl x:Name="usersList" DisplayMemberPath="Name">
+        <local:Person Name="Tom" Age="38" />
+        <local:Person Name="Bob" Age="42" />
+        <local:Person Name="Sam" Age="25" />
+        <local:Person Name="Alice" Age="34" />
+    </ItemsControl>
+</Window>
+```
+
+В этом случае в коде C# таким же образом можно добавлять и удалять данные:
+```cs
+var firstPerson = usersList.Items[0];   // получаем первый объект
+usersList.Items.Remove(firstPerson);    // удаляем его
+usersList.Items.Add(new Person { Name = "Kate", Age = 23 }); // добавляем новый объект
+```
+
+#### ItemsSource
+Нам необязательно вручную заполнять значения элемента управления списком, так как мы можем установить свойство **`ItemsSource`**, задав в качестве параметра коллекцию, из которой будет формироваться элемент управления списком. Например, в коде xaml-разметки определим пустой список:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="300">
+
+    <ItemsControl x:Name="usersList" />
+
+</Window>
+```
+
+А в файле отделенного кода выполним наполнение списка:
+```cs
+using System.Windows;
+using System.Collections.Generic;
+
+namespace MetanitApp;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        usersList.ItemsSource = new List<Person>()
+        {
+            new Person{Name="Tom", Age=38},
+            new Person {Name="Bob", Age=42},
+            new Person{Name="Sam", Age=25}
+        };
+        // устанавливаем отображаемое свойство
+        usersList.DisplayMemberPath = "Name";
+    }
+}
+```
+
+Но стоит учитывать, что если мы наполняем элемент управления списком через свойство **`ItemsSource`**, то мы не сможем использовать выше рассмотренные методы `Add`/`Remove`/`RemoveAt`/`Insert`/`Clear` для добавления/удаления элементов списка. В этом случае для управления элементами необходимо обращаться непосредственно к самому источнику данных. Например, определим в коде xaml кнопку для добавления одного объекта:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="300">
+    <StackPanel>
+        <ListBox x:Name="usersList" DisplayMemberPath="Name" />
+        <Button Content="Add" Click="Button_Click" Margin="5" Width="80" HorizontalAlignment="Left" />
+    </StackPanel>
+</Window>
+```
+
+По нажатию на кнопку будет вызываться метод `Button_Click`. И в файле связанного кода C# определим данный метод и наполним `ListBox` данными:
+```cs
+using System.Windows;
+using System.Collections.Generic;
+
+namespace MetanitApp;
+
+public partial class MainWindow : Window
+{
+    List<Person> people = new List<Person>()
+        {
+            new Person{Name="Tom", Age=38},
+            new Person {Name="Bob", Age=42},
+            new Person{Name="Sam", Age=25}
+        };
+    public MainWindow()
+    {
+        InitializeComponent();
+        usersList.ItemsSource = people;
+    }
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        people.Add(new Person { Name = "Mike", Age = 29 });
+        usersList.Items.Refresh();
+    }
+}
+```
+
+Здесь в качестве источника данных выступает список `people`, и из этого списка `ListBox` будет брать данные.
+
+В обработчике нажатия кнопки добавляем в список `people` один объект `Person` для теста. Обратите внимание, что добавляем именно в стандартный список `List<Person>`, а не в `ListBox`. `ListBox` в данном случае просто отображает данные. Но чтобы `ListBox` обновил свое визуальное представление, после изменения списка `people` обновляем данные в `ListBox`:
+```cs
+usersList.Items.Refresh();
+```
+
+Стоит отметить, что если в качестве источника данных выступает `ObservableCollection`, то нам не надо вызывать обновление данных списка, так как коллекция `ObservableCollection` сама извещает систему об изменениях.
+
+#### Преимущества и недостатки
+Преимущества:
+
+- Гибкость в форматировании и привязке данных.
+
+- Может содержать элементы разных типов.
+
+- Поддерживает различные панели компоновки.
+
+Недостатки:
+
+- Может потребовать ручной настройки шаблонов и панелей для корректного отображения.
+
+#### Selector / Селектор
+`Selector` в WPF — это базовый класс для элементов управления, которые позволяют пользователю выбрать один или несколько элементов из коллекции. Он наследуется от `ItemsControl` и добавляет свойства и события для управления выбором элементов.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.None, Readability=System.Windows.Readability.Unreadable)]
+public abstract class Selector : System.Windows.Controls.ItemsControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.selector?view=windowsdesktop-9.0
+
+Свойства и события `Selector`
+- **`SelectedItem`**: Возвращает выбранный элемент.
+
+- **`SelectedIndex`**: Возвращает индекс выбранного элемента.
+
+- **`SelectedValue`**: Возвращает значение выбранного элемента, указанное свойством `SelectedValuePath`.
+
+- **`SelectedValuePath`**: Указывает путь к свойству объекта данных, которое будет возвращено как `SelectedValue`.
+
+- **`IsSelected`**: Присоединенное свойство, которое можно использовать для установки выбора элемента, если контейнер элементов не создается явно.
+
+- **`SelectionChanged`**: Событие, возникающее при изменении выбора.
+
+- **`Selected`**: Событие, возникающее при выборе элемента.
+
+- **`Unselected`**: Событие, возникающее при снятии выбора с элемента.
+
+Некоторые элементы управления в WPF наследуются от `Selector`, такие как:
+
+- **`ListBox`**: Позволяет выбрать один или несколько элементов.
+
+- **`ComboBox`**: Комбинированный список, позволяющий выбрать один элемент.
+
+- **`TabControl`**: Позволяет выбрать одну вкладку.
+
+Пример использования `Selector`:
+```xml
+<ListBox ItemsSource="{Binding MyCollection}" SelectedItem="{Binding SelectedItem}" />
+```
+
+В этом примере `ListBox` — это элемент управления, наследующий от `Selector`, и он позволяет выбрать один элемент из коллекции.
+
+Важные моменты:
+- **Выбор элементов**: `Selector` поддерживает выбор только одного элемента по умолчанию. Для множественного выбора необходимо использовать `SelectionMode` в элементах управления, таких как `ListBox`.
+
+- **Привязка данных**: Свойства `SelectedItem`, `SelectedIndex`, `SelectedValue` можно привязывать к объектам данных для автоматического обновления выбора.
+
+##### Выбор элементов
+Все наследники класса `Selector` поддерживают выделение входящих элементов. Выделенный элемент(ы) можно получить с помощью свойств **`SelectedItem`**(`SelectedItems`), а получить индекс выделенного элемента — с помощью свойства **`SelectedIndex`**. Свойство **`SelectedValue`** позволяет получить значение выделенного элемента.
+
+При выделении элемента в списке генерируется событие **`SelectionChanged`**, которое мы можем обработать. Например, возьмем предыдущий список:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MetanitApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="300">
+    <ListBox x:Name="usersList" DisplayMemberPath="Name" SelectionChanged="usersList_SelectionChanged">
+        <local:Person Name="Tom" Age="38" />
+        <local:Person Name="Bob" Age="42" />
+        <local:Person Name="Sam" Age="25" />
+        <local:Person Name="Alice" Age="34" />
+    </ListBox>
+</Window>
+```
+
+А в файле кода определим обработчик для этого события:
+```cs
+using System.Windows;
+using System.Windows.Controls;
+
+namespace MetanitApp;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+    private void usersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (usersList.SelectedItem is Person person)
+        {
+            MessageBox.Show(person.Name);
+        }
+    }
+}
+```
+
+Важно учитывать, что так как в разметке *xaml* в списке определены элементы `Person`, то в коде мы можем привести объект `usersList.SelectedItem` к типу `Person`.
+
+Предположим, у нас есть класс `Person` с свойствами `Name` и `Age`, и мы хотим отобразить список людей в `ComboBox`, где выбранное значение будет именем человека.
+
+```cs
+public class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+```
+
+```xml
+<ComboBox x:Name="peopleComboBox"
+          ItemsSource="{Binding People}"
+          SelectedValuePath="Name"
+          DisplayMemberPath="Name" />
+```
+
+В этом примере:
+
+- **`ItemsSource`**: Связан с коллекцией объектов `Person`.
+
+- **`SelectedValuePath`**: Указывает, что свойство `Name` должно быть использовано как выбранное значение.
+
+- **`DisplayMemberPath`**: Указывает, что свойство `Name` должно быть отображено в списке.
+
+Как это работает:
+- **`SelectedItem`**: Возвращает выбранный объект целиком (в данном случае объект `Person`).
+
+- **`SelectedValue`**: Возвращает значение свойства, указанного в `SelectedValuePath` (в данном случае имя человека).
+
+- **`SelectedValuePath`**: Определяет путь к свойству объекта данных, которое будет возвращено как `SelectedValue`.
+
+Пример кода:
+```cs
+public partial class MainWindow : Window
+{
+    public ObservableCollection<Person> People { get; set; }
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        People = new ObservableCollection<Person>
+        {
+            new Person { Name = "John", Age = 30 },
+            new Person { Name = "Alice", Age = 25 },
+            new Person { Name = "Bob", Age = 40 }
+        };
+        DataContext = this;
+    }
+
+    private void peopleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (peopleComboBox.SelectedValue is string selectedName)
+        {
+            MessageBox.Show($"Выбрано имя: {selectedName}");
+        }
+    }
+}
+```
+
+В этом примере при изменении выбора в `ComboBox` отображается выбранное имя.
+
+Итак, после заполнения любого элемента управления `Selector` есть три способа определен выбранного в них элемента. Во-первых, если необходимо найти числовой индекс выбранного элемента, необходимо использовать свойство `SelectedIndex` (отсчет начинается с `0`; `-`1 означает отсутствие выбора). Во-вторых, если требуется получить объект, выбранный внутри списка, то используется свойство `SelectedItem`. В-третьих, `SelectedValue` позволяет получить значение выбранного объекта.
+
+##### ListBox
+`ListBox` в WPF — это элемент управления, который позволяет отображать список элементов и предоставляет пользователю возможность выбрать один или несколько элементов. Он наследуется от `ItemsControl` и добавляет функциональность для управления выбором элементов.
+
+Основные свойства и события `ListBox`:
+- **`SelectionMode`**: Определяет режим выбора элементов. Может принимать значения `Single`, `Multiple` или `Extended`.
+
+    - `Single`: Пользователь может выбрать только один элемент.
+
+    - `Multiple`: Пользователь может выбрать несколько элементов без использования клавиш <kbd>Shift</kbd> или <kbd>Ctrl</kbd>.
+
+    - `Extended`: Пользователь может выбрать несколько последовательных элементов, удерживая <kbd>Shift</kbd>, или не последовательных элементов, удерживая <kbd>Ctrl</kbd>.
+
+- **`SelectedItem`**: Возвращает выбранный элемент.
+
+- **`SelectedItems`**: Возвращает коллекцию выбранных элементов (доступна только в режиме `Multiple` или `Extended`).
+
+- **`SelectedIndex`**: Возвращает индекс выбранного элемента.
+
+- **`SelectionChanged`**: Событие, возникающее при изменении выбора.
+
+Пример использования `ListBox`:
+```xml
+<ListBox Name="myListBox" SelectionMode="Multiple">
+    <ListBoxItem>Элемент 1</ListBoxItem>
+    <ListBoxItem>Элемент 2</ListBoxItem>
+    <ListBoxItem>Элемент 3</ListBoxItem>
+</ListBox>
+```
+
+Элемент `ListBox` представляет собою обычный список, элементы которого определены с помощью элементов `ListBoxItem`:
+```xml
+<ListBox SelectedIndex="1">
+  <ListBoxItem Content="Red" />
+  <ListBoxItem Content="Green" />
+  <ListBoxItem Content="Blue" />
+</ListBox>
+```
+
+`ListBox` содержит коллекцию элементов `ListBoxItem`, которые являются типичными элементами управления содержимым. В качестве содержимого элементов списка можно задавать не только текст, но и любоые другие элементы, например:
+```xml
+<ListBox Name="phonesList">
+    <TextBlock FontWeight="Bold" TextDecorations="Underline" Text="Новинки 2015 года" />
+    <ListBoxItem Background="LightGray">LG Nexus 5X</ListBoxItem>
+    <ListBoxItem>Huawei Nexus 6P</ListBoxItem>
+    <ListBoxItem Background="LightGray">iPhone 6S</ListBoxItem>
+    <ListBoxItem>iPhone 6S Plus</ListBoxItem>
+    <ListBoxItem Background="LightGray">Аsus Zenphone 2</ListBoxItem>
+    <ListBoxItem>Microsoft Lumia 950</ListBoxItem>
+</ListBox>
+```
+
+Все эти элементы будут находиться в коллекции `phonesList.Items` и, таким образом, по счетчику можно к ним обращаться, например, `phonesList.Items[0]` — первый элемент `ListBox`, который в данном случае представляет `TextBlock`. Также мы можем установить элемент: `phonesList.Items[2]="LG G 4";`
+
+Компонент `ListBoxItem` представляет элемент управления содержимым, поэтому также мы можем задавать через его свойство `Content` более сложные композиции элементов, например:
+```xml
+<ListBox Name="Photos" Background="Lavender">
+    <ListBoxItem Margin="3">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="cats.jpg" Width="60" />
+            <TextBlock>cats.jpg</TextBlock>
+        </StackPanel>
+    </ListBoxItem>
+    <StackPanel Orientation="Horizontal">
+        <Image Source="windowcat.jpg" Width="60" />
+        <TextBlock>windowcat.jpg</TextBlock>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal">
+        <Image Source="234.jpg" Width="60" />
+        <TextBlock>234.jpg</TextBlock>
+    </StackPanel>
+</ListBox>
+```
+
+Мы можем использовать элементы как внутри элемента `ListBoxItem`, так и непосредственно вставляя их в список. Однако на следующем примере видно, что использование `ListBoxItem` имеет небольшое преимущество, так как мы можем задать некоторые дополнительные свойства, например, отступы.
+
+`ListBox` часто используется с привязкой данных. Вы можете связать свойство `ItemsSource` с коллекцией объектов для отображения данных.
+
+```xml
+<ListBox ItemsSource="{Binding MyCollection}" />
+```
+
+Вы можете использовать `ItemTemplate` для настройки внешнего вида каждого элемента в списке.
+
+```xml
+<ListBox ItemsSource="{Binding MyCollection}">
+    <ListBox.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+    </ListBox.ItemTemplate>
+</ListBox>
+```
+
+Важные моменты
+- **Элементы управления**: `ListBox` может содержать любые элементы управления, что делает его гибким инструментом для создания сложных интерфейсов.
+
+- **Производительность**: Отображение большого количества элементов может привести к проблемам с производительностью. Для оптимизации можно использовать виртуализацию или другие методы.
+
+Пример обработки выбора:
+```cs
+public partial class MainWindow : Window
+{
+    public ObservableCollection<Person> People { get; set; }
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        People = new ObservableCollection<Person>
+        {
+            new Person { Name = "John", Age = 30 },
+            new Person { Name = "Alice", Age = 25 },
+            new Person { Name = "Bob", Age = 40 }
+        };
+        DataContext = this;
+    }
+
+    private void myListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (myListBox.SelectedItem is Person selectedPerson)
+        {
+            MessageBox.Show($"Выбран человек: {selectedPerson.Name}");
+        }
+    }
+}
+```
+
+В этом примере при изменении выбора в `ListBox` отображается выбранный человек.
+
+###### ListView
+`ListView` в WPF — это элемент управления, который позволяет отображать набор элементов данных в различных представлениях. Он наследуется от `ListBox` и добавляет свойство `View`, которое позволяет создавать сложные представления данных, такие как таблицы с несколькими столбцами.
+
+Основные свойства и представления `ListView`:
+- **`View`**: Это свойство определяет режим представления данных в `ListView`. В WPF доступен режим `GridView`, который позволяет отображать данные в виде таблицы с настраиваемыми столбцами.
+
+- **`GridView`**: Это представление позволяет создавать таблицы с несколькими столбцами. Каждый столбец определяется с помощью `GridViewColumn`, где можно указать заголовок (`Header`) и привязку к свойству данных (`DisplayMemberBinding`).
+
+Этот элемент управления отображает информацию на множестве строк и столбцов. Он унаследован от класса `ListBox`, поэтому может вести себя простой список:
+```xml
+<ListView>
+    <TextBlock>LG Nexus 5X</TextBlock>
+    <TextBlock>Huawei Nexus 6P</TextBlock>
+    <TextBlock>iPhone 6S</TextBlock>
+    <TextBlock>iPhone 6S Plus</TextBlock>
+    <TextBlock>Аsus Zenphone 2</TextBlock>
+    <TextBlock>Microsoft Lumia 950</TextBlock>
+</ListView>
+```
+
+Но чтобы создать более сложные по структуре данные используется свойство **`View`**. Это свойство принимает в качестве значения объект `GridView`, который управляет отображением данных. `GridView` определяет коллекцию определений столбцов — **`GridViewColumn`**, которое с помощью свойства `Header` определяет название столбца, а с помощью свойства `DisplayMemberBinding` можно определить привязку столбца к определенному свойству добавляемого в `ListView` объекта.
+
+```xml
+<GridViewColumn DisplayMemberBinding="{Binding Path=Company}">Компания</GridViewColumn>
+```
+
+Допустим у нас в проекте определен класс `Phone`:
+```cs
+public class Phone
+{
+    public string Title { get; set; }
+    public string Company { get; set; }
+    public int Price { get; set; }
+}
+```
+
+Создадим в xaml-коде коллекцию объектов `Phone` (в принципе это можно было бы сделать и в файле кода) и объявим привязку столбцов `ListView` к свойствам объектов `Phone`:
+```xml
+<Window x:Class="ControlsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlsApp"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="ListView" Height="220" Width="300">
+    <Grid Background="Lavender">
+        <ListView Name="phonesList" ItemsSource="{DynamicResource ResourceKey=phones}" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Title}">Модель</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Company}" Width="100">Компания</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Price}">Цена</GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.Resources>
+                <col:ArrayList x:Key="phones">
+                    <local:Phone Title="iPhone 6S" Company="Apple" Price="54990" />
+                    <local:Phone Title="Lumia 950" Company="Microsoft" Price="39990" />
+                    <local:Phone Title="Nexus 5X" Company="Google" Price="29990" />
+                    <local:Phone Title = "Galaxy Edge" Company = "Samsung" Price = "45670" />
+                </col:ArrayList>
+            </ListView.Resources>
+        </ListView>
+    </Grid>
+</Window>
+```
+
+Таким образом, `GridView` — это представление для элемента управления `ListView` в WPF, которое позволяет отображать данные в виде таблицы с несколькими столбцами. Каждый столбец определяется с помощью `GridViewColumn`, где можно указать заголовок (`Header`) и привязку к свойству данных (`DisplayMemberBinding`).
+
+В WPF по умолчанию доступно только представление `GridView`. Однако вы можете создавать свои собственные представления, наследуя от `ViewBase`, что позволяет расширить возможности `ListView`.
+
+Чтобы создать свое собственное представление, вам нужно создать класс, наследующий от `ViewBase`, и переопределить необходимые методы для отображения данных. Это позволяет создавать любые пользовательские представления, которые могут быть использованы с `ListView`.
+
+Важные моменты:
+- **Гибкость**: `ListView` позволяет переключаться между разными представлениями данных, что делает его гибким инструментом для отображения информации в приложениях.
+
+- **Сравнение с `WinForms`**: В отличие от `ListView` в WinForms, который использует Windows API для отображения стандартного элемента управления, `ListView` в WPF является независимым элементом управления и не полагается на Windows API.
+
+- **Создание пользовательских представлений**: Вы можете создавать свои собственные представления, наследуя от `ViewBase`, что позволяет расширить возможности `ListView` за пределы стандартного `GridView`.
+
+Пример кода:
+```cs
+public class Phone
+{
+    public string Title { get; set; }
+    public string Company { get; set; }
+    public int Price { get; set; }
+}
+
+public partial class MainWindow : Window
+{
+    public ObservableCollection<Phone> Phones { get; set; }
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        Phones = new ObservableCollection<Phone>
+        {
+            new Phone { Title = "iPhone 6S", Company = "Apple", Price = 54990 },
+            new Phone { Title = "Lumia 950", Company = "Microsoft", Price = 39990 },
+        };
+        DataContext = this;
+    }
+}
+```
+
+XAML:
+```xml
+<ListView ItemsSource="{Binding Phones}">
+    <ListView.View>
+        <GridView>
+            <GridViewColumn Header="Модель" DisplayMemberBinding="{Binding Path=Title}" />
+            <GridViewColumn Header="Компания" DisplayMemberBinding="{Binding Path=Company}" Width="100" />
+            <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Path=Price}" />
+        </GridView>
+    </ListView.View>
+</ListView>
+```
+
+В этом примере `ListView` отображает коллекцию объектов Phone в виде таблицы.
+
+###### Выделение элементов
+`ListBox` поддерживает множественный выбор. Для этого нужно установить свойство `SelectionMode="Multiple"` или `SelectionMode="Extended"`. В последнем случае, чтобы выделить несколько элементов, необходимо держать нажатой клавишу <kbd>Ctrl</kbd> или <kbd>Shift</kbd>. По умолчанию `SelectionMode="Single"`, то есть допускается только единственное выделение.
+
+##### TabControl / Создание вкладок
+Для создания вкладок в WPF, как и в WinForms, предназначен элемент `TabControl`, а отдельная вкладка представлена элементом `TabItem`:
+```xml
+<TabControl>
+    <TabItem Header="Вкладка 1">Первая вкладка</TabItem>
+    <TabItem Header="Вкладка 2">Вторая вкладка</TabItem>
+</TabControl>
+```
+
+`TabControl` в WPF — это элемент управления, который позволяет разбить интерфейс на несколько вкладок, каждая из которых содержит отдельное содержимое. Это удобный способ организовать большое количество информации в приложении, делая его более навигируемым и компактным.
+
+Основные компоненты `TabControl`:
+- **`TabControl`**: Сам элемент управления, который содержит вкладки.
+
+- **`TabItem`**: Представляет отдельную вкладку. Каждая вкладка имеет свойство Header, которое определяет заголовок вкладки, и свойство Content, которое содержит содержимое вкладки.
+
+Пример использования `TabControl`:
+```xml
+<TabControl>
+    <TabItem Header="Вкладка 1">
+        <TextBlock>Содержимое первой вкладки</TextBlock>
+    </TabItem>
+    <TabItem Header="Вкладка 2">
+        <TextBlock>Содержимое второй вкладки</TextBlock>
+    </TabItem>
+</TabControl>
+```
+
+Свойства и события `TabControl`:
+- **`SelectedItem`**: Возвращает выбранную вкладку.
+
+- **`SelectedIndex`**: Возвращает индекс выбранной вкладки.
+
+- **`SelectionChanged`**: Событие, возникающее при изменении выбора вкладки.
+
+- **`Items`**: Коллекция вкладок (`TabItem`).
+
+Элемент `TabItem` является элементом управления содержимым, поэтому в него можно вложить другие элементы:
+```xml
+<TabControl x:Name="products">
+    <TabItem x:Name="smartphonesTab">
+        <TabItem.Header>
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Height="10" Width="10" Fill="Black" />
+                <TextBlock Margin="3">Смартфоны</TextBlock>
+            </StackPanel>
+        </TabItem.Header>
+        <TabItem.Content>
+            <StackPanel>
+                <RadioButton IsChecked="True">iPhone S6</RadioButton>
+                <RadioButton>LG G 4</RadioButton>
+                <RadioButton>Lumia 550</RadioButton>
+            </StackPanel>
+        </TabItem.Content>
+    </TabItem>
+    <TabItem x:Name="tabletsTab">
+        <TabItem.Header>
+            <StackPanel Orientation="Horizontal">
+                <Rectangle Height="10" Width="10" Fill="Black" />
+                <TextBlock Margin="3">Планшеты</TextBlock>
+            </StackPanel>
+        </TabItem.Header>
+    </TabItem>
+</TabControl>
+```
+
+Класс `TabItem` наследуется от класса `HeaderedContentControl`, поэтому кроме свойства `Content`, определяющее содержимое вкладки, имеет также свойство **`Header`**, которое определяет заголовок. И в этот заголовок мы можем вложить различное содержимое, как в примере выше.
+
+И также, как и в случае с `ListBoxItem` и `ComboBoxItem`, мы можем вложить в `TabControl` и другие элементы, которые неявно образуют отдельные вкладки:
+```xml
+<TabControl>
+    <TextBlock>Первая вкладка</TextBlock>
+    <TextBlock>Вторая вкладка</TextBlock>
+    <TextBlock>Третья вкладка</TextBlock>
+</TabControl>
+```
+
+Важные моменты:
+- **Гибкость**: `TabControl` позволяет создавать сложные интерфейсы с несколькими вкладками, что делает его удобным для организации большого количества информации.
+
+- **Содержимое вкладок**: Каждая вкладка может содержать любые элементы управления, что позволяет создавать сложные и настраиваемые интерфейсы.
+
+- **Привязка данных**: Вы можете использовать привязку данных для автоматического заполнения вкладок данными из модели данных.
+
+Вы можете добавлять вкладки в `TabControl` программно:
+```cs
+TabItem item = new TabItem();
+item.Header = "Новая вкладка";
+item.Content = new TextBlock { Text = "Содержимое новой вкладки" };
+myTabControl.Items.Add(item);
+```
+
+###### Программное добавление вкладок
+Допустим, у нас на форме есть `TabControl`:
+```xml
+<TabControl x:Name="products">
+</TabControl>
+```
+
+Через код C# добавим в него вкладку:
+```cs
+// формируем содержимое вкладки в виде списка
+ListBox notesList = new ListBox();
+notesList.Items.Add("Macbook Pro");
+notesList.Items.Add("HP Pavilion 5478");
+notesList.Items.Add("Acer LK-08");
+// добавление вкладки
+products.Items.Add(new TabItem
+{
+    Header = new TextBlock { Text = "Ноутбуки" }, // установка заголовка вкладки
+    Content = notesList // установка содержимого вкладки
+});
+```
+
+###### Сравнение с другими элементами
+- `TabControl` vs `ListBox`: `TabControl` используется для создания навигационных систем с вкладками, в то время как `ListBox` — для отображения списков элементов для выбора.
+
+- `TabControl` vs `GridView`: `GridView` — это представление для `ListView`, которое позволяет отображать данные в виде таблицы, в то время как `TabControl` — это отдельный элемент управления для создания вкладок.
+
+##### ComboBox / Выпадающий список
+`ComboBox` в WPF — это элемент управления, который позволяет пользователю выбрать один элемент из выпадающего списка. Он наследуется от `ItemsControl`, что означает, что может содержать коллекцию объектов любого типа.
+
+Элемент `ComboBox` представляет собою выпадающий список, элементы которого определены с помощью элементов `ComboBoxItem`:
+```xml
+<ComboBox SelectedIndex="1">
+  <ComboBoxItem Content="Red" />
+  <ComboBoxItem Content="Green" />
+  <ComboBoxItem Content="Blue" />
+</ComboBox>
+```
+
+В качестве содержимого элементов выпадающего списка можно задавать не только текст, но и другие элементы, например эллипс или прямоугольник.
+
+Например, определим элемент `ComboBox` в *xaml*:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="METANIT.COM" Height="200" Width="300">
+    <StackPanel>
+        <ComboBox>
+            <sys:String>Tom</sys:String>
+            <sys:String>Bob</sys:String>
+            <sys:String>Sam</sys:String>
+            <sys:String>Alice</sys:String>
+        </ComboBox>
+    </StackPanel>
+</Window>
+```
+
+Здесь в качестве элементов выпадающего списка используются строки. И после запуска программы мы сможем выбрать один из четырех элементов.
+
+В реальности в качестве элементов могут выступать любые объекты, например, элементы `TextBlock`:
+```xml
+<ComboBox>
+    <TextBlock>Tom</TextBlock>
+    <TextBlock>Bob</TextBlock>
+    <TextBlock>Sam</TextBlock>
+    <TextBlock>Alice</TextBlock>
+</ComboBox>
+```
+
+Результат будет тот же самый, что и в предыдущем случае.
+
+Однако также в WPF предоставляет для `ComboBox` специальный тип — **`ComboBoxItem`**. `ComboBoxItem` представляет элемент управления содержимым, в который через свойство `Content` мы можем поместить другие элементы. Например:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="METANIT.COM" Height="200" Width="300">
+    <StackPanel>
+        <ComboBox>
+            <ComboBoxItem>
+                <StackPanel>
+                    <TextBlock FontSize="16">Tom</TextBlock>
+                    <TextBlock>Microsoft</TextBlock>
+                </StackPanel>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <StackPanel>
+                    <TextBlock FontSize="16">Bob</TextBlock>
+                    <TextBlock>Google</TextBlock>
+                </StackPanel>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <StackPanel>
+                    <TextBlock FontSize="16">Sam</TextBlock>
+                    <TextBlock>JetBrains</TextBlock>
+                </StackPanel>
+            </ComboBoxItem>
+        </ComboBox>
+    </StackPanel>
+</Window>
+```
+
+Стоит отметить, что в примеры выше для демонстрации применяется повторяющаяся разметка. В реальном же приложении для создании подобных разметок, применяются шаблон данных и механизм привязки, которые рассматриваются далее.
+
+Например, вы можете связать свойство `ItemsSource` с коллекцией объектов для отображения данных.
+```xml
+<ComboBox ItemsSource="{Binding MyCollection}">
+    <ComboBox.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+    </ComboBox.ItemTemplate>
+</ComboBox>
+```
+
+Как и другие элементы управления списками, `ComboBox` можно отображать объекты пользовательских классов. Например, определим пустой `ComboBox`:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="METANIT.COM" Height="200" Width="300">
+    <StackPanel>
+        <ComboBox x:Name="peopleComboBox" />
+    </StackPanel>
+</Window>
+```
+
+В файле связанного кода C# определим класс `Person`, который представляет данные, и добавим в список несколько объектов этого класса:
+```cs
+using System.Windows;
+
+namespace MetanitApp;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        peopleComboBox.ItemsSource = new Person[]
+        {
+            new Person { Name = "Tom", Company = "Microsoft" },
+            new Person { Name = "Bob", Company = "Google" },
+            new Person { Name = "Sam", Company = "JetBrains" }
+        };
+    }
+}
+public class Person
+{
+    public string Name { get; set; } = "";
+    public string Company { get; set; } = "";
+    public override string ToString() => $"{Name} ({Company})";
+}
+```
+
+По умолчанию `ComboBox` выводит строковое представление объекта. Если необходимо отображать значение определенного свойства, применяется свойство `DisplayMemberPath`, например, выведем значение свойства `Name`:
+```xml
+<ComboBox x:Name="peopleComboBox" DisplayMemberPath="Name" />
+```
+
+Важные моменты:
+- **Гибкость**: `ComboBox` может содержать любые объекты, что делает его гибким инструментом для отображения данных.
+
+- **Создание пользовательских элементов**: Вы можете использовать `ComboBoxItem` для создания пользовательских элементов в выпадающем списке.
+
+- **События**: `ComboBox` имеет событие `SelectionChanged`, которое позволяет обрабатывать изменения выбора.
+
+###### Событие SelectionChanged и обработка выбора объекта
+Обрабатывая событие **`SelectionChanged`**, мы можем динамически получать выделенный элемент. Для управления выбранными объектами класс `ComboBox` предоставляет следующие свойства:
+
+- **`SelectedItem`**: выбранный объект списка
+
+- **`SelectedValue`**: выбранное значение
+
+- **`SelectedIndex`**: индекс выбранного объекта в списке
+
+Определим в *xaml* следующий интерфейс:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="METANIT.COM" Height="200" Width="300">
+    <StackPanel>
+        <TextBlock x:Name="selectedLabel" FontSize="18" />
+        <ComboBox x:Name="peopleComboBox" SelectionChanged="peopleComboBox_SelectionChanged" />
+    </StackPanel>
+</Window>
+```
+
+Здесь для события `SelectionChanged` установлен обработчик `"peopleComboBox_SelectionChanged"`, а для вывода выбранного объекта определен элемент `TextBlock`.
+
+В коде C# определим обработчик события:
+```cs
+using System.Windows;
+using System.Windows.Controls;
+
+namespace MetanitApp;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        peopleComboBox.ItemsSource = new Person[]
+        {
+            new Person { Name = "Tom", Company = "Microsoft" },
+            new Person { Name = "Bob", Company = "Google" },
+            new Person { Name = "Sam", Company = "JetBrains" }
+        };
+        peopleComboBox.SelectedIndex = 1;   // по умолчанию будет выбран второй элемент
+    }
+
+    private void peopleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if(peopleComboBox.SelectedItem is Person person)
+        {
+            selectedLabel.Text = person.Name;
+        }
+    }
+}
+public class Person
+{
+    public string Name { get; set; } = "";
+    public string Company { get; set; } = "";
+    public override string ToString() => $"{Name} ({Company})";
+}
+```
+
+Поскольку здесь элементами списка являются объекты `Person`, то выбранный объект мы можем привести к типу `Person`
+```cs
+if(peopleComboBox.SelectedItem is Person person)
+```
+
+И вывести в текстовую метку значение свойства `Name`.
+
+Также мы могли бы использовать свойство **`SelectedValue`**, которое представляет выбранное значение. Для его использования определим следующий код *xaml*:
+```xml
+<Window x:Class="MetanitApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="METANIT.COM" Height="200" Width="300">
+    <StackPanel>
+        <TextBlock x:Name="selectedPerson" FontSize="18" />
+        <ComboBox x:Name="peopleComboBox" SelectedValuePath="Name"
+                  SelectionChanged="peopleComboBox_SelectionChanged" />
+    </StackPanel>
+</Window>
+```
+
+Обратите внимание на свойство `SelectedValuePath="Name"` — здесь мы указываем, что свойство "Name" будет выступать в качестве свойства значения.
+
+Для обработки события выбора элемента определим следующий код C#:
+```cs
+using System.Windows;
+using System.Windows.Controls;
+
+namespace MetanitApp;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        peopleComboBox.ItemsSource = new Person[]
+        {
+            new Person { Name = "Tom", Company = "Microsoft" },
+            new Person { Name = "Bob", Company = "Google" },
+            new Person { Name = "Sam", Company = "JetBrains" }
+        };
+        peopleComboBox.SelectedIndex = 1;   // по умолчанию будет выбран второй элемент
+    }
+
+    private void peopleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if(peopleComboBox.SelectedValue is { }) // если не равно null
+        {
+            selectedPerson.Text = peopleComboBox.SelectedValue.ToString();
+        }
+        // или так
+        // selectedPerson.Text = peopleComboBox.SelectedValue?.ToString();
+    }
+}
+public class Person
+{
+    public string Name { get; set; } = "";
+    public string Company { get; set; } = "";
+    public override string ToString() => $"{Name} ({Company})";
+}
+```
+
+Здесь проверяем, не равно ли `peopleComboBox.SelectedValue` `null` (хотя в примере выше это не имеет смысла, поскольку это свойство представляет строку), и выводим значение этого свойства в текстовый блок. Результат будет аналогичен предыдущему.
+
+###### Свойства и события
+Основные свойства и события `ComboBox`:
+- **`ItemsSource`**: Связывает элемент управления с коллекцией данных.
+
+- **`SelectedItem`**: Возвращает выбранный элемент.
+
+- **`SelectedValue`**: Возвращает значение выбранного элемента, указанное свойством `SelectedValuePath`.
+
+- **`SelectedIndex`**: Возвращает индекс выбранного элемента.
+
+- **`SelectionChanged`**: Событие, возникающее при изменении выбора.
+
+- **`IsEditable`**: Определяет, может ли пользователь вводить текст в текстовое поле элемента управления.
+
+- **`IsReadOnly`**: Определяет, может ли пользователь редактировать текст в текстовом поле.
+
+Установка свойства `IsEditable="True"` позволяет вводить в поле списка начальные символы, а затем функция автозаполнения подставит подходящий результат. По умолчанию свойство имеет значение `False`.
+
+Это свойство работает в комбинации со свойством `IsReadOnly`: оно указывает, является поле ввода доступным только для чтения. По умолчанию имеет значение `False`, поэтому если `IsEditable="True"`, то мы можем вводить туда произвольный текст.
+
+Таким образом можно ввести данные, отсутствующие в списке `ItemsSource`, если свойство `IsEditable` установлено в `true`. Это позволяет пользователю вводить произвольный текст в текстовое поле `ComboBox`, даже если введенный текст не соответствует ни одному из элементов в списке.
+
+Важные моменты:
+- **`IsReadOnly`**: Если `IsReadOnly` установлено в `true`, то даже при `IsEditable="true"` пользователь не сможет вводить или редактировать текст в текстовом поле.
+
+- **Автозаполнение**: Если вы хотите включить автозаполнение, чтобы пользователь мог вводить начальные символы и получать подходящие варианты, можно использовать свойство `IsTextSearchEnabled`.
+
+В коде вы можете обрабатывать событие `TextChanged` или `SelectionChanged`, чтобы проверить, был ли введен пользователем текст, отсутствующий в списке:
+```cs
+private void myComboBox_TextChanged(object sender, TextChangedEventArgs e)
+{
+    if (myComboBox.Text != null && !myComboBox.Items.Contains(myComboBox.Text))
+    {
+        // Обработка ввода текста, отсутствующего в списке
+    }
+}
+```
+
+Свойство `IsDropDownOpen` в `ComboBox` используется для управления состоянием выпадающего списка. Оно позволяет программно открывать или закрывать список элементов.
+
+Основные сферы применения `IsDropDownOpen`:
+- **Программное управление**: Вы можете использовать это свойство для открытия или закрытия выпадающего списка в коде, что может быть полезно для реализации определенного поведения приложения.
+
+- **Привязка данных**: Свойство `IsDropDownOpen` можно привязывать к свойству модели данных, что позволяет управлять состоянием выпадающего списка из кода модели.
+
+- **Обработка событий**: Это свойство часто используется в сочетании с событиями, такими как `DropDownOpened` и `DropDownClosed`, для обработки моментов открытия и закрытия выпадающего списка.
+
+Еще одно свойство `StaysOpenOnEdit` при установке в `True` позволяет сделать список раскрытым на время ввода значений в поле ввода.
+
+###### Сравнение с другими элементами
+- **`ComboBox` vs `ListBox`**: `ComboBox` позволяет выбрать только один элемент и отображает его в текстовом поле, в то время как `ListBox` может отображать несколько элементов и позволяет выбрать несколько из них.
+
+- **`ComboBox` vs `DropDownList`**: В WPF нет отдельного элемента `DropDownList`, но `ComboBox` может быть использован в режиме, когда пользователь может только выбрать элемент из списка, установив `IsEditable` в `false`.
+
+##### MutliSelector / Множественное выделение
+`MutliSelector` — абстрактный класс для элементов управления, реализующих множественное выделение.
+
+Определение:
+```cs
+public abstract class MultiSelector : System.Windows.Controls.Primitives.Selector
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.multiselector?view=windowsdesktop-9.0
+
+###### DataGrid / Таблица данных
+`DataGrid` в WPF — это мощный элемент управления, предназначенный для отображения и редактирования данных в табличном виде. Он позволяет создавать сложные интерфейсы для работы с данными, включая сортировку, фильтрацию и редактирование.
+
+Определение:
+```cs
+public class DataGrid : System.Windows.Controls.Primitives.MultiSelector
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.datagrid?view=windowsdesktop-9.0
+
+`DataGrid` во многом похож на `ListView`, но более сложный по характеру и допускает редактирование содержимого таблицы.
+
+В разделе о `ListView` мы создали класс `Phone`, объекты которого выводили в список:
+```cs
+public class Phone
+{
+    public string Title { get; set; }
+    public string Company { get; set; }
+    public int Price { get; set; }
+}
+```
+
+Теперь же выведем объекты в таблицу `DataGrid`. Чтобы `DataGrid` автоматически разбивал таблицу на столбцы, установим свойство `AutoGenerateColumns="True"`:
+```xml
+<Window x:Class="ControlsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlsApp"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+
+        mc:Ignorable="d"
+        Title="DataGrid" Height="220" Width="300">
+    <Grid Background="Lavender">
+        <DataGrid x:Name="phonesGrid" AutoGenerateColumns="True" ItemsSource="{DynamicResource ResourceKey=phones}">
+            <DataGrid.Resources>
+                <col:ArrayList x:Key="phones">
+                    <local:Phone Title="iPhone 6S" Company="Apple" Price="54990" />
+                    <local:Phone Title="Lumia 950" Company="Microsoft" Price="39990" />
+                    <local:Phone Title="Nexus 5X" Company="Google" Price="29990" />
+                </col:ArrayList>
+            </DataGrid.Resources>
+        </DataGrid>
+    </Grid>
+</Window>
+```
+
+В данном случае префикс `local` ссылается на пространство имен текущего проекта, в котором определен класс `Phone` (`xmlns:local="clr-namespace:Controls"`), а `col` — префикс-ссылка на пространство имен `System.Collections (xmlns:col="clr-namespace:System.Collections;assembly=mscorlib")`. И это даст в итоге следующий вывод:
+
+Программная установка источника для `DataGrid`:
+```cs
+List<Phone> phonesList = new List<Phone>
+{
+    new Phone { Title="iPhone 6S", Company="Apple", Price=54990 },
+    new Phone {Title="Lumia 950", Company="Microsoft", Price=39990 },
+    new Phone {Title="Nexus 5X", Company="Google", Price=29990 }
+};
+phonesGrid.ItemsSource = phonesList;
+```
+
+Основные особенности:
+- **Отображение данных**: `DataGrid` может отображать данные из различных источников, таких как базы данных, коллекции объектов или XML-файлы. Каждая строка соответствует объекту в источнике данных, а каждый столбец — свойству этого объекта.
+
+- **Автоматическая генерация столбцов**: Свойство `AutoGenerateColumns` позволяет автоматически создавать столбцы на основе свойств объектов в источнике данных.
+
+- **Редактирование данных**: `DataGrid` поддерживает редактирование данных по умолчанию, что позволяет пользователям изменять значения в ячейках.
+
+- **Сортировка и фильтрация**: Элемент управления поддерживает сортировку и фильтрацию данных, что упрощает работу с большими объемами информации.
+
+- **Типы столбцов**: `DataGrid` предлагает различные типы столбцов, такие как `DataGridTextColumn`, `DataGridCheckBoxColumn`, и `DataGridComboBoxColumn`, что позволяет отображать разные типы данных
+
+Пример создания простого `DataGrid` с автоматической генерацией столбцов:
+```xml
+<DataGrid Name="myDataGrid" AutoGenerateColumns="True">
+</DataGrid>
+```
+
+И установка источника данных в коде:
+```cs
+using System.Collections.Generic;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+
+        List<User> users = new List<User>();
+        users.Add(new User() { Id = 1, Name = "John Doe" });
+        users.Add(new User() { Id = 2, Name = "Jane Doe" });
+
+        myDataGrid.ItemsSource = users;
+    }
+}
+
+public class User
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+```
+
+Преимущества использования:
+- **Гибкость**: `DataGrid` может быть настроен для отображения различных типов данных и поддерживает пользовательские шаблоны столбцов.
+
+- **Редактирование и сортировка**: Встроенная поддержка редактирования и сортировки делает его удобным для работы с данными.
+
+- **Привязка данных**: Легко интегрируется с механизмом привязки данных WPF, что упрощает обновление интерфейса при изменении данных.
+
+В целом, `DataGrid` является мощным инструментом для создания сложных интерфейсов управления данными в приложениях WPF.
+
+###### Некоторые полезные свойства DataGrid
+
+| Свойство | Описание
+-- | --
+**`RowBackground`** и<br>**`AlternatingRowBackground`** | Устанавливают фон строки. Если установлены оба свойства, цветовой фон чередуется: **`RowBackground`** — для нечетных строк и **`AlternatingRowBackground`** — для четных
+**`ColumnHeaderHeight`** | Устанавливает высоту строки названий столбцов.
+**`ColumnWidth`** | Устанавливает ширину столбцов.
+**`RowHeight`** | Устанавливает высоту строк.
+**`GridLinesVisibility`** | Устанавливает видимость линий, разделяющих столбцы и строки. Имеет четыре значения — `All` — видны все линии, `Horizontal` — видны только горизонтальные линии, `Vertical` — видны только вертикальные линии, `None` — линии отсутствуют
+**`HeadersVisibility`** | Задает видимость заголовков
+**`HorizontalGridLinesBrush`** и<br>**`VerticalGridLinesBrush`** | Задает цвет горизонтальных и вертикальных линий соответственно
+
+Хотя предыдущий пример довольно прост, в нем есть несколько недочетов. Во-первых, у нас нет возможности повлиять на расстановку столбцов. Во-вторых, заголовки определены по названиям свойств, которые на английском языке, а хотелось бы на русском. В этом случае мы должны определить свойства отображения столбцов сами. Для этого надо воспользоваться свойством **`DataGrid.Columns`** и определить коллекцию столбцов для отображения в таблице.
+
+Причем можно задать также и другой тип столбца, отличный от текстового. `DataGrid` поддерживает следующие варианты столбцов:
+
+| Свойства | Описание
+-- | --
+`DataGridTextColumn` | Отображает элемент `TextBlock` или `TextBox` при редактировании
+`DataGridHyperlinkColumn` | Представляет гиперссылку и позволяет переходить по указанному адресу
+`DataGridCheckBoxColumn` | Отображает элемент `CheckBox`
+`DataGridComboBoxColumn` | Отображает выпадающий список — элемент `ComboBox`
+`DataGridTemplateColumn` | Позволяет задать специфичный шаблон для отображения столбца
+
+Перепишем предыдущий пример с учетом новой информации:
+```xml
+<DataGrid x:Name="phonesGrid" AutoGenerateColumns="False" HorizontalGridLinesBrush="DarkGray"
+    RowBackground="LightGray" AlternatingRowBackground="White">
+
+    <DataGrid.Items>
+        <local:Phone Title="iPhone 6S" Company="Apple" Price="54990" />
+        <local:Phone Title="Lumia 950" Company="Microsoft" Price="39990" />
+        <local:Phone Title="Nexus 5X" Company="Google" Price="29990" />
+    </DataGrid.Items>
+    <DataGrid.Columns>
+        <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="90" />
+        <DataGridHyperlinkColumn Header="Компания" Binding="{Binding Path=Company}" Width="80" />
+        <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="50" />
+    </DataGrid.Columns>
+</DataGrid>
+```
+
+Среди свойств `DataGrid` одним из самых интересных является **`RowDetailsTemplate`**. Оно позволяет задать шаблон отображения дополнительной информации касательно данной строки. Изменим элемент `DataGrid`:
+```xml
+<DataGrid x:Name="phonesGrid" AutoGenerateColumns="False" HorizontalGridLinesBrush="DarkGray"
+    RowBackground="LightGray" AlternatingRowBackground="White">
+
+    <DataGrid.Items>
+        <local:Phone Title="iPhone 6S" Company="Apple" Price="54990" />
+        <local:Phone Title="Lumia 950" Company="Microsoft" Price="39990" />
+        <local:Phone Title="Nexus 5X" Company="Google" Price="29990" />
+    </DataGrid.Items>
+    <DataGrid.Columns>
+        <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="90" />
+        <DataGridHyperlinkColumn Header="Компания" Binding="{Binding Path=Company}" Width="80" />
+        <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="50" />
+    </DataGrid.Columns>
+
+    <DataGrid.RowDetailsTemplate>
+        <DataTemplate>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Price}" />
+                <TextBlock Text=" рублей по скидке" />
+            </StackPanel>
+        </DataTemplate>
+    </DataGrid.RowDetailsTemplate>
+
+</DataGrid>
+```
+
+###### Фильтрация и сортировка
+Фильтрация и сортировка в `DataGrid` WPF — это важные функции, которые позволяют пользователям упорядочивать и ограничивать отображаемые данные. Давайте рассмотрим, как реализовать эти функции.
+
+Фильтрация в `DataGrid` обычно реализуется с помощью `CollectionView`, который является представлением коллекции данных. Для фильтрации необходимо задать предикат, который проверяет каждый элемент коллекции и возвращает `true`, если элемент должен быть отображен.
+
+Пример фильтрации:
+```cs
+// Получение представления коллекции
+ICollectionView view = CollectionViewSource.GetDefaultView(phonesGrid.ItemsSource);
+
+// Установка функции фильтрации
+view.Filter = item =>
+{
+    // Пример фильтрации по названию телефона
+    if (item is PhoneEditable phone)
+    {
+        return phone.Title.Contains("iPhone"); // Фильтруем по названию "iPhone"
+    }
+    return false;
+};
+
+// Применение фильтрации
+view.Refresh();
+```
+
+Если вы хотите реализовать динамическую фильтрацию по вводу в `TextBox`, вы можете привязать текст в `TextBox` к свойству в представлении модели и обновлять фильтр при изменении этого свойства.
+
+```xml
+<TextBox x:Name="filterTextBox" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+```
+
+И в представлении модели:
+```cs
+private string _filterText;
+
+public string FilterText
+{
+    get => _filterText;
+    set
+    {
+        _filterText = value;
+        OnFilterTextChanged();
+        OnPropertyChanged(nameof(FilterText));
+    }
+}
+
+private void OnFilterTextChanged()
+{
+    ICollectionView view = CollectionViewSource.GetDefaultView(phonesGrid.ItemsSource);
+    view.Filter = item =>
+    {
+        if (item is PhoneEditable phone)
+        {
+            return phone.Title.Contains(FilterText);
+        }
+        return false;
+    };
+    view.Refresh();
+}
+```
+
+Этот подход позволяет фильтровать данные в `DataGrid` по вводу в `TextBox`.
+
+Сортировка в `DataGrid` может быть реализована как для данных, так и для их представления. Для сортировки представления можно использовать `CollectionView` и задать свойство `SortDescriptions`.
+
+Пример сортировки:
+```cs
+// Создание CollectionView
+ICollectionView view = CollectionViewSource.GetDefaultView(myDataGrid.ItemsSource);
+
+// Установка сортировки
+view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+```
+
+Преимущества использования `CollectionView`:
+- **Гибкость**: `CollectionView` позволяет легко переключаться между разными режимами сортировки и фильтрации.
+
+- **Отделение данных от представления**: Это позволяет изменять представление данных без изменения самих данных.
+
+При использовании паттерна MVVM фильтрацию и сортировку можно обрабатывать в представлении модели, что упрощает управление данными и их отображением.
+
+```cs
+public class MyViewModel
+{
+    private ObservableCollection<MyData> _data;
+
+    public MyViewModel()
+    {
+        _data = new ObservableCollection<MyData>();
+        // Инициализация данных
+    }
+
+    public ICollectionView DataView
+    {
+        get
+        {
+            return CollectionViewSource.GetDefaultView(_data);
+        }
+    }
+
+    // Методы для установки фильтра и сортировки
+    public void SetFilter(string filterText)
+    {
+        DataView.Filter = item =>
+        {
+            // Логика фильтрации
+        };
+    }
+
+    public void Sort(string propertyName)
+    {
+        DataView.SortDescriptions.Clear();
+        DataView.SortDescriptions.Add(new SortDescription(propertyName, ListSortDirection.Ascending));
+    }
+}
+```
+
+Продемонстрируем полный пример использования `CollectionView` для сортировки и фильтрации данных в `DataGrid`. В этом примере мы будем использовать `DataGrid`, который отображает список телефонов, и добавим сортировку по названию телефона и фильтрацию по компании.
+
+XAML:
+```xml
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:local="clr-namespace:YourNamespace"
+        Title="Телефоны" Height="350" Width="525">
+    <DockPanel>
+        <DataGrid x:Name="phonesGrid" AutoGenerateColumns="True" DockPanel.Dock="Top"
+                  ItemsSource="{DynamicResource ResourceKey=phones}">
+        </DataGrid>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Button x:Name="sortButton" Content="Сортировать по названию" Click="sortButton_Click" />
+            <Button x:Name="filterButton" Content="Фильтровать по Apple" Click="filterButton_Click" />
+            <Button x:Name="clearFilterButton" Content="Сбросить фильтр" Click="clearFilterButton_Click" />
+        </StackPanel>
+    </DockPanel>
+    <Window.Resources>
+        <col:ArrayList x:Key="phones">
+            <local:PhoneEditable Title="iPhone 6S" Company="Apple" Price="54990" IsChecked="True" />
+            <local:PhoneEditable Title="Lumia 950" Company="Microsoft" Price="39990" IsChecked="False" />
+            <local:PhoneEditable Title="Nexus 5X" Company="Google" Price="29990" IsChecked="True" />
+            <local:PhoneEditable Title="iPhone 12" Company="Apple" Price="69990" IsChecked="True" />
+        </col:ArrayList>
+    </Window.Resources>
+</Window>
+```
+
+CodeBehind:
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Data;
+
+namespace YourNamespace
+{
+    public partial class MainWindow : Window
+    {
+        private ICollectionView _view;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            _view = CollectionViewSource.GetDefaultView(phonesGrid.ItemsSource);
+        }
+
+        private void sortButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Установка сортировки
+            _view.SortDescriptions.Clear();
+            _view.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
+        }
+
+        private void filterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Установка фильтра
+            _view.Filter = item =>
+            {
+                if (item is PhoneEditable phone)
+                {
+                    return phone.Company == "Apple";
+                }
+                return false;
+            };
+            _view.Refresh();
+        }
+
+        private void clearFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Сброс фильтра
+            _view.Filter = null;
+            _view.Refresh();
+        }
+    }
+
+    public class PhoneEditable
+    {
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public decimal Price { get; set; }
+        public bool IsChecked { get; set; }
+    }
+}
+```
+
+В этом примере мы использовали `CollectionView` для сортировки данных по названию телефона и для фильтрации по компании "Apple". Кнопки в нижней части окна позволяют пользователям управлять сортировкой и фильтрацией данных.
+
+#### HeaderedItemsControl / Заголовочные списки
+`HeaderedItemsControl` — это базовый класс в WPF, который наследуется от `ItemsControl`. Он используется для создания элементов управления, которые содержат заголовок и коллекцию элементов. Этот класс предоставляет свойства для управления заголовком и его внешним видом.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.Menu)]
+public class HeaderedItemsControl : System.Windows.Controls.ItemsControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.headereditemscontrol?view=windowsdesktop-9.0
+
+Основные свойства `HeaderedItemsControl`:
+- **`Header`**: Определяет заголовок элемента управления. Может быть объектом любого типа.
+
+- **`HeaderTemplate`**: Шаблон данных, используемый для отображения заголовка. Позволяет настроить внешний вид заголовка.
+
+- **`HeaderTemplateSelector`**: Объект, обеспечивающий пользовательскую логику выбора шаблона для заголовка.
+
+- **`HeaderStringFormat`**: Определяет форматирование заголовка, если он отображается как строка.
+
+В WPF есть несколько элементов управления, которые наследуются от `HeaderedItemsControl`, такие как:
+
+- **`MenuItem`**: Используется для создания меню и подменю.
+
+- **`TreeViewItem`**: Используется в `TreeView` для отображения элементов дерева.
+
+`ListBoxItem` и `ComboBoxItem` не наследуются напрямую от `HeaderedItemsControl`, но могут использовать заголовки через свойство `Header`.
+
+Пример использования `HeaderedItemsControl`:
+```xml
+<MenuItem Header="Файл">
+    <MenuItem Header="Открыть" />
+    <MenuItem Header="Сохранить" />
+</MenuItem>
+```
+
+В этом примере `MenuItem` — это элемент управления, наследующий от `HeaderedItemsControl`, где `Header` используется для указания заголовка меню.
+
+Важные моменты:
+- **Гибкость**: `HeaderedItemsControl` позволяет создавать элементы управления с настраиваемыми заголовками, что делает его гибким инструментом для создания интерфейсов.
+
+- **Шаблоны**: Используйте `HeaderTemplate` для настройки внешнего вида заголовка, что позволяет создавать сложные и настраиваемые интерфейсы.
+
+- **Создание пользовательских элементов**: Вы можете создавать свои собственные элементы управления, наследуя от `HeaderedItemsControl`, для расширения его возможностей.
+
+##### MenuItem / Элемент меню
+`MenuItem` в WPF — это элемент управления, который используется для создания пунктов меню. Он наследуется от `HeaderedItemsControl`, что позволяет ему иметь заголовок и коллекцию дочерних элементов, включая другие `MenuItem` для создания подменю.
+
+Основные особенности `MenuItem`:
+- **Заголовок**: Свойство `Header` позволяет задавать текст или другие элементы (например, изображения) для отображения в меню.
+
+- **Подменю**: `MenuItem` может содержать другие `MenuItem`, что позволяет создавать иерархические меню.
+
+- **Иконки и флажки**: Помимо текста, можно добавлять иконки или флажки к пунктам меню.
+
+- **Клавиатурные сокращения**: Поддерживает отображение клавиатурных сокращений (например, <kbd>Ctrl</kbd>+<kbd>O</kbd>).
+
+- **Команды**: Может быть связан с командами (`ICommand`), что упрощает обработку событий.
+
+Пример использования `MenuItem` с клавишами быстрого доступа:
+```xml
+<Menu Height="25" VerticalAlignment="Top">
+    <MenuItem Header="_File">
+        <MenuItem Header="_New Project" InputGestureText="Ctrl+N" />
+        <MenuItem Header="_Open Project">
+            <MenuItem Header="_WinForms" />
+            <MenuItem Header="_WPF" />
+            <MenuItem Header="_submenuitem1" StaysOpenOnClick="true" IsCheckable="true" />
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="_Exit" />
+    </MenuItem>
+    <MenuItem Header="_Edit" />
+    <MenuItem Header="_View" />
+</Menu>
+```
+
+Чтобы использовать эти клавиши доступа, пользователь должен нажать <kbd>Alt</kbd>, а затем клавишу доступа. Например, чтобы открыть меню "File", пользователь нажимает <kbd>Alt</kbd> + <kbd>F</kbd>. Если меню уже открыто, можно просто нажать клавишу доступа без <kbd>Alt</kbd>.
+
+Если вы хотите использовать клавиатурные сокращения типа <kbd>Ctrl</kbd>+<kbd>N</kbd> для пунктов меню, можно использовать свойство `InputGestureText` для отображения текста сокращения, а затем обрабатывать события клавиатуры вручную или использовать команды (`ICommand`).
+
+Свойство `StaysOpenOnClick` в `MenuItem` WPF используется для того, чтобы подменю, в котором находится этот элемент, не закрывалось при нажатии на него. Это может пригодиться, если клик на элементе меню запускает сложную операцию, и пользователь должен иметь возможность продолжить взаимодействие с меню без его закрытия. Это свойство особенно полезно, когда в меню есть флажки (`IsCheckable="True"`), чтобы пользователь мог выбрать несколько опций без закрытия меню, или другие элементы, которые должны оставаться доступными после клика. По умолчанию равно `false`: Если не указано иное, меню закрывается после клика на элементе.
+
+Для обработки нажатия на пункт меню можно использовать событие `Click` или связать с командой (`ICommand`):
+```cs
+private void MenuItem_Click(object sender, RoutedEventArgs e)
+{
+    MenuItem menuItem = (MenuItem)sender;
+    MessageBox.Show(menuItem.Header.ToString());
+}
+```
+
+`MenuItem` также используется в контекстных меню (`ContextMenu`), которые отображаются при нажатии правой кнопки мыши на элементе:
+```xml
+<ListBox Name="list" Height="145">
+    <ListBoxItem Margin="3">MS SQL Server</ListBoxItem>
+    <ListBoxItem Margin="3">MySQL</ListBoxItem>
+    <ListBoxItem Margin="3">Oracle</ListBoxItem>
+    <ListBox.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Копировать" />
+            <MenuItem Header="Вставить" />
+            <MenuItem Header="Вырезать" />
+            <MenuItem Header="Удалить" />
+        </ContextMenu>
+    </ListBox.ContextMenu>
+</ListBox>
+```
+
+Для создания клавиатурных сокращений в меню WPF используются два основных подхода:
+
+1. Подчеркивание клавиш доступа: Чтобы сделать клавишу доступной с помощью клавиатуры, перед ней нужно поставить символ подчеркивания (`_`). Например, `_New` будет отображать `New` с подчеркнутой клавишей `N`. При нажатии <kbd>Alt</kbd> и последующем нажатии клавиши доступа (`N` в данном случае) будет выбран соответствующий пункт меню.
+
+2. Свойство `InputGestureText`: Это свойство позволяет отобразить текст сокращенной клавиатурной команды рядом с текстом меню. Однако, само по себе оно не активирует обработку клавиатурных сокращений; для этого необходимо либо использовать команды (`Command`), либо обрабатывать события клавиатуры вручную.
+
+Команды (`ICommand`) — это мощный способ связать клавиатурные сокращения с пунктами меню. Когда вы используете команды, WPF автоматически отображает текст жеста ввода (например, <kbd>Ctrl</kbd>+<kbd>N</kbd> для `ApplicationCommands.New`) и обрабатывает нажатие клавиш без дополнительного кода.
+
+Пример использования команд:
+```cs
+private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+{
+    if (e.Key == Key.N && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+    {
+        // Обработка нажатия Ctrl+N
+    }
+}
+```
+
+Этот подход позволяет гибко настраивать обработку клавиатурных событий, но требует больше кода и внимания к деталям.
+
+Клавиатурные сообщения в `MenuItem` WPF позволяют пользователям эффективно взаимодействовать с меню с помощью клавиатуры. Использование подчеркивания для клавиш доступа и свойств команд для автоматической обработки сокращений делает интерфейс более удобным и интуитивным.
+
+##### TreeViewItem / Элемент дерева
+`TreeViewItem` в WPF — это элемент управления, который используется внутри элемента `TreeView` для представления отдельных узлов в иерархической структуре данных. Каждый `TreeViewItem` может содержать другие `TreeViewItem`, что позволяет создавать многоуровневые представления данных.
+
+Основные особенности `TreeViewItem`:
+- **`Header`**: Свойство `Header` позволяет задавать текстовую метку или заголовок узла дерева. Это может быть простой текст или более сложный элемент, такой как `TextBlock` или `Image`.
+
+- **`Items`**: Свойство `Items` содержит коллекцию дочерних элементов TreeViewItem, что позволяет создавать иерархические структуры данных.
+
+- **`IsExpanded`** и **`IsSelected`**: Свойства `IsExpanded` и `IsSelected` позволяют контролировать состояние узла: раскрыт ли он и выбран ли.
+
+- **События**: `TreeViewItem` генерирует события `Expanded`, `Collapsed`, и `Selected`, которые можно использовать для обработки взаимодействия с узлами дерева.
+
+Пример использования `TreeViewItem`:
+```xml
+<TreeView>
+    <TreeViewItem Header="Базы данных">
+        <TreeViewItem Header="MS SQL Server" />
+        <TreeViewItem Header="MySQL" />
+        <TreeViewItem Header="MongoDB" />
+        <TreeViewItem Header="Postgres" />
+    </TreeViewItem>
+    <TreeViewItem Header="Языки программирования">
+        <TreeViewItem Header="C-языки">
+            <TreeViewItem Header="C#" />
+            <TreeViewItem Header="C/C++" />
+            <TreeViewItem Header="Java" />
+        </TreeViewItem>
+        <TreeViewItem Header="Basic">
+            <TreeViewItem Header="Visual Basic" />
+            <TreeViewItem Header="VB.Net" />
+            <TreeViewItem Header="PureBasic" />
+        </TreeViewItem>
+    </TreeViewItem>
+</TreeView>
+```
+
+Для более сложных данных можно использовать шаблоны данных, такие как `HierarchicalDataTemplate`, чтобы связать данные с `TreeViewItem` и автоматически создавать иерархическую структуру:
+```xml
+<TreeView>
+    <TreeView.ItemTemplate>
+        <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
+            <TextBlock Text="{Binding Path=Name}" />
+        </HierarchicalDataTemplate>
+    </TreeView.ItemTemplate>
+</TreeView>
+```
+
+В этом примере `HierarchicalDataTemplate` используется для отображения иерархических данных, где каждый узел имеет свойство `Name` и коллекцию дочерних узлов (Nodes).
+
+Чтобы обрабатывать выбор или раскрытие узлов, можно использовать события `Expanded`, `Collapsed`, и `Selected` на уровне `TreeViewItem` или на уровне `TreeView`:
+```cs
+private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+{
+    TreeViewItem tvItem = (TreeViewItem)sender;
+    MessageBox.Show("Узел " + tvItem.Header.ToString() + " раскрыт");
+}
+
+private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
+{
+    TreeViewItem tvItem = (TreeViewItem)sender;
+    MessageBox.Show("Выбран узел: " + tvItem.Header.ToString());
+}
+```
+
+Эти события позволяют реагировать на действия пользователя и выполнять необходимые действия при выборе или раскрытии узлов дерева.
+
+Свойство `IsSelectionActive` у `TreeViewItem` в WPF используется для определения, имеет ли содержащий объект `TreeView` фокус клавиатуры, когда текущий `TreeViewItem` выбран, что важно для обработки клавиатурных событий. Это свойство показывает, что не только элемент выбран (`IsSelected`), но и его родительский `TreeView` имеет фокус клавиатуры. `IsSelectionActive` отличается от `IsSelected`, поскольку последнее только указывает на то, что элемент выбран, но не обязательно имеет фокус клавиатуры. Это свойство часто используется в стилях для изменения внешнего вида выбранного элемента, когда он имеет фокус.
+
+Пример использования свойства `IsSelectionActive`:
+```xml
+<Style TargetType="TreeViewItem">
+    <Style.Triggers>
+        <Trigger Property="IsSelectionActive" Value="True">
+            <Setter Property="Background" Value="LightBlue" />
+        </Trigger>
+    </Style.Triggers>
+</Style>
+```
+
+В этом примере, когда `TreeViewItem` выбран и имеет фокус клавиатуры (`IsSelectionActive="True"`), его фон будет изменен на светло-синий.
+
+##### ToolBar / Панель инструментов
+Панель инструментов в WPF представлена классом `ToolBar`, который в качестве содержимого может включать в себя коллекцию любых других элементов. Панели инструментов обычно используются как альтернативный способ активизации пунктов меню.
+
+`ToolBar` в WPF — это элемент управления, который позволяет создавать панели инструментов, содержащие набор команд или элементов управления, обычно функционально связанных между собой. Панель инструментов обычно содержит кнопки, вызывающие команды, и может включать другие элементы, такие как `ComboBox`, `CheckBox`, `RadioButton` и `Separator`.
+
+Пример элемента `ToolBar`:
+```xml
+<ToolBar>
+  <Button>
+    <Image Source="open.png"></Image>
+  </Button>
+  <Separator/>
+  <Button>
+    <Image Source="http://www.readyicons.com/IconSets/Sky_Light_%28Basic%29/48x48-save.png"></Image>
+  </Button>
+</ToolBar>
+```
+
+Кнопки содержат элементы `Image`. Первый элемент `Image` получает данные из файла *open.png*, включенного в проект. Второй элемент `Image` получает данные с веб-сайта по протоколу HTTP. Другие изображения можно выбрать, открыв в браузере адрес http://www.readyicons.com/IconSets/Sky_Light_%28Basic%29/
+
+Для создания нескольких панелей инструментов элементы `ToolBar` необходимо поместить в элемент `ToolBarTray`.
+
+Основные особенности `ToolBar`:
+- **Элементы управления**: `ToolBar` обычно содержит кнопки (`Button`), комбобоксы (`ComboBox`), флажки (`CheckBox`), радиокнопки (`RadioButton`) и разделители (`Separator`).
+
+- **Переполнение**: Если на панели инструментов не хватает места для всех элементов, WPF автоматически помещает их в специальную область переполнения, доступную через стрелку на правой стороне панели.
+
+- **`ToolBarTray`**: Для размещения нескольких панелей инструментов можно использовать `ToolBarTray`, который позволяет упорядочивать и изменять размер панелей инструментов.
+
+- **Настройка внешнего вида**: `ToolBar` позволяет настраивать внешний вид элементов, например, делая кнопки плоскими и без границ, что соответствует стандартному виду панелей инструментов в Windows.
+
+Пример использования `ToolBar`:
+```xml
+<ToolBarTray>
+    <ToolBar>
+        <Button Content="Кнопка 1" />
+        <Button Content="Кнопка 2" />
+        <Separator />
+        <ComboBox>
+            <ComboBoxItem>Опция 1</ComboBoxItem>
+            <ComboBoxItem>Опция 2</ComboBoxItem>
+        </ComboBox>
+    </ToolBar>
+    <ToolBar>
+        <Button Content="Кнопка 3" />
+        <Button Content="Кнопка 4" />
+    </ToolBar>
+</ToolBarTray>
+```
+
+Этот элемент, как правило, применяется для обеспечения быстрого доступа к наиболее часто используемым операциям. Он может содержать прочие элементы как кнопки, текстовые поля, объекты `Menu` и др.
+
+```xml
+<ToolBar Height="25" VerticalAlignment="Top">
+    <ToggleButton><Image Source="icon0.gif" /></ToggleButton>
+    <Separator />
+    <Button><Image Source="icon1.gif" /></Button>
+    <Separator />
+    <Button><Image Source="icon2.png" /></Button>
+    <Separator />
+    <Button><Image Source="icon3.png" /></Button>
+    <TextBox Foreground="LightGray" Width="100">Поиск...</TextBox>
+</ToolBar>
+```
+
+Также можно создавать сразу несколько связанных элементов **`ToolBar`** внутри **`ToolBarTray`**. Преимущество его использования заключается в возможности задать как горизонтальное, так и вертикальное расположение элементов `ToolBar` в окне приложения.
+
+```xml
+<ToolBarTray>
+     <ToolBar Height="25" VerticalAlignment="Top">
+        <ToggleButton><Image Source="icon0.gif" /></ToggleButton>
+        <Separator />
+        <Button><Image Source="icon1.gif" /></Button>
+        <Separator />
+        <Button><Image Source="icon2.png" /></Button>
+        <Separator />
+        <Button><Image Source="icon3.png" /></Button>
+        <TextBox Foreground="LightGray" Width="100">Поиск...</TextBox>
+    </ToolBar>
+    <ToolBar>
+        <Button>
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="10" Height="10" Fill="Black"  HorizontalAlignment="Left"/>
+                <TextBlock HorizontalAlignment="Right" Width="60" Margin="5 0 0 0">Найти</TextBlock>
+            </StackPanel>
+        </Button>
+    </ToolBar>
+</ToolBarTray>
+```
+
+Свойства и методы:
+- **`Band`** и **`BandIndex`**: Используются для размещения `ToolBar` внутри `ToolBarTray`, позволяя управлять положением панелей инструментов.
+
+- **`Orientation`**: Свойство, которое можно использовать в `ToolBarTray` для изменения ориентации панелей инструментов (например, вертикальная или горизонтальная).
+
+Используя свойство `Orientation` мы можем настроить у `ToolBarTray` ориентацию. По умолчанию она горизонтальная, но мы можем расположить его вертикально:
+```xml
+<ToolBarTray Orientation="Vertical">
+     <ToolBar Width="25" VerticalAlignment="Top">
+     <!-- здесь остальной код -->
+```
+
+Свойства `HasOverflowItems` и `IsOverflowOpen` в `ToolBar` WPF используются для управления поведением области переполнения панели инструментов.
+
+- **`HasOverflowItems`**: Это свойство указывает, есть ли у панели инструментов элементы, которые не помещаются в основную область и поэтому перемещены в область переполнения (`ToolBarOverflowPanel`). Оно полезно для проверки, есть ли элементы в области переполнения, что может быть важно для динамической настройки или обработки событий.
+
+- **`IsOverflowOpen`**: Это свойство указывает, открыта ли в данный момент область переполнения (`ToolBarOverflowPanel`). Когда оно установлено в `true`, пользователь может видеть и взаимодействовать с элементами в области переполнения. Это свойство часто используется для программного открытия или закрытия области переполнения. Например, можно открыть область переполнения при наведении мыши на панель инструментов или при нажатии на кнопку.
+
+Пример использования:
+```cs
+if (toolBar.HasOverflowItems)
+{
+    // Обработка наличия элементов в области переполнения
+}
+toolBar.IsOverflowOpen = true; // Открыть область переполнения
+```
+
+Таким образом, `HasOverflowItems` указывает на наличие элементов в области переполнения, но не говорит о том, открыта ли эта область, а `IsOverflowOpen` указывает, открыта ли область переполнения для взаимодействия с элементами. Эти свойства позволяют гибко управлять поведением панели инструментов и ее элементами, особенно в ситуациях, когда на панели не хватает места для всех элементов.
+
+Преимущества использования `ToolBar`:
+- **Автоматическое переполнение**: `ToolBar` автоматически обрабатывает переполнение, что упрощает управление элементами на панели.
+
+- **Гибкая компоновка**: В сочетании с `ToolBarTray` позволяет гибко управлять расположением и размером панелей инструментов.
+
+- **Стандартный вид**: `ToolBar` обеспечивает стандартный внешний вид панелей инструментов, соответствующий интерфейсу Windows.
+
+Еще один элемент — **`StatusBar`**, во многом напоминает `ToolBar` и выполняет схожие функции, только в отличие о `ToolBar` его располагают обычно внизу окна приложения.
+
+#### MenuBase / Меню
+`MenuBase` в WPF — это абстрактный базовый класс для элементов управления, которые предоставляют пользователю варианты выбора. Он наследуется от `ItemsControl`, что позволяет ему содержать коллекцию объектов любого типа, таких как строки, изображения или панели.
+
+Определение:
+```cs
+[System.Windows.Localizability(System.Windows.LocalizationCategory.Menu)]
+[System.Windows.StyleTypedProperty(Property="ItemContainerStyle", StyleTargetType=typeof(System.Windows.Controls.MenuItem))]
+public abstract class MenuBase : System.Windows.Controls.ItemsControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.menubase?view=windowsdesktop-9.0
+
+Основные особенности `MenuBase`:
+- **Наследование**: `MenuBase` является базовым классом для элементов управления `Menu` и `ContextMenu`. Оба этих элемента управления позволяют пользователю выбрать элемент для вызова какого-либо действия.
+
+- **`ItemsControl`**: Как производный от `ItemsControl`, `MenuBase` может содержать коллекцию объектов, что делает его гибким для различных типов данных.
+
+- **Шаблоны**: Поскольку MenuBase наследуется от `ItemsControl`, он поддерживает шаблоны для настройки внешнего вида элементов меню.
+
+Пример использования:
+```xml
+<!-- Пример использования Menu -->
+<Menu>
+    <MenuItem Header="Файл">
+        <MenuItem Header="Новый" />
+        <MenuItem Header="Открыть" />
+    </MenuItem>
+</Menu>
+
+<!-- Пример использования ContextMenu -->
+<Button>
+    <Button.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Копировать" />
+            <MenuItem Header="Вставить" />
+        </ContextMenu>
+    </Button.ContextMenu>
+</Button>
+```
+
+Свойства и методы:
+- **`ItemContainerTemplateSelectorProperty`**: Определяет свойство зависимостей для селектора шаблонов контейнеров элементов.
+
+- **`UsesItemContainerTemplateProperty`**: Определяет свойство зависимостей для использования шаблона контейнера элементов.
+
+Разница между `Menu` и `ContextMenu`:
+- **`Menu`**: Используется для создания основных меню приложений.
+
+- **`ContextMenu`**: Используется для создания всплывающих меню, которые появляются при нажатии правой кнопки мыши на элементе.
+
+Оба этих элемента управления наследуются от `MenuBase`, что обеспечивает им общую функциональность для работы с меню.
+
+##### Menu / Стандартное меню
+Меню в WPF представлено классом `Menu`, который может включать в себя набор объектов `MenuItem`. Каждый объект `MenuItem` в свою очередь может включать в себя другие объекты `MenuItem` и объекты `Separator` (разделитель).
+
+`Menu` в WPF — это элемент управления, который позволяет создавать иерархические меню для приложений. Он используется для организации команд и обработчиков событий в удобном для пользователя виде.
+
+Пример элемента `Menu`:
+```xml
+<Menu Background="White" BorderBrush="Navy" BorderThickness="1">
+  <MenuItem Header="_Файл" />
+    <MenuItem Header="_Открыть" />
+    <MenuItem Header="_Сохранить" />
+    <Separator />
+    <MenuItem Header="_Закрыть" />
+  </MenuItem>
+  <MenuItem Header="_О программе" />
+</Menu>
+```
+
+Знак подчеркивания в названиях пунктов меню указывает «горячие» клавиши для доступа к этим пунктам меню.
+
+Элемент `MenuItem` может содержать и другие элементы управления, например зависимые (`RadioButton`) и независимые (`CheckBox`) переключатели:
+```xml
+<CheckBox Content="Предупреждать о несохраненных данных при закрытии" />
+<RadioButton GroupName="codepage" Content="Windows-1251" />
+<RadioButton GroupName="codepage" Content="Koi8-r" />
+<RadioButton GroupName="codepage" Content="UTF-8" />
+```
+
+Основные особенности `Menu`:
+- **Иерархическая структура**: `Menu` содержит элементы `MenuItem`, которые могут иметь дочерние элементы, позволяя создавать многоуровневые меню.
+
+- **Свойства `ItemsControl`**: `Menu` наследуется от `ItemsControl`, что позволяет использовать свойства `ItemsSource`, `DisplayMemberPath`, `ItemTemplate` и `ItemTemplateSelector` для привязки данных и настройки внешнего вида.
+
+- **Свойство `IsMainMenu`**: Определяет, является ли меню основным меню приложения. Если установлено в `true`, нажатие клавиш <kbd>Alt</kbd> или <kbd>F10</kbd> перемещает фокус на меню.
+
+- **Гибкое размещение**: Меню можно размещать в любом месте окна, используя элементы управления компоновки, такие как `DockPanel` или `Grid`.
+
+Данный элемент служит для создания стандартных меню:
+```xml
+<Menu Height="25" VerticalAlignment="Top">
+    <MenuItem Header="File">
+        <MenuItem Header="New Project" ></MenuItem>
+        <MenuItem Header="Open Project" >
+            <MenuItem Header="WinForms"></MenuItem>
+            <MenuItem Header="WPF" ></MenuItem>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Exit" ></MenuItem>
+    </MenuItem>
+    <MenuItem Header="Edit" ></MenuItem>
+    <MenuItem Header="View" ></MenuItem>
+</Menu>
+```
+
+Элемент `Menu` включает набор элементов `MenuItem`, которые опять же являются элементами управления содержимым и могут включать другие элементы `MenuItem` и не только. Также мы можем вложить в меню и другие элементы, которые неявно будут преобразованы в `MenuItem`. Например:
+```xml
+<Menu Height="25" VerticalAlignment="Top">
+    <MenuItem Header="File">
+        <Button Content="Exit" />
+    </MenuItem>
+    <MenuItem Header="Edit" ></MenuItem>
+    <MenuItem Header="View" ></MenuItem>
+    <Button Content="Кнопка в меню" />
+</Menu>
+```
+
+Также для разделения отдельных пунктов меню можно включать элемент `Separator`, как в примере выше.
+
+Мы также можем настроить внешний вид отображения, задав свойство **`MenuItem.Header`** или использовав свойство `Icons`:
+```xml
+<Menu Height="25" VerticalAlignment="Top" Background="LightGray">
+    <MenuItem>
+        <MenuItem.Header>
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Height="10" Width="10" Fill="Black" Margin="0 0 5 0" />
+                <TextBlock>File</TextBlock>
+            </StackPanel>
+        </MenuItem.Header>
+    </MenuItem>
+    <MenuItem Header="Edit">
+        <MenuItem.Icon>
+            <Image Source="C:\Users\Eugene\Documents\pen.png"></Image>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="View"></MenuItem>
+</Menu>
+```
+
+Чтобы обработать нажатие пункта меню и произвести определенное действие, можно использовать событие `Click`, однако в будущем мы познакомимся с еще одним инструментом под названием команды (`ICommand`), который также широко применяется для реакции на нажатие кнопок меню. А пока свяжем обработчик c событием:
+```xml
+<MenuItem Header="View"  Click="MenuItem_Click"></MenuItem>
+```
+
+И определим сам обработчик в коде C#:
+```cs
+private void MenuItem_Click(object sender, RoutedEventArgs e)
+{
+    MenuItem menuItem = (MenuItem)sender;
+    MessageBox.Show(menuItem.Header.ToString());
+}
+```
+
+##### ContextMenu / Контекстное меню
+`ContextMenu` в WPF — это элемент управления, который позволяет создавать всплывающие меню, отображающиеся при определенных действиях пользователя, обычно при нажатии правой кнопки мыши на элементе интерфейса. Он используется для обеспечения функциональности, связанной с конкретным элементом управления.
+
+Пример:
+```xml
+<Button Name="cmButton" Height="30">
+    Button with Context Menu
+    <Button.ContextMenu>
+        <ContextMenu Name="cm" Opened="OnOpened" Closed="OnClosed" StaysOpen="true">
+            <MenuItem Header="File"/>
+            <MenuItem Header="Save"/>
+            <MenuItem Header="SaveAs"/>
+            <MenuItem Header="Recent Files">
+                <MenuItem Header="ReadMe.txt"/>
+                <MenuItem Header="Schedule.xls"/>
+            </MenuItem>
+        </ContextMenu>
+    </Button.ContextMenu>
+</Button>
+```
+
+Основные особенности `ContextMenu`:
+- **Присоединение к элементам**: Свойство `ContextMenu` определено в классе `FrameworkElement`, поэтому его можно присоединить к большинству элементов WPF, таких как `Button`, `TextBox`, `ListBoxItem` и т.д.
+
+- **Отображение**: Контекстное меню отображается автоматически при щелчке правой кнопкой мыши на элементе, к которому оно присоединено. Также можно открыть его программно, установив свойство **`IsOpen`** в `true`.
+
+- **Содержимое**: Как и `Menu`, `ContextMenu` содержит коллекцию объектов `MenuItem`, которые могут иметь подменю и обрабатывать события или команды
+
+Таким образом, класс `ContextMenu` служит для создания контекстных всплывающих меню, отображающихся после нажатия на правую кнопку мыши. Этот элемент также содержит коллекцию элементов `MenuItem`. Однако сам по себе `ContextMenu` существовать не может и должен быть прикреплен к другому элементу управления. Для этого у элементов есть свойство `ContextMenu`:
+```xml
+<ListBox Name="list" Height="145">
+    <ListBoxItem Margin="3">MS SQL Server</ListBoxItem>
+    <ListBoxItem Margin="3">MySQL</ListBoxItem>
+    <ListBoxItem Margin="3">Oracle</ListBoxItem>
+    <ListBox.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Копировать"></MenuItem>
+            <MenuItem Header="Вставить"></MenuItem>
+            <MenuItem Header="Вырезать"></MenuItem>
+            <MenuItem Header="Удалить"></MenuItem>
+        </ContextMenu>
+    </ListBox.ContextMenu>
+</ListBox>
+```
+
+И при нажатии правой кнопкой мыши на один из элементов отобразится контекстное меню.
+
+Для обработки нажатия на пункты меню можно использовать событие `Click` или связать с командами (`ICommand`).
+
+```cs
+<MenuItem Header="Save" Click="MenuItem_Click"></MenuItem>
+
+private void MenuItem_Click(object sender, RoutedEventArgs e)
+{
+    MenuItem menuItem = (MenuItem)sender;
+    MessageBox.Show(menuItem.Header.ToString());
+}
+```
+
+Если необходимо открыть контекстное меню программно, можно использовать следующий код:
+```cs
+private void Button_Click(object sender, RoutedEventArgs e)
+{
+    ContextMenu cm = (ContextMenu)cmButton.ContextMenu;
+    cm.PlacementTarget = cmButton;
+    cm.IsOpen = true;
+}
+```
+
+Свойства `Placement`, `PlacementRectangle`, и `PlacementTarget` в `ContextMenu` WPF используются для управления поведением и размещением контекстного меню относительно целевого элемента.
+
+- **`Placement`**: Это свойство определяет, где контекстное меню будет отображено относительно целевого элемента. Возможные значения включают `Bottom`, `Left`, `Right`, `Top`, `Mouse`, `Absolute`, `AbsolutePoint`, `Center`, и `Custom`. Например, если установить `Placement="Bottom"`, меню будет отображаться под целевым элементом.
+
+- **`PlacementRectangle`**: Это свойство позволяет указать прямоугольную область на целевом элементе, относительно которой будет позиционировано контекстное меню. Используется для более точного контроля над позицией меню, например, если нужно отобразить меню в конкретной части элемента.
+
+- **`PlacementTarget`**: Это свойство указывает на элемент, относительно которого будет позиционировано контекстное меню. Если не задано явно, целевым элементом становится родительский элемент, к которому присоединено контекстное меню. Используется для программного открытия меню или для доступа к элементу, который вызвал меню.
+
+Пример использования:
+```xml
+<Button Name="cmButton" Height="30">
+    Button with Context Menu
+    <Button.ContextMenu>
+        <ContextMenu Placement="Bottom" PlacementTarget="{Binding RelativeSource={RelativeSource Self}}">
+            <MenuItem Header="File"/>
+            <MenuItem Header="Save"/>
+        </ContextMenu>
+    </Button.ContextMenu>
+</Button>
+```
+
+В этом примере контекстное меню будет отображаться под кнопкой (`Placement="Bottom"`), и кнопка является целевым элементом (`PlacementTarget="{Binding RelativeSource={RelativeSource Self}}"`).
+
+Свойство **`StaysOpen`** в `ContextMenu` WPF используется для того, чтобы контекстное меню оставалось открытым после клика на одном из его элементов. Однако, это свойство не работает так, как ожидается, если не использовать его в сочетании с другими настройками. По умолчанию контекстное меню закрывается после клика на одном из его элементов. Даже если установить StaysOpen="True", меню все равно закроется при клике вне его области или при клике на другой элемент.
+
+Чтобы контекстное меню оставалось открытым после клика, необходимо использовать свойство `StaysOpenOnClick="True"` для каждого `MenuItem`. Это позволит меню оставаться открытым после клика на элементе, но только если клик происходит внутри меню.
+
+```xml
+<ContextMenu StaysOpen="True">
+    <MenuItem Header="Item 1" StaysOpenOnClick="True" />
+    <MenuItem Header="Item 2" StaysOpenOnClick="True">
+        <MenuItem Header="Sub item 1" StaysOpenOnClick="True" />
+        <MenuItem Header="Sub item 2" StaysOpenOnClick="True" />
+    </MenuItem>
+</ContextMenu>
+```
+
+Если вы хотите, чтобы контекстное меню оставалось открытым вне зависимости от кликов вне его области, вам, возможно, стоит рассмотреть использование другого элемента управления, такого как `Popup`, который позволяет более гибко управлять поведением всплывающих окон.
+
+#### TreeView / Древовидный список
+`TreeView` в WPF — это элемент управления, предназначенный для отображения данных в древовидной структуре. Он позволяет пользователям просматривать иерархические данные, сворачивая и разворачивая узлы дерева.
+
+Определение:
+```cs
+[System.Windows.StyleTypedProperty(Property="ItemContainerStyle", StyleTargetType=typeof(System.Windows.Controls.TreeViewItem))]
+public class TreeView : System.Windows.Controls.ItemsControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.treeview?view=windowsdesktop-9.0
+
+Основные особенности:
+- **Иерархическая структура**: `TreeView` состоит из элементов `TreeViewItem`, которые могут содержать другие `TreeViewItem`, образуя иерархическую структуру данных.
+
+- **Привязка данных**: `TreeView` поддерживает привязку данных, что позволяет легко отображать сложные иерархические данные. Для этого используется свойство `ItemsSource` и шаблоны данных, такие как `HierarchicalDataTemplate`.
+
+- **События**: `TreeView` позволяет обрабатывать события, связанные с выбором и раскрытием узлов, такие как `Selected` и `Expanded`.
+
+Таким образом, данный элемент управления предназначен для древовидного отображения данных в окне приложения. Может содержать как коллекцию элементов **`TreeViewItem`**, так и другое содержимое, например, текстовые блоки:
+```xml
+<TreeView>
+    <TextBox>Элемент TreeView</TextBox>
+    <TreeViewItem Header="Базы данных">
+        <TreeViewItem Header="MS SQL Server" />
+        <TreeViewItem Header="MySQL" />
+        <TreeViewItem Header="MongoDB" />
+        <TreeViewItem Header="Postgres" />
+    </TreeViewItem>
+    <TreeViewItem Header="Языки программирования">
+        <TreeViewItem Header="C-языки">
+            <TreeViewItem Header="C#" />
+            <TreeViewItem Header="C/C++" />
+            <TreeViewItem Header="Java" />
+        </TreeViewItem>
+        <TreeViewItem Header="Basic">
+            <TreeViewItem Header="Visual Basic" />
+            <TreeViewItem Header="VB.Net" />
+            <TreeViewItem Header="PureBasic" />
+        </TreeViewItem>
+    </TreeViewItem>
+</TreeView>
+```
+
+Однако все же лучше обертывать элементы в объекты `TreeViewItem`. С помощью его свойства **`Header`** мы можем установить текстовую метку или заголовок узла дерева. Элемент `TreeViewItem` предлагает также ряд свойств для управления состоянием: **`IsExpanded`** (принимает логическое значение и показывает, раскрыт ли узел) и **`IsSelected`** (показывает, выбран ли узел).
+
+Чтобы отследить выбор или раскрытие узла, мы можем обработать соответствующие события. Событие **`Expanded`** возникает при раскрытии узла, а событие **`Collapsed`**, наоборот, при его сворачивании.
+
+Выбор узла дерева мы можем обработать с помощью обработки события **`Selected`**. Например:
+```xml
+<TreeView>
+    <TreeViewItem Header="C-языки" Expanded="TreeViewItem_Expanded">
+        <TreeViewItem Header="C#" Selected="TreeViewItem_Selected" />
+        <TreeViewItem Header="C/C++" Selected="TreeViewItem_Selected" />
+        <TreeViewItem Header="Java" Selected="TreeViewItem_Selected" />
+    </TreeViewItem>
+</TreeView>
+```
+
+Теперь добавим в файл связанного кода C# обработчики для этих событий:
+```cs
+private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+{
+    TreeViewItem tvItem = (TreeViewItem)sender;
+    MessageBox.Show("Узел " + tvItem.Header.ToString() + " раскрыт");
+}
+
+private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
+{
+    TreeViewItem tvItem = (TreeViewItem)sender;
+    MessageBox.Show("Выбран узел: " + tvItem.Header.ToString());
+}
+```
+
+Основные свойства:
+- **`SelectedItem`** — это свойство, которое возвращает объект, представляющий выбранный элемент в `TreeView`. Это свойство доступно только для чтения и не поддерживает привязку данных по умолчанию, что означает, что вы не можете напрямую привязать его к свойству в модели представления (`ViewModel`) с помощью двухсторонней привязки.
+
+- **`SelectedValue`** — это свойство, которое возвращает значение выбранного элемента, определенное по пути, указанному в `SelectedValuePath`. Это свойство полезно, когда вы хотите получить конкретное значение из выбранного объекта, а не весь объект целиком.
+
+- **`SelectedValuePath`** — это свойство, которое указывает путь к свойству выбранного объекта, значение которого должно быть возвращено в `SelectedValue`. Например, если у вас есть объекты с свойством `EmployeeNumber`, вы можете установить `SelectedValuePath` равным "EmployeeNumber", чтобы при выборе элемента в `TreeView` в `SelectedValue` возвращалось значение свойства `EmployeeNumber` выбранного объекта
+
+Пример использования этих свойств:
+```xml
+<TreeView Name="myTreeView"
+          SelectedValuePath="EmployeeNumber">
+    <!-- Шаблон данных для отображения информации -->
+    <TreeView.ItemTemplate>
+        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+            <TextBlock Text="{Binding EmployeeName}" />
+        </HierarchicalDataTemplate>
+    </TreeView.ItemTemplate>
+</TreeView>
+
+<!-- Отображение выбранного значения -->
+<TextBlock Text="{Binding ElementName=myTreeView, Path=SelectedValue}" />
+```
+
+В этом примере `SelectedValue` будет содержать значение свойства `EmployeeNumber` выбранного элемента.
+
+Для привязки данных к `TreeView` можно использовать следующий подход:
+
+1. Определение источника данных: Создайте коллекцию объектов, которые будут отображаться в `TreeView`.
+
+2. Привязка к `ItemsSource`: Установите свойство `ItemsSource` элемента `TreeView` на вашу коллекцию данных.
+
+3. Использование шаблонов данных: Определите шаблоны данных для отображения информации в узлах дерева.
+
+Пример привязки данных:
+```cs
+// Создание коллекции данных
+var categories = new ObservableCollection<Category>();
+
+// Привязка данных к TreeView
+trw_Products.ItemsSource = categories;
+```
+
+*[MVVM]: Model-View-ViewModel
+При использовании шаблона MVVM (Model-View-ViewModel) для привязки данных к `TreeView` необходимо создать `ViewModel`, который будет содержать коллекцию данных и обрабатывать команды для управления состоянием узлов дерева.
+
+При работе с большими объемами данных важно оптимизировать производительность `TreeView`, чтобы избежать замедления приложения. Для этого можно использовать техники, такие как отложенная загрузка данных и оптимизация шаблонов данных.
+
+#### StatusBar / Строка состояния
+Строка состояния в WPF представлена классом `StatusBar`, который в качестве содержимого может включать в себя коллекцию любых других элементов, в том числе `StatusBarItem`.
+
+`StatusBar` в WPF — это элемент управления, используемый для отображения информации о состоянии приложения в нижней части окна. Он позволяет добавлять различные элементы, такие как текст, изображения или другие сложные элементы управления, для предоставления пользователю полезной информации.
+
+Определение:
+```cs
+[System.Windows.StyleTypedProperty(Property="ItemContainerStyle", StyleTargetType=typeof(System.Windows.Controls.Primitives.StatusBarItem))]
+public class StatusBar : System.Windows.Controls.ItemsControl
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.statusbar?view=windowsdesktop-9.0
+
+Пример элемента `StatusBar`:
+```xml
+<StatusBar DockPanel.Dock="Bottom">
+  <TextBlock Text="Сохранение документа ..." />
+  <StatusBarItem HorizontalAlignment="Right" >
+    <TextBlock Text="Подключение к БД: ОК" />
+  </StatusBarItem>
+</StatusBar>
+```
+
+Элемент `TextBlock` может применяться для отображения текста с добавлением форматирования: полужирный текст, подчеркнутый текст, разрывы строк и т.д.
+
+Основные особенности:
+- **Отображение информации**: `StatusBar` используется для отображения информации о текущем состоянии приложения, например, положения курсора, прогресса заданий или других сведений.
+
+- **Компоновка элементов**: По умолчанию `StatusBar` использует `StackPanel` с горизонтальной ориентацией для компоновки своих дочерних элементов. Однако вы можете изменить это поведение, используя свойство `ItemsPanelTemplate`, чтобы применить другую панель, например `Grid` или `DockPanel`.
+
+- **Элементы `StatusBarItem`**: `StatusBar` содержит элементы типа `StatusBarItem`, которые могут отображать текст, изображения или другие сложные элементы.
+
+Пример создания простого `StatusBar` с помощью XAML:
+```xml
+<StatusBar>
+    <StatusBarItem>
+        <TextBlock Text="Текст в строке состояния" />
+    </StatusBarItem>
+    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+    <StatusBarItem>
+        <ProgressBar Width="100" Height="20" />
+    </StatusBarItem>
+</StatusBar>
+```
+
+Чтобы изменить внешний вид `StatusBar`, вы можете использовать стили и шаблоны. Например, можно изменить шаблон элемента управления, чтобы придать ему уникальный вид.
+
+`StatusBar` не идеален для использования элементов управления, таких как кнопки или комбинированные списки, поскольку они могут выглядеть неестественно в строке состояния. В таких случаях лучше использовать другие элементы управления, такие как `ToolBar`.
+
+В отличие от `StatusStrip` в Windows Forms, который более гибок и функционален, `StatusBar` в WPF менее изощрен, но все же может быть полезен для базового отображения информации о состоянии приложения.
 
 ## Навигация
 
