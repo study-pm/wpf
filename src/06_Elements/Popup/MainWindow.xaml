@@ -1,0 +1,44 @@
+﻿<Window x:Class="Popup.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Popup"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <UniformGrid>
+        <StackPanel>
+            <Button Name="myBtn" Click="Button_Click" MouseLeave="myBtn_MouseLeave">Button</Button>
+            <Popup Name="myPopup" PlacementTarget="{Binding ElementName=myBtn}">
+                <TextBlock Name="myPopupText"
+                           Background="LightBlue"
+                           Foreground="Blue">
+                    Popup Text
+                </TextBlock>
+            </Popup>
+        </StackPanel>
+
+        <StackPanel>
+            <Button Content="Popup" Width="80" MouseEnter="Button_MouseEnter_1" HorizontalAlignment="Left" />
+            <Popup x:Name="popup1" StaysOpen="False" Placement="Mouse" MaxWidth="180"
+                    AllowsTransparency="True"
+                >
+                <TextBlock TextWrapping="Wrap" Width="180" Background="LightPink" Opacity="0.8" >
+            Чтобы узнать больше, посетите сайт metanit.com
+                </TextBlock>
+            </Popup>
+        </StackPanel>
+
+        <StackPanel>
+            <Button x:Name="addBtn" Content="Add to Basket" Width="80" HorizontalAlignment="Left" Click="addBtn_Click" />
+            <Popup x:Name="addedPopup" Placement="Mouse" MinHeight="50" MinWidth="200"
+                   HorizontalOffset="25" VerticalOffset="25" StaysOpen="False"
+                    AllowsTransparency="True" PopupAnimation="Fade"
+            >
+                <TextBlock TextWrapping="Wrap" Width="180" Background="LightPink" Opacity="0.5" >
+                    Товар добавлен в корзину!
+                </TextBlock>
+            </Popup>
+        </StackPanel>
+    </UniformGrid>
+</Window>
