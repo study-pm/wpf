@@ -8595,11 +8595,25 @@ public class Image : System.Windows.FrameworkElement, System.Windows.Markup.IUri
 
 Элемент `Image` можно создавать и настраивать программно, используя классы `BitmapImage` и `Uri` для задания источника изображения:
 ```cs
-Image image = new Image();
+Assembly assembly = Assembly.GetExecutingAssembly();
+var AssemblyName = assembly.ToString();
+
+System.Windows.Controls.Image image = new System.Windows.Controls.Image();
 BitmapImage bitmap = new BitmapImage();
-bitmap.UriSource = new Uri("pack://application:,,,/AssemblyName;component/myPhoto.jpg");
+bitmap.BeginInit();
+bitmap.UriSource = new Uri($"pack://application:,,,/{AssemblyName};component/Images/wpf_logo.jpg");
+bitmap.EndInit();
 image.Source = bitmap;
 image.Stretch = Stretch.Uniform;
+
+stkPnl.Children.Add(image);
+```
+
+В этом примере изображение *wpf_logo.jpg* находится в папке *Images* в корне проекта. Для данного файл `BuildAction` обязательно должен быть установлен в `Resource` (это можно узнать из свойств объекта в панели *Properties*). Кроме того, в отдельных случаях может потребоваться установить свойство `CopyToOutputDirectory` в "Copy if newer" или "Copy always". Название сборки можно определить динамически, как показано выше, но, как правило, оно совпадает с названием проекта и указано в файле *Properties/AssemblyInfo.cs*:
+```cs
+...
+[assembly: AssemblyTitle("Image")]
+...
 ```
 
 Ограничения:
