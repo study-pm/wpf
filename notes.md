@@ -173,6 +173,7 @@
     - [Программное форматирование](#программное-форматирование)
   - [Popup / Всплывающее окно](#popup--всплывающее-окно)
     - [Popup и ToolTip](#popup-и-tooltip)
+    - [Скрытие окна](#скрытие-окна)
   - [Image / Изображение](#image--изображение)
   - [InkCanvas / Полотно](#inkcanvas--полотно)
     - [Режимы рисования](#режимы-рисования)
@@ -8484,6 +8485,61 @@ private void Button_MouseEnter_1(object sender, MouseEventArgs e)
 ```
 
 И при наведении указателя мыши на элемент появится всплывающее окно с сообщением.
+
+#### Скрытие окна
+Если необходимо, чтобы `Popup` автоматически закрывался при клике вне его области, можно установить свойство `StaysOpen` в `false`:
+```xml
+<Popup StaysOpen="False">...</Popup>
+```
+
+Этот подход не требует использования дополнительного кода, но при этом `Popup` закроется при любом клике вне его области.
+
+Чтобы скрыть `Popup` в WPF автоматически через определенное время, можно использовать таймер (`DispatcherTimer`) для установки свойства `IsOpen` в `false` после заданного интервала. Пример реализации с использованием обоих подходов показан ниже.
+
+*XAML*:
+```xml
+<StackPanel>
+    <Button x:Name="addBtn" Content="Add to Basket" Width="80" HorizontalAlignment="Left" Click="addBtn_Click" />
+    <Popup x:Name="addedPopup" Placement="Mouse" MinHeight="50" MinWidth="200"
+           HorizontalOffset="25" VerticalOffset="25" StaysOpen="False"
+            AllowsTransparency="True" PopupAnimation="Fade"
+    >
+        <TextBlock TextWrapping="Wrap" Width="180" Background="LightPink" Opacity="0.5" >
+            Товар добавлен в корзину!
+        </TextBlock>
+    </Popup>
+</StackPanel>
+```
+
+*C#*:
+```cs
+private void addBtn_Click(object sender, RoutedEventArgs e)
+{
+    // Создание таймера
+    DispatcherTimer timer = new DispatcherTimer();
+
+    // Настройка таймера
+    timer.Interval = TimeSpan.FromSeconds(5); // Скрыть через 5 секунд
+    timer.Tick += (s, args) =>
+    {
+        addedPopup.IsOpen = false; // Скрыть Popup
+        timer.Stop(); // Остановить таймер
+    };
+
+    // Запуск таймера при открытии Popup
+    addedPopup.IsOpen = true;
+    timer.Start();
+}
+```
+
+Шаги:
+1. **Создание Таймера**: Создается экземпляр `DispatcherTimer`.
+
+2. **Настройка Интервала**: Устанавливается интервал, через который таймер сработает (`Interval`).
+
+3. **Обработчик События `Tick`**: В обработчике события `Tick` устанавливается `IsOpen` в `false`, чтобы скрыть `Popup`, а таймер останавливается, чтобы он не срабатывал повторно.
+
+4. **Запуск Таймера**: Запускается таймер сразу после открытия `Popup`.
 
 ### Image / Изображение
 Элемент `Image` в WPF используется для отображения изображений в приложениях. Он поддерживает различные форматы изображений, включая *.bmp*, *.png*, *.gif*, *.jpg*, *.tiff*, *.ico*, и *.wdp*.
