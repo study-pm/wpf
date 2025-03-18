@@ -8810,6 +8810,40 @@ public class InkCanvas : System.Windows.FrameworkElement, System.Windows.Markup.
 
 В этом примере создается `InkCanvas` с светло-голубым фоном, на котором пользователь может рисовать штрихи.
 
+Основные свойства и их описание:
+
+1. **`DefaultDrawingAttributes`**: Определяет атрибуты рисования, которые применяются к новым штрихам, создаваемым на `InkCanvas`. Это включает в себя цвет, толщину и другие свойства штрихов.
+
+    ```cs
+    inkCanvas.DefaultDrawingAttributes.Color = Colors.Red;
+    ```
+
+2. **`EditingMode`**: Управляет режимом редактирования `InkCanvas`. Возможные режимы: `Ink`, `InkAndGesture`, `GestureOnly`, `EraseByStroke`, `EraseByPoint`, `Select`, `None`.
+
+    ```cs
+    inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
+    ```
+
+3. **`Strokes`**: Коллекция штрихов, которые были нарисованы на `InkCanvas`. Это свойство позволяет управлять существующими штрихами.
+
+    ```cs
+    inkCanvas.Strokes.Clear(); // для очистки всех штрихов.
+    ```
+
+4. **`Background`**: Определяет фон `InkCanvas`. Может быть цветом или изображением.
+
+    ```xml
+    <InkCanvas Background="LightCyan" />
+    ```
+
+5. **`Top`**, **`Left`**, **`Bottom`**, **`Right`**: Эти свойства используются для позиционирования дочерних элементов внутри `InkCanvas`, подобно `Canvas`.
+
+    ```xml
+    <InkCanvas>
+        <Image InkCanvas.Left="10" InkCanvas.Top="20" />
+    </InkCanvas>
+    ```
+
 Преимущества использования:
 - **Гибкость**: `InkCanvas` может быть использован в различных приложениях, где требуется рукописный ввод.
 
