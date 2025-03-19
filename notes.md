@@ -181,6 +181,7 @@
   - [InkCanvas / Полотно](#inkcanvas--полотно)
     - [Режимы рисования](#режимы-рисования)
     - [Настройка внешнего вида](#настройка-внешнего-вида)
+    - [Сохранение и загрузка](#сохранение-и-загрузка)
 - [Навигация](#навигация)
   - [Основные подходы к навигации](#основные-подходы-к-навигации)
   - [Оконная навигация](#оконная-навигация)
@@ -8898,6 +8899,89 @@ public class InkCanvas : System.Windows.FrameworkElement, System.Windows.Markup.
 ```
 
 Этот пример создает градиентный фон для `InkCanvas`.
+
+#### Сохранение и загрузка
+
+*[ISF]: Ink Serielized Format
+В WPF результаты работы пользователя с `InkCanvas` обычно сохраняются в виде сериализованного формата рукописного ввода (ISF). Вот основные шаги для сохранения и загрузки данных из `InkCanvas`:
+
+1. Сохранение Данных из `InkCanvas`
+
+    Чтобы сохранить данные из `InkCanvas`, вы можете использовать метод `Save()` класса `StrokeCollection`, который возвращает коллекцию штрихов (`Strokes`) из `InkCanvas`. Эти данные можно сохранить в файл или базу данных.
+
+    ```cs
+    // Создание диалогового окна для сохранения файла
+    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+    saveFileDialog1.Filter = "isf files (*.isf)|*.isf";
+
+    if (saveFileDialog1.ShowDialog() == true)
+    {
+        // Сохранение данных в файл
+        using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create))
+        {
+            inkCanvas.Strokes.Save(fs);
+        }
+    }
+    ```
+
+2. Загрузка Данных в `InkCanvas`
+
+    Для загрузки данных обратно в `InkCanvas`, вы можете использовать конструктор `StrokeCollection`, который принимает поток данных.
+
+    ```cs
+    // Создание диалогового окна для открытия файла
+    OpenFileDialog openFileDialog1 = new OpenFileDialog();
+    openFileDialog1.Filter = "isf files (*.isf)|*.isf";
+
+    if (openFileDialog1.ShowDialog() == true)
+    {
+        // Загрузка данных из файла
+        using (FileStream fs = new FileStream(openFileDialog1.FileName, FileMode.Open))
+        {
+            inkCanvas.Strokes = new StrokeCollection(fs);
+        }
+    }
+    ```
+
+3. Сохранение в Базу Данных
+
+    Если вы хотите сохранить данные в базу данных, вы можете сериализовать `StrokeCollection` в двоичные данные (BLOB) и сохранить их в базе данных.
+
+    ```cs
+    using (MemoryStream ms = new MemoryStream())
+    {
+        inkCanvas.Strokes.Save(ms);
+        byte[] binaryData = ms.ToArray();
+
+        // Сохранение двоичных данных в базу данных
+        using (var context = new MyDbContext())
+        {
+            var document = new Document { BinaryContent = binaryData };
+            context.Documents.Add(document);
+            context.SaveChanges();
+        }
+    }
+    ```
+
+4. Загрузка из Базы Данных
+
+    Для загрузки данных из базы данных, вы можете прочитать двоичные данные и создать из них `StrokeCollection`.
+
+    ```cs
+    // Загрузка двоичных данных из базы данных
+    using (var context = new MyDbContext())
+    {
+        var document = context.Documents.First();
+        byte[] binaryData = document.BinaryContent;
+
+        using (MemoryStream ms = new MemoryStream(binaryData))
+        {
+            inkCanvas.Strokes = new StrokeCollection(ms);
+        }
+    }
+    ```
+
+Таким образом, вы можете эффективно сохранять и загружать данные из `InkCanvas` в WPF, используя сериализованный формат ISF.
 
 ## Навигация
 
