@@ -19,8 +19,8 @@
         </StackPanel>
 
         <StackPanel>
-            <Button Content="Popup" Width="80" MouseEnter="Button_MouseEnter_1" HorizontalAlignment="Left" />
-            <Popup x:Name="popup1" StaysOpen="False" Placement="Mouse" MaxWidth="180"
+            <Button x:Name="addButton" Content="Popup" Width="80" MouseEnter="Button_MouseEnter_1" HorizontalAlignment="Left" />
+            <Popup x:Name="popup1" StaysOpen="False" Placement="Mouse" MaxWidth="180" PlacementTarget="{Binding ElementName=addButton}"
                     AllowsTransparency="True"
                 >
                 <TextBlock TextWrapping="Wrap" Width="180" Background="LightPink" Opacity="0.8" >
