@@ -108,6 +108,10 @@
       - [UserControl vs. CustomControl](#usercontrol-vs-customcontrol)
   - [TextBoxBase / Текстовые элементы](#textboxbase--текстовые-элементы)
     - [TextBox / Неформатированный текст](#textbox--неформатированный-текст)
+      - [Однострочный ввод](#однострочный-ввод)
+      - [Многострочный ввод](#многострочный-ввод)
+      - [Работа с выделением](#работа-с-выделением)
+      - [Модифицирование выделения](#модифицирование-выделения)
       - [Проверка орфографии](#проверка-орфографии)
       - [Преимущества и недостатки](#преимущества-и-недостатки)
     - [RichTextBox / Форматированный текст](#richtextbox--форматированный-текст)
@@ -4102,7 +4106,7 @@ public abstract class TextBoxBase : System.Windows.Controls.Control
 - **Форматированный текст**: Лучше использовать `RichTextBox`, если требуется форматирование текста, добавление изображений или других элементов
 
 #### TextBox / Неформатированный текст
-`TextBox` в WPF — это элемент управления, который позволяет пользователям вводить и редактировать текст. Он является базовым элементом для ввода текста и может быть использован как для однострочного, так и для многострочного ввода.
+`TextBox` в WPF — это элемент управления, который позволяет пользователям вводить и редактировать текст. Он является базовым элементом для ввода текста и может быть использован как для однострочного (режим диалога), так и для многострочного (режим редактора) ввода.
 
 Определение:
 ```cs
@@ -4179,9 +4183,40 @@ private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
 }
 ```
 
-По умолчанию, если вводимый текст превышает установленные границы поля, то текстовое поле растет, чтобы вместить весь текст. Но визуально это не очень хорошо выглядит. Поэтому, как и в случае с `TextBlock`, мы можем перенести непомещающийся текст на новую строку, установив свойство `TextWrapping="Wrap"`.
+##### Однострочный ввод
+`TextBox` является настолько ходовым элементом, что часто даже можно не задавать каких-то особых свойств для того, чтобы получить полноценное редактируемое текстовое поле. Ниже приведён базовый пример:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.TextBoxSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TextBoxSample" Height="80" Width="250">
+    <StackPanel Margin="10">
+		<TextBox />
+	</StackPanel>
+</Window>
+```
 
-Чтобы переводить по нажатию на клавишу <kbd>Enter</kbd> курсор на следующую строку, нам надо установить свойство `AcceptsReturn="True"`.
+Собственно, это всё, что нужно для создания текстового поля. Как правило, текстовое поле предназначено для приема пользовательского ввода, но при этом оно может быть предварительно заполнено через разметку с помощью свойства `Text`:
+```xml
+<TextBox Text="Hello, world!" />
+```
+
+Если понажимать правую кнопку мыши, находясь внутри элемента `TextBox`, то можно увидеть меню с опциями, позволяющими использовать `TextBox` с буфером обмена Windows. Горячие клавиши отмена и повтора (<kbd>Ctrl</kbd>+<kbd>Z</kbd> и <kbd>Ctrl</kbd>+<kbd>Y</kbd>) также должны работать уже по умолчанию, и всё это доступно сразу, без дополнительных .
+
+##### Многострочный ввод
+По умолчанию, если вводимый текст превышает установленные границы поля, то текстовое поле растет, чтобы вместить весь текст. Но визуально это не очень хорошо выглядит. Также ничего не происходит при нажатии на клавишу <kbd>Enter</kbd>, а если добавить текста больше, чем его может визуально поместиться в одну строку, элемент просто прокрутит текст на текущую позицию ввода. Однако исправить эту ситуацию не так уж сложно, превратив `TextBox` в многострочный редактор: как и в случае с `TextBlock`, мы можем перенести непомещающийся текст на новую строку, установив свойство `TextWrapping="Wrap"`:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.TextBoxSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TextBoxSample" Height="160" Width="280">
+    <Grid Margin="10">
+		<TextBox AcceptsReturn="True" TextWrapping="Wrap" />
+	</Grid>
+</Window>
+```
+
+Здесь добавлены два дополнительных свойства: чтобы переводить по нажатию на клавишу <kbd>Enter</kbd> курсор на следующую строку, нам надо установить свойство `AcceptsReturn="True"`, при этом свойство `TextWrapping` реализует автоматический перенос по достижении конца строки.
 
 Также мы можем добавить полю возможность создавать табуляцию с помощью клавиши <kbd>Tab</kbd>, установив свойство `AcceptsTab="True"`.
 
@@ -4193,7 +4228,62 @@ private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
 
 Возможно, при создании приложения нам потребуется сделать текстовое поле недоступным для ввода (на время в зависимости от условий или вообще), тогда для этого нам надо установить свойство `IsReadOnly="True"`.
 
-Для выделения текста есть свойства `SelectionStart`, `SelectionLength` и `SelectionText`. Например, выделим программно текст по нажатию кнопки:
+Свойства `MaxLines` и `MinLines` определяют предельное допустимое количество видимых строк текста.
+
+##### Работа с выделением
+Как и любой другой элемент Windows с поддержкой редактирования, `TextBox` позволяет выделять текст: например для удаления целого слова или копирования текстового фрагмента в буфер обмена. `TextBox` в WPF имеет ряд свойств для работы с выделенным текстом, которые можно как считывать, так и модифицировать. В следующем примере мы проанализируем следующие свойства:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.TextBoxSelectionSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TextBoxSelectionSample" Height="150" Width="300">
+	<DockPanel Margin="10">
+		<TextBox SelectionChanged="TextBox_SelectionChanged" DockPanel.Dock="Top" />
+		<TextBox Name="txtStatus" AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True" />
+
+	</DockPanel>
+</Window>
+```
+
+Пример состоит из двух элементов `TextBox`: один для редактирования, а второй для отображения текущего состояния выделения. Для последнего мы установили свойство `IsReadOnly` в `true` во избежание редактирования текста, предназначенного для отображения статусов. Мы подписываемся на событие `SelectionChanged` первого поля, которое обрабатываем в отделенном коде (CodeBehind):
+```cs
+using System;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace WpfTutorialSamples.Basic_controls
+{
+	public partial class TextBoxSelectionSample : Window
+	{
+		public TextBoxSelectionSample()
+		{
+			InitializeComponent();
+		}
+
+		private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
+		{
+			TextBox textBox = sender as TextBox;
+			txtStatus.Text = "Selection starts at character #" + textBox.SelectionStart + Environment.NewLine;
+			txtStatus.Text += "Selection is " + textBox.SelectionLength + " character(s) long" + Environment.NewLine;
+			txtStatus.Text += "Selected text: '" + textBox.SelectedText + "'";
+		}
+	}
+}
+```
+
+Для достижения результата здесь использованы три интересных свойства:
+
+- **`SelectionStart`**, предоставляющее текущее положение курсора либо в случае выделения обознающее начальную позицию выделения.
+
+- **`SelectionLength`**, предоставляющее длину текущего выделения, если таковое имеет место. В противном случае возвращается 0.
+
+- **`SelectedText`**, предоставляющее фрагмент выделенной строки, если выделение имеется. В противном случае возвращается пустая строка.
+
+##### Модифицирование выделения
+Итак, для выделения текста есть свойства `SelectionStart`, `SelectionLength` и `SelectionText`. Все эти свойства доступны как для чтения, так и для записи, а значит их вполне можно модифицировать. К примеру, для выделения произвольного фрагмента текста можно установить свойства `SelectionStart` и `SelectionLength`, а для вставки и выделения строки — использовать `SelectedText`. Главное здесь помнить, что для реализации подобных механизмов `TextBlock` должен получить фокус, другим словами, чтобы это заработало, необходимо не забыть вызвать метод `Focus()`.
+
+Например, выделим программно текст по нажатию кнопки:
 ```xml
 <StackPanel>
     <TextBox x:Name="textBox1" Height="100" SelectionBrush="Blue" />
@@ -4213,14 +4303,24 @@ private void Button_Click(object sender, RoutedEventArgs e)
 }
 ```
 
-Свойства `MaxLines` и `MinLines` определяют предельное допустимое количество видимых строк текста.
-
 ##### Проверка орфографии
-`TextBox` обладает встроенной поддержкой орфографии. Чтобы ее задействовать, надо установить свойство `SpellCheck.IsEnabled="True"`. Кроме того, по умолчанию проверка орфографии распространяется только на английский язык, поэтому, если приложение заточено под другой язык, нам надо его явным образом указать через свойство `Language`:
+Дополнительным преимуществом `TextBox` является то, что он обладает встроенной поддержкой орфографии. Чтобы ее задействовать, надо установить значение присоединяемого свойства `IsEnabled` класса `SpellCheck` в `True`. Кроме того, по умолчанию проверка орфографии распространяется только на английский язык, поэтому, если приложение ориентирован на другой язык, нам надо его явным образом указать через свойство `Language`:
 ```xml
 <DockPanel>
     <TextBox SpellCheck.IsEnabled="True" Language="ru-ru">Привет, как дила?</TextBox>
 </DockPanel>
+```
+
+Этот механизм работает аналогично проверке орфографии в Microsoft Word, где ошибки написания подчеркиваются, а по нажатию правой кнопкой мыши предлагаются варианты исправления:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.TextBoxSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TextBoxSample" Height="160" Width="280">
+    <Grid Margin="10">
+		<TextBox AcceptsReturn="True" TextWrapping="Wrap" SpellCheck.IsEnabled="True" Language="en-US" />
+	</Grid>
+</Window>
 ```
 
 ##### Преимущества и недостатки
