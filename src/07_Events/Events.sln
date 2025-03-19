@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutedEvents", "RoutedEvent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsRouting", "EventsRouting\EventsRouting.csproj", "{B502E65F-5A0B-4BC3-81E8-02930BDC134C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttachedEvents", "AttachedEvents\AttachedEvents.csproj", "{00625F60-54EF-4CE5-8623-CA9E403B3F51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B502E65F-5A0B-4BC3-81E8-02930BDC134C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B502E65F-5A0B-4BC3-81E8-02930BDC134C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B502E65F-5A0B-4BC3-81E8-02930BDC134C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
