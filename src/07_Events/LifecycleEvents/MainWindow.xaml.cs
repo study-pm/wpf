@@ -76,5 +76,10 @@ namespace LifecycleEvents
         {
             Debug.WriteLine("Unloaded", "StackPanel");
         }
+
+        private void txtBx_KeyDown(object sender, KeyEventArgs e)
+        {
+            Debug.WriteLine("KeyDown", "TextBox");
+        }
     }
 }

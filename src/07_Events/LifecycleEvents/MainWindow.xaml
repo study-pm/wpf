@@ -12,11 +12,13 @@
         Closing="Window_Closing" Closed="Window_Closed"
         >
     <Grid>
-        <Label BorderBrush="LightBlue" BorderThickness="3" HorizontalAlignment="Center" MaxHeight="120">
+        <Label BorderBrush="LightBlue" BorderThickness="3" HorizontalAlignment="Center" MaxHeight="120"
+               >
             <StackPanel Name="stkPnl" MaxWidth="200"
                         Initialized="StkPnl_Initialized" Loaded="StkPnl_Loaded" Unloaded="StkPnl_Unloaded"
                         >
-                <TextBlock Margin="3" FontSize="13" >Всем привет!</TextBlock>
+                <TextBox Name="txtBx" KeyDown="txtBx_KeyDown"></TextBox>
+                <TextBlock Margin="3" FontSize="13">Всем привет!</TextBlock>
                 <Image Source="wpf_logo.png" Width="60" Height="60"></Image>
                 <TextBlock Margin="3" FontSize="13">Маршрутизация событий</TextBlock>
             </StackPanel>
