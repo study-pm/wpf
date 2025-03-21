@@ -23,14 +23,16 @@ namespace RoutedEvents
         public MainWindow()
         {
             InitializeComponent();
+            txtBlk.MouseUp += Element_MouseUp;
+            txtBlk.MouseUp -= Element_MouseUp;
         }
 
         int i = 0;
-        private void El_MouseUp(object sender, MouseButtonEventArgs e)
+        private void Element_MouseUp(object sender, MouseButtonEventArgs e)
         {
             MessageBox.Show($"Object: {sender}, Source: {e.Source}, OriginalSource: {e.OriginalSource}, RoutedEvent: {e.RoutedEvent}");
         }
-        private void El_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void Element_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             MessageBox.Show($"Object: {sender}, Source: {e.Source}, OriginalSource: {e.OriginalSource}, RoutedEvent: {e.RoutedEvent}");
         }

@@ -18,7 +18,7 @@
                         Initialized="StkPnl_Initialized" Loaded="StkPnl_Loaded" Unloaded="StkPnl_Unloaded"
                         >
                 <TextBox Name="txtBx" KeyDown="txtBx_KeyDown"></TextBox>
-                <TextBlock Margin="3" FontSize="13">Всем привет!</TextBlock>
+                <TextBlock Name="txtBlk" Margin="3" FontSize="13" GotFocus="txtBlk_GotFocus" GotKeyboardFocus="txtBlk_GotKeyboardFocus" GotMouseCapture="txtBlk_GotMouseCapture" >Всем привет!</TextBlock>
                 <Image Source="wpf_logo.png" Width="60" Height="60"></Image>
                 <TextBlock Margin="3" FontSize="13">Маршрутизация событий</TextBlock>
             </StackPanel>

@@ -5,17 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RoutedEvents"
         mc:Ignorable="d"
-        Title="Routed Events" Height="800" Width="800"
-        MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp"
+        Title="Routed Events" Height="500" Width="800"
         >
-    <StackPanel>
-        <Label BorderBrush="LightBlue" BorderThickness="3"  HorizontalAlignment="Center"
-       MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">
-            <StackPanel MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp" MaxWidth="200">
-                <TextBlock Margin="3" FontSize="13" MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">Всем привет!</TextBlock>
-                <Image Source="wpf_logo.png" Width="60" Height="60" MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp"></Image>
-                <TextBlock Margin="3" FontSize="13" MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">Маршрутизация событий</TextBlock>
-            </StackPanel>
-        </Label>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Center">
+            <Label MouseUp="Element_MouseUp">
+                <WrapPanel>
+                    <Image x:Name="img" Source="wpf_logo.png" Width="20"/>
+                    <TextBlock x:Name="txtBlk" MouseUp="Element_MouseUp">Enter your favorite programming language</TextBlock>
+                </WrapPanel>
+            </Label>
+            <TextBox x:Name="txtBx"></TextBox>
+        </StackPanel>
+        <UniformGrid Grid.Row="1" Height="300" Rows="1">
+            <ListBox Margin="3" Name="lbInfoTunnel"></ListBox>
+            <ListBox Margin="3" Name="lbInfoBubble"></ListBox>
+        </UniformGrid>
+        <DockPanel Grid.Row="2" Margin="5">
+            <CheckBox Name="chb_ShowFirstEvent" Margin="3" Content="Показать первое событие" VerticalAlignment="Center" />
+            <Button x:Name="clearBtn" Margin="3" Padding="3" HorizontalAlignment="Right" Content="Очистить"
+                    />
+        </DockPanel>
+    </Grid>
 </Window>

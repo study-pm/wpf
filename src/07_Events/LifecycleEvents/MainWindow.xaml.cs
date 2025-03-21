@@ -81,5 +81,20 @@ namespace LifecycleEvents
         {
             Debug.WriteLine("KeyDown", "TextBox");
         }
+
+        private void txtBlk_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void txtBlk_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+
+        }
+
+        private void txtBlk_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }
