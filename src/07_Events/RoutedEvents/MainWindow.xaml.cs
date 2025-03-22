@@ -48,7 +48,14 @@ namespace RoutedEvents
                 "Объект: " + sender.ToString() + "\r\n" +
                 "Событие: " + e.RoutedEvent.ToString() + "\r\n" +
                 "Источник: " + e.Source.ToString() + "\r\n" +
-                "Первоначальный источник: " + e.OriginalSource;
+                "Первоначальный источник: " + e.OriginalSource + "\r\n" +
+                "Состояние кнопки: " + e.ButtonState + "\r\n" +
+                "Кнопка: " + e.ChangedButton + "\r\n" +
+                "Число нажатий: " + e.ClickCount + "\r\n" +
+                "ЛКМ: " + e.LeftButton + "\r\n" +
+                "СКМ: " + e.MiddleButton + "\r\n" +
+                "ПКМ: " + e.RightButton + "\r\n"
+            ;
             lbInfoBubble.Items.Add(message);
             e.Handled = (bool)chb_ShowFirstEvent.IsChecked;
         }
@@ -59,7 +66,14 @@ namespace RoutedEvents
                 "Объект: " + sender.ToString() + "\r\n" +
                 "Событие: " + e.RoutedEvent.ToString() + "\r\n" +
                 "Источник: " + e.Source.ToString() + "\r\n" +
-                "Начальный источник: " + e.OriginalSource;
+                "Первоначальный источник: " + e.OriginalSource + "\r\n" +
+                "Состояние кнопки: " + e.ButtonState + "\r\n" +
+                "Кнопка: " + e.ChangedButton + "\r\n" +
+                "Число нажатий: " + e.ClickCount + "\r\n" +
+                "ЛКМ: " + e.LeftButton + "\r\n" +
+                "СКМ: " + e.MiddleButton + "\r\n" +
+                "ПКМ: " + e.RightButton + "\r\n"
+            ;
             lbInfoTunnel.Items.Add(message);
             // This locks the tunneling sequence thus button stops working
             // e.Handled = (bool)chb_ShowFirstEvent.IsChecked;
@@ -145,6 +159,12 @@ namespace RoutedEvents
                 txtBx.Focus();
                 Debug.WriteLine("Focus");
             }
+        }
+
+        private void StackPanel_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            Point p = e.GetPosition(this);
+            lbInfoBubble.Items.Add($"Позиция: {p.X} {p.Y}");
         }
     }
 }

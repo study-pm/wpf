@@ -14,7 +14,10 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel HorizontalAlignment="Center" MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">
+        <StackPanel HorizontalAlignment="Center" MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp"
+                    MouseDown="El_MouseUp" PreviewMouseDown="El_PreviewMouseUp"
+                    PreviewMouseMove="StackPanel_PreviewMouseMove"
+                    >
             <Label MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">
                 <WrapPanel MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">
                     <Image x:Name="img" Source="wpf_logo.png" Width="20"
