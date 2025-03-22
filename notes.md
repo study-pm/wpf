@@ -91,6 +91,8 @@
         - [Пользовательское содержимое](#пользовательское-содержимое)
         - [Свойство IsThreeState](#свойство-isthreestate)
       - [RadioButton / Зависимый переключатель](#radiobutton--зависимый-переключатель)
+        - [Поддержка групп](#поддержка-групп)
+        - [Пользовательское содержимое](#пользовательское-содержимое-1)
     - [HeaderedContentControl / Заголовочное содержимое](#headeredcontentcontrol--заголовочное-содержимое)
       - [GroupBox](#groupbox)
       - [Expander](#expander)
@@ -3061,7 +3063,50 @@ namespace WpfTutorialSamples.Basic_controls
 Все описанные варианты поведения достигаются с помощью подписки на события `Checked` и `Unchecked` элементов `CheckBox`. В реальном приложении обычно используют привязку данных, целью же данного примера было проиллюстрировать основы использования свойства `IsThreeState` для создания эффекта по типу "Переключить все".
 
 ##### RadioButton / Зависимый переключатель
-Элемент управления, также производный от `ToggleButton`, представляющий переключатель. Главная его особенность — поддержка групп. Несколько элементов `RadioButton` можно объединить в группы, и в один момент времени мы можем выбрать из этой группы только один переключатель. Например,
+Данный элемент управления также является производным от `ToggleButton` и представляет собой переключатель. `RadioButton` позволяет предоставить пользователю набор возможных вариантов, из которых выбрать можно только один. Аналогичного результата можно добиться при помощи более копактного элемента управления `ComboBox`, однако набор радиокнопок, как правило, даёт пользователю более наглядный обзор доступных вариантов.
+
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.RadioButtonSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RadioButtonSample" Height="150" Width="250">
+	<StackPanel Margin="10">
+		<Label FontWeight="Bold">Are you ready?</Label>
+		<RadioButton>Yes</RadioButton>
+		<RadioButton>No</RadioButton>
+		<RadioButton IsChecked="True">Maybe</RadioButton>
+	</StackPanel>
+</Window>
+```
+
+Здесь всего лишь добавлены `Label` с вопросом и три радиокнопки с вариантами ответов. На последнем элементе `RadioButton` установлено свойство `IsChecked`, определяющее выбор по умолчанию, который пользователь может изменить, просто щелкнув на любую другую радиокнопку. Это **же свойство используется в отделенном коде для проверки того, выбран ли данный элемент `RadioButton`.**
+
+Главная особенность элемента `RadioButton` — поддержка групп.
+
+###### Поддержка групп
+Если попробовать запустить пример выше, то можно увидеть, что одновременно может быть выбран только один `RadioButton`. Но что делать в том случае, если необходимо использовать несколько групп радиокнопок, причем каждую со своим, не зависимым от остальных, выбором? Здесь на помощь приходит свойство `GroupName`, позволяющее объединять несколько радиокнопок. Вот пример:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.RadioButtonSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RadioButtonSample" Height="230" Width="250">
+	<StackPanel Margin="10">
+		<Label FontWeight="Bold">Are you ready?</Label>
+		<RadioButton GroupName="ready">Yes</RadioButton>
+		<RadioButton GroupName="ready">No</RadioButton>
+		<RadioButton GroupName="ready" IsChecked="True">Maybe</RadioButton>
+
+		<Label FontWeight="Bold">Male or female?</Label>
+		<RadioButton GroupName="sex">Male</RadioButton>
+		<RadioButton GroupName="sex">Female</RadioButton>
+		<RadioButton GroupName="sex" IsChecked="True">Not sure</RadioButton>
+	</StackPanel>
+</Window>
+```
+
+Определение свойства `GroupName` для каждой из радиокнопок сделало возможным независимый выбор для обеих групп. Без этого из шести представленных радиокнопок можно было бы выбрать только одну.
+
+Таким образом, несколько элементов `RadioButton` можно объединить в группы, и в один момент времени мы можем выбрать из этой группы только один переключатель. Например,
 ```xml
 <StackPanel x:Name="stackPanel">
     <RadioButton GroupName="Languages" Content="C#" IsChecked="True" />
@@ -3136,10 +3181,45 @@ if (RadioButton_Boot3.IsChecked == true)
 ...
 ```
 
-Класс `RadioButton` является наследником от класса `ToggleButton` и наследует его свойства и события.
+Таким образом, класс `RadioButton` является наследником от класса `ToggleButton` и наследует его свойства и события.
 
 Отличительные особенности:
 - Свойство **`GroupName`** – название группы зависимых переключателей. В одном окне может быть несколько групп зависимых переключателей с разными названиями групп.
+
+###### Пользовательское содержимое
+Наследуя от класса `ContentControl`, элемент управления `RadioButton` может содержать и отображать пользовательское содержимое. Если между тегами `RadioButton` просто указать текст, как в примере выше, то WPF автоматически отобразит его внутри элемента `TextBlock`, и сделано это лишь для упрощения процесса. На самом же деле внутри можно использовать любой элемент, что демонстрирует следующий пример:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.RadioButtonCustomContentSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RadioButtonCustomContentSample" Height="150" Width="250">
+	<StackPanel Margin="10">
+		<Label FontWeight="Bold">Are you ready?</Label>
+		<RadioButton>
+			<WrapPanel>
+				<Image Source="/WpfTutorialSamples;component/Images/accept.png" Width="16" Height="16" Margin="0,0,5,0" />
+				<TextBlock Text="Yes" Foreground="Green" />
+			</WrapPanel>
+		</RadioButton>
+		<RadioButton Margin="0,5">
+			<WrapPanel>
+				<Image Source="/WpfTutorialSamples;component/Images/cancel.png" Width="16" Height="16" Margin="0,0,5,0" />
+				<TextBlock Text="No" Foreground="Red" />
+			</WrapPanel>
+		</RadioButton>
+		<RadioButton IsChecked="True">
+			<WrapPanel>
+				<Image Source="/WpfTutorialSamples;component/Images/question.png" Width="16" Height="16" Margin="0,0,5,0" />
+				<TextBlock Text="Maybe" Foreground="Gray" />
+			</WrapPanel>
+		</RadioButton>
+	</StackPanel>
+</Window>
+```
+
+Данный пример, хоть и тяжеловат с точки зрения разметки, но концептуально довольно прост. В каждом `RadioButton` определен контейнер `WrapPanel` с изображением и текстовым фрагментом внутри. Использование текста внутри `TextBlock` дает возможность лучше контролировать и как угодно форматировать текст. В обсуждаемом примере цвет текста изменен, чтобы лучше соответстовать выбору. Элемент `Image` позволяет для каждого варианта показать соответстующее изображение.
+
+Стоит отметить, что для активации/декктивации можно ткнуть в любое место радиокнопки, даже на текст или картинку, поскольку они определены в качестве содержимого `RadioButton`. Если бы они были размещены в отдельной панели рядом с элементом `RadioButton`, то для осуществления выбора пользователю приходилось бы нажимать на сам кружок радиокнопки, что не столь практично.
 
 #### HeaderedContentControl / Заголовочное содержимое
 Особая группа элементов управления образована от класса **`HeaderedContentControl`**, который является подклассом `ContentControl`. Эта группа отличается тем, что позволяет задать заголовок содержимому. В эту группу элементов входят `GroupBox` и `Expander`.
