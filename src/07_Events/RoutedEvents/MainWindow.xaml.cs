@@ -26,6 +26,8 @@ namespace RoutedEvents
             InitializeComponent();
             textBlk.MouseUp += Element_MouseUp;
             textBlk.MouseUp -= Element_MouseUp;
+
+            txtBx.TabIndex = 0;
         }
 
         private void Element_MouseUp(object sender, MouseButtonEventArgs e)
@@ -113,10 +115,16 @@ namespace RoutedEvents
                 "Событие: " + e.RoutedEvent + "\r\n" +
                 "Текст: " + e.Text
             ;
-            lbInfoBubble.Items.Add(msg);
+            lbInfoTunnel.Items.Add(msg);
         }
         private void txtBx_GotFocus(object sender, RoutedEventArgs e)
         {
+            i++;
+            string msg = "--> " + i + ":\r\n" +
+                "Событие: " + e.RoutedEvent + "\r\n"
+            ;
+
+            lbInfoBubble.Items.Add(msg);
             Debug.WriteLine("GotFocus");
             // txtBx.SelectAll();
             txtBx.SelectionStart = 0;
@@ -124,6 +132,12 @@ namespace RoutedEvents
         }
         private void txtBx_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            i++;
+            string msg = "--> " + i + ":\r\n" +
+                "Событие: " + e.RoutedEvent + "\r\n"
+            ;
+            lbInfoTunnel.Items.Add(msg);
+
             Debug.WriteLine("PreviewMouseDown");
             if (!txtBx.IsKeyboardFocusWithin)
             {

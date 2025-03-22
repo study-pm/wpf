@@ -30,8 +30,8 @@
                      PreviewMouseDown="txtBx_PreviewMouseDown"
                      KeyDown="txtBx_KeyEvt" KeyUp="txtBx_KeyEvt"
                      TextInput="txtBx_TextInput" PreviewTextInput="txtBx_PreviewTextInput"
+                     TabIndex="0"
                      />
-            <TextBox></TextBox>
             <CheckBox x:Name="IgnoreRepeatChkBx" Content="Игнорировать повторное нажатие" />
         </StackPanel>
         <UniformGrid Grid.Row="1" Height="350" Rows="1">
