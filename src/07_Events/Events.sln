@@ -5,8 +5,6 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutedEvents", "RoutedEvents\RoutedEvents.csproj", "{99A551A1-B7DF-4D73-A021-CC811CA558F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttachedEvents", "AttachedEvents\AttachedEvents.csproj", "{00625F60-54EF-4CE5-8623-CA9E403B3F51}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifecycleEvents", "LifecycleEvents\LifecycleEvents.csproj", "{0DC5C514-F4C2-4DBD-8398-5FCDEA040BE2}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{99A551A1-B7DF-4D73-A021-CC811CA558F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99A551A1-B7DF-4D73-A021-CC811CA558F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99A551A1-B7DF-4D73-A021-CC811CA558F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00625F60-54EF-4CE5-8623-CA9E403B3F51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0DC5C514-F4C2-4DBD-8398-5FCDEA040BE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0DC5C514-F4C2-4DBD-8398-5FCDEA040BE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DC5C514-F4C2-4DBD-8398-5FCDEA040BE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
