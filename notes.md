@@ -88,6 +88,8 @@
       - [RepeatButton / Кнопка повтора](#repeatbutton--кнопка-повтора)
       - [ToggleButton / Элементарный переключатель](#togglebutton--элементарный-переключатель)
       - [CheckBox / Независимый переключатель](#checkbox--независимый-переключатель)
+        - [Пользовательское содержимое](#пользовательское-содержимое)
+        - [Свойство IsThreeState](#свойство-isthreestate)
       - [RadioButton / Зависимый переключатель](#radiobutton--зависимый-переключатель)
     - [HeaderedContentControl / Заголовочное содержимое](#headeredcontentcontrol--заголовочное-содержимое)
       - [GroupBox](#groupbox)
@@ -2861,7 +2863,7 @@ private void ToggleButton_Click(object sender, RoutedEventArgs e)
 `ToggleButton`, как правило, сам по себе тоже редко используется, однако при этом он служит основой для создания других более функциональных элементов, таких как `checkbox` и `radiobutton`.
 
 ##### CheckBox / Независимый переключатель
-Элемент `CheckBox` представляет собой обычный флажок. Данный элемент является производным от класса `ToggleButton` и поэтому может принимать также три состояния: `Checked`, `Unchecked` и `Indeterminate`.
+Элемент `CheckBox` представляет собой обычный флажок, позволяющий пользователю управлять параметром с двумя состояниями (включено/выключено), обычно ассоциированным с переменной логического типа в отделенном коде.
 
 ```xml
 <CheckBox x:Name="CheckBox_CloseAfterComplete">Закрыть окно по завершении</CheckBox>
@@ -2876,9 +2878,61 @@ if (CheckBox_CloseAfterComplete.IsChecked == true)
 
 Класс `CheckBox` является наследником от класса `ToggleButton` и наследует его свойства и события.
 
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.CheckBoxSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CheckBoxSample" Height="140" Width="250">
+    <StackPanel Margin="10">
+		<Label FontWeight="Bold">Application Options</Label>
+		<CheckBox>Enable feature ABC</CheckBox>
+		<CheckBox IsChecked="True">Enable feature XYZ</CheckBox>
+		<CheckBox>Enable feature WWW</CheckBox>
+	</StackPanel>
+</Window>
+```
+
+`CheckBox` очень легко использовать. На втором флажке установлено свойство `IsChecked`, определяющее текущий элемент отмеченным по умолчанию, и кроме одного этого свойства, для функционирования элемента никакие другие не нужны. Свойство `IsChecked` также можно использовать из отделенного кода для проверки, является ли тот или иной `CheckBox` выбранным.
+
 Для обращения к элементу управления из кода программы необходимо в XAML-коде задать для него имя в атрибуте `Name` с префиксом `x`, как это показано в примере выше. Префикс 'x:' означает пространство имен XAML, а не пространство имен WPF.
 
-Чтобы получить или установить определенное состояние, надо использовать свойство `IsChecked`, которое также унаследовано от `ToggleButton`:
+###### Пользовательское содержимое
+Наследуя от класса `ContentControl`, элемент управления `CheckBox` может содержать и отображать пользовательское содержимое. Если между тегами `CheckBox` просто указать текст, как в примере выше, то WPF автоматически отобразит его внутри элемента `TextBlock`, и сделано это лишь для упрощения процесса. На самом же деле внутри можно использовать любой элемент, что демонстрирует следующий пример:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.CheckBoxSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CheckBoxSample" Height="140" Width="250">
+    <StackPanel Margin="10">
+		<Label FontWeight="Bold">Application Options</Label>
+		<CheckBox>
+			<TextBlock>
+				Enable feature <Run Foreground="Green" FontWeight="Bold">ABC</Run>
+			</TextBlock>
+		</CheckBox>
+		<CheckBox IsChecked="True">
+			<WrapPanel>
+				<TextBlock>
+					Enable feature <Run FontWeight="Bold">XYZ</Run>
+				</TextBlock>
+				<Image Source="/WpfTutorialSamples;component/Images/question.png" Width="16" Height="16" Margin="5,0" />
+			</WrapPanel>
+		</CheckBox>
+		<CheckBox>
+			<TextBlock>
+				Enable feature <Run Foreground="Blue" TextDecorations="Underline" FontWeight="Bold">WWW</Run>
+			</TextBlock>
+		</CheckBox>
+	</StackPanel>
+</Window>
+```
+
+Как видно из примера выше, внутри можно указывать любое содержимое. Все три флажка используют разное оформление, а в средний вообще добавлен элемент `Image`. Определяя вместо обычного текста элемент управления в качестве содержимого, мы получаем возможность лучше контролировать внешний вид элемента, а самое замечательное во всем этом то, что `CheckBox` будет работать (включаться и выключаться) вне зависимости от того, какая именно часть содержимого будет активирована.
+
+###### Свойство IsThreeState
+Как уже упоминалось, `CheckBox`, как правило, соответствует логическому значению, что подразумевает наличие лишь двух состояний: `true` или `false` (включено или выключено). Однако поскольку логический тип данных в принципе может быть nullable, фактически допуская наличия третьего варианта (`true`, `false` или `null`), то логично допустить наличие третьего состояния и у элемента `CheckBox`. И, действительно, данный элемент является производным от класса `ToggleButton` и поэтому может принимать также три состояния: `Checked`, `Unchecked` и `Indeterminate`. Если установить свойство `IsThreeState` в `true`, то элемент `CheckBox` становится способным принимать третье состояние, называемое "неопределенным".
+
+Чтобы получить или установить какое-либо состояние, надо использовать свойство `IsChecked`, которое также унаследовано от `ToggleButton`:
 ```xml
 <StackPanel x:Name="stackPanel">
     <CheckBox x:Name="checkBox1" IsThreeState="True" IsChecked="False" Height="20" Content="Неотмечено" />
@@ -2946,6 +3000,65 @@ namespace ControlsApp
     }
 }
 ```
+
+Распространенным сценарием использования трех состояний является `CheckBox` по типу "Выбрать все", контролирующий набор подчиненных флажков и отображающий их групповое состояние. Следующий пример демонстрирует, как создать список опций, которые могут быть разом включены или выключены посредством общего трехпозиционного флажка сверху:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.CheckBoxThreeStateSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CheckBoxThreeStateSample" Height="170" Width="300">
+	<StackPanel Margin="10">
+		<Label FontWeight="Bold">Application Options</Label>
+		<StackPanel Margin="10,5">
+			<CheckBox IsThreeState="True" Name="cbAllFeatures" Checked="cbAllFeatures_CheckedChanged" Unchecked="cbAllFeatures_CheckedChanged">Enable all</CheckBox>
+			<StackPanel Margin="20,5">
+				<CheckBox Name="cbFeatureAbc" Checked="cbFeature_CheckedChanged" Unchecked="cbFeature_CheckedChanged">Enable feature ABC</CheckBox>
+				<CheckBox Name="cbFeatureXyz" IsChecked="True" Checked="cbFeature_CheckedChanged" Unchecked="cbFeature_CheckedChanged">Enable feature XYZ</CheckBox>
+				<CheckBox Name="cbFeatureWww" Checked="cbFeature_CheckedChanged" Unchecked="cbFeature_CheckedChanged">Enable feature WWW</CheckBox>
+			</StackPanel>
+		</StackPanel>
+	</StackPanel>
+</Window>
+```
+
+```cs
+using System;
+using System.Windows;
+
+namespace WpfTutorialSamples.Basic_controls
+{
+	public partial class CheckBoxThreeStateSample : Window
+	{
+		public CheckBoxThreeStateSample()
+		{
+			InitializeComponent();
+		}
+
+
+		private void cbAllFeatures_CheckedChanged(object sender, RoutedEventArgs e)
+		{
+			bool newVal = (cbAllFeatures.IsChecked == true);
+			cbFeatureAbc.IsChecked = newVal;
+			cbFeatureXyz.IsChecked = newVal;
+			cbFeatureWww.IsChecked = newVal;
+		}
+
+		private void cbFeature_CheckedChanged(object sender, RoutedEventArgs e)
+		{
+			cbAllFeatures.IsChecked = null;
+			if((cbFeatureAbc.IsChecked == true) && (cbFeatureXyz.IsChecked == true) && (cbFeatureWww.IsChecked == true))
+				cbAllFeatures.IsChecked = true;
+			if((cbFeatureAbc.IsChecked == false) && (cbFeatureXyz.IsChecked == false) && (cbFeatureWww.IsChecked == false))
+				cbAllFeatures.IsChecked = false;
+		}
+
+	}
+}
+```
+
+Этот механизм является двусторонним: при включении/выключении трехпозиционного переключателя все дочерние флажки, каждый из которых представляет определенный функционал приложения, будут синхронно включены/выключены. Работает это и в обратную сторону, поскольку включение/выключение дочерних флажков влияет на состояние трехпозиционного переключателя: если они все оказываются в одинаковом состоянии, то и переключатель "Выбрать все" автоматически принимает соответствующее этому значение — в противном случае его значение останется равным `null`, переводя `CheckBox` в неопределенное состояние.
+
+Все описанные варианты поведения достигаются с помощью подписки на события `Checked` и `Unchecked` элементов `CheckBox`. В реальном приложении обычно используют привязку данных, целью же данного примера было проиллюстрировать основы использования свойства `IsThreeState` для создания эффекта по типу "Переключить все".
 
 ##### RadioButton / Зависимый переключатель
 Элемент управления, также производный от `ToggleButton`, представляющий переключатель. Главная его особенность — поддержка групп. Несколько элементов `RadioButton` можно объединить в группы, и в один момент времени мы можем выбрать из этой группы только один переключатель. Например,
