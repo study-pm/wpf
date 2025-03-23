@@ -166,5 +166,20 @@ namespace RoutedEvents
             Point p = e.GetPosition(this);
             lbInfoBubble.Items.Add($"Позиция: {p.X} {p.Y}");
         }
+
+        private void clearBtn_Drop(object sender, DragEventArgs e)
+        {
+            var btn = (Button)sender;
+
+            if (e.Data.GetDataPresent(typeof(string)))
+            {
+                e.Effects = DragDropEffects.Copy; // Установка эффекта
+                // Вставьте текст в целевой элемент
+                btn.Content = e.Data.GetData(DataFormats.Text);
+                // Alternative solution
+                string text = (string)e.Data.GetData(typeof(string));
+                btn.Content = text;
+            }
+        }
     }
 }

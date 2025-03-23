@@ -44,7 +44,7 @@
         <DockPanel Grid.Row="2" Margin="5">
             <CheckBox Name="chb_ShowFirstEvent" Margin="3" Content="Показать первое событие" VerticalAlignment="Center" />
             <Button x:Name="clearBtn" Margin="3" Padding="3" HorizontalAlignment="Right" Content="Очистить"
-                    Click="clearBtn_Click"
+                    Click="clearBtn_Click" AllowDrop="True" Drop="clearBtn_Drop"
                     />
         </DockPanel>
         <GroupBox Grid.Row="3" Header="Languages" Margin="10">
