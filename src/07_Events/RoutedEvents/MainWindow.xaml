@@ -6,6 +6,10 @@
         xmlns:local="clr-namespace:RoutedEvents"
         mc:Ignorable="d"
         Title="Event Tracker" Height="600" Width="800"
+        Loaded="Window_Loaded" Unloaded="Window_Unloaded" Initialized="Window_Initialized"
+        SourceInitialized="Window_SourceInitialized" ContentRendered="Window_ContentRendered"
+        Activated="Window_Activated" Deactivated="Window_Deactivated"
+        Closing="Window_Closing" Closed="Window_Closed"
         >
     <Grid>
         <Grid.RowDefinitions>
@@ -17,6 +21,7 @@
         <StackPanel HorizontalAlignment="Center" MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp"
                     MouseDown="El_MouseUp" PreviewMouseDown="El_PreviewMouseUp"
                     PreviewMouseMove="StackPanel_PreviewMouseMove"
+                    Initialized="StkPnl_Initialized" Loaded="StkPnl_Loaded" Unloaded="StkPnl_Unloaded"
                     >
             <Label MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">
                 <WrapPanel MouseUp="El_MouseUp" PreviewMouseUp="El_PreviewMouseUp">
