@@ -10333,8 +10333,6 @@ flowchart BT
     Grid --> Window
 ```
 
-![Picture 6.3](./img/67c3452f5040133e8429f083-6.3.png)
-
 Три элемента имеют привязку к одному обработчику события, которое возникает при нажатии правой кнопки мыши или тачпада. Определим этот обработчик в файле кода C#:
 ```cs
 private void Control_MouseDown(object sender, MouseButtonEventArgs e)
