@@ -95,7 +95,8 @@ namespace RoutedEvents
             { }
             else if (e.OriginalSource == opt3)
             { }
-        }        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        }
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
             RadioButton selectedRadio = (RadioButton)e.Source;
             textBlock1.Text = "Вы выбрали: " + selectedRadio.Content.ToString();
@@ -109,8 +110,8 @@ namespace RoutedEvents
                 "Клавиша: " + e.Key + "\r\n" +
                 "Системная клавиша: " + e.SystemKey + "\r\n" +
                 "Повтор: " + e.IsRepeat + "\r\n" +
-                "Нажатие: " + e.IsUp + "\r\n" +
-                "Освобождение: " + e.IsDown + "\r\n" +
+                "Нажатие: " + e.IsDown + "\r\n" +
+                "Освобождение: " + e.IsUp + "\r\n" +
                 "Включение: " + e.IsToggled + "\r\n" +
                 "Модификаторы: " + e.KeyboardDevice.Modifiers.ToString() + "\r\n" +
                 "Элемент фокуса: " + e.KeyboardDevice.FocusedElement.ToString()
