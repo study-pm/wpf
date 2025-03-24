@@ -182,6 +182,7 @@ namespace RoutedEvents
             }
         }
 
+        #region Navigation Events
         private void Window_Initialized(object sender, EventArgs e)
         {
             Debug.WriteLine("Initialized", "MainWindow");
@@ -230,5 +231,6 @@ namespace RoutedEvents
         {
             Debug.WriteLine("Unloaded", "StackPanel");
         }
+        #endregion
     }
 }
