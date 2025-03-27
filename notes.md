@@ -1,26 +1,38 @@
 # Windows Presentation Foundation
 
-- [Введение в WPF](./docs/01_WPF.md)
+<details>
+<summary><a href="./docs/01_WPF.md">01. Introduction / Введение в WPF</a></summary>
+
   - [Особенности платформы WPF](./docs/01_WPF.md#особенности-платформы-wpf)
     - [Преимущества WPF](./docs/01_WPF.md#преимущества-wpf)
     - [Структура проекта WPF](./docs/01_WPF.md#структура-проекта-wpf)
-- [XAML](./docs/02_XAML.md)
+
+</details>
+
+<details>
+<summary><a href="./docs/02_XAML.md">02. XAML / Разметка</a></summary>
+
   - [Введение в язык XAML](./docs/02_XAML.md#введение-в-язык-xaml)
     - [Структура XAML](./docs/02_XAML.md#структура-xaml)
     - [Пространства имен XAML](./docs/02_XAML.md#пространства-имен-xaml)
     - [Элементы и их атрибуты](./docs/02_XAML.md#элементы-и-их-атрибуты)
     - [Специальные символы](./docs/02_XAML.md#специальные-символы)
   - [Файлы отделенного кода](./docs/02_XAML.md#файлы-отделенного-кода)
-    - [Взаимодействие кода C./docs/02_XAML.md# и XAML](./docs/02_XAML.md#взаимодействие-кода-c-и-xaml)
-    - [Создание элементов в коде C./docs/02_XAML.md#](./docs/02_XAML.md#создание-элементов-в-коде-c)
+    - [Взаимодействие кода C-sharp и XAML](./docs/02_XAML.md#взаимодействие-кода-c-и-xaml)
+    - [Создание элементов в коде C-sharp](./docs/02_XAML.md#создание-элементов-в-коде-c)
   - [Сложные свойства и конвертеры](./docs/02_XAML.md#сложные-свойства-и-конвертеры)
     - [Сложные свойства в WPF](./docs/02_XAML.md#сложные-свойства-в-wpf)
     - [Конвертеры типов в WPF](./docs/02_XAML.md#конвертеры-типов-в-wpf)
     - [Конвертеры значений](./docs/02_XAML.md#конвертеры-значений)
-  - [Пространства имен из C./docs/02_XAML.md# в XAML](./docs/02_XAML.md#пространства-имен-из-c-в-xaml)
+  - [Пространства имен из C-sharp в XAML](./docs/02_XAML.md#пространства-имен-из-c-в-xaml)
     - [Преимущества](./docs/02_XAML.md#преимущества)
     - [Проблемы и решения](./docs/02_XAML.md#проблемы-и-решения)
-- [Компоновка](./docs/03_Layout.md)
+
+</details>
+
+<details>
+<summary><a href="./docs/03_Layout.md">03. Layout / Компоновка</a></summary>
+
   - [Введение в компоновку](./docs/03_Layout.md#введение-в-компоновку)
   - [Иерархия классов](./docs/03_Layout.md#иерархия-классов)
   - [Принципы компоновки](./docs/03_Layout.md#принципы-компоновки)
@@ -59,7 +71,12 @@
       - [`VerticalAlignment`](./docs/03_Layout.md#verticalalignment)
     - [Отступы / `Margin`](./docs/03_Layout.md#отступы--margin)
     - [`Panel.ZIndex`](./docs/03_Layout.md#panelzindex)
-- [Control / Элементы управления](./docs/04_Controls.md)
+
+</details>
+
+<details>
+<summary><a href="./docs/04_Controls.md">04. Controls / Элементы управления</a></summary>
+
   - [Обзор элементов управления и их свойств](./docs/04_Controls.md#обзор-элементов-управления-и-их-свойств)
   - [Иерархия классов элементов управления](./docs/04_Controls.md#иерархия-классов-элементов-управления)
   - [Основные свойства элементов управления](./docs/04_Controls.md#основные-свойства-элементов-управления)
@@ -170,7 +187,12 @@
       - [ContextMenu / Контекстное меню](./docs/04_Controls.md#contextmenu--контекстное-меню)
     - [TreeView / Древовидный список](./docs/04_Controls.md#treeview--древовидный-список)
     - [StatusBar / Строка состояния](./docs/04_Controls.md#statusbar--строка-состояния)
-- [UI Elements / Элементы интерфейса](./docs/05_Elements.md)
+
+</details>
+
+<details>
+<summary><a href="./docs/05_Elements.md">05. UI Elements / Элементы интерфейса</a></summary>
+
   - [Visual / Визуальные элементы](./docs/05_Elements.md#visual--визуальные-элементы)
   - [UIElement / Элемент пользовательского интерфейса](./docs/05_Elements.md#uielement--элемент-пользовательского-интерфейса)
   - [FrameworkElement / Элементы фреймворка](./docs/05_Elements.md#frameworkelement--элементы-фреймворка)
@@ -194,7 +216,12 @@
     - [Режимы рисования](./docs/05_Elements.md#режимы-рисования)
     - [Настройка внешнего вида](./docs/05_Elements.md#настройка-внешнего-вида)
     - [Сохранение и загрузка](./docs/05_Elements.md#сохранение-и-загрузка)
-- [События](./docs/06_Events.md#события)
+
+</details>
+
+<details>
+<summary><a href="./docs/06_Events.md">06. Events / События</a></summary>
+
   - [Модель событий в WPF](./docs/06_Events.md#модель-событий-в-wpf)
     - [Маршрутизируемые события](./docs/06_Events.md#маршрутизируемые-события)
       - [Генерация маршрутизируемого события](./docs/06_Events.md#генерация-маршрутизируемого-события)
@@ -230,7 +257,12 @@
     - [Обработка на уровне страницы](#обработка-на-уровне-страницы)
     - [Обработка на уровне главного окна](#обработка-на-уровне-главного-окна)
     - [Обработка на уровне приложения](#обработка-на-уровне-приложения)
-- [Навигация](./docs/07_Navigation.md)
+
+</details>
+
+<details>
+<summary><a href="./docs/07_Navigation.md">07. Navigation / Навигация</a></summary>
+
   - [Основные подходы к навигации](./docs/07_Navigation.md#основные-подходы-к-навигации)
   - [Оконная навигация](./docs/07_Navigation.md#оконная-навигация)
     - [Окно](./docs/07_Navigation.md#окно)
@@ -249,4 +281,5 @@
     - [Служба навигации](./docs/07_Navigation.md#служба-навигации)
       - [Программная навигация](./docs/07_Navigation.md#программная-навигация)
       - [События навигации](./docs/07_Navigation.md#события-навигации)
-- [Доступ к данным](./docs/08_DataAccess.md)
+
+</details>
