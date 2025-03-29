@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{22386482-9730-4A94-AA2B-7808236BE54D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUD", "CRUD\CRUD.csproj", "{C1EA41FB-8187-4922-B1B8-F5FE5180F930}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{22386482-9730-4A94-AA2B-7808236BE54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22386482-9730-4A94-AA2B-7808236BE54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22386482-9730-4A94-AA2B-7808236BE54D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1EA41FB-8187-4922-B1B8-F5FE5180F930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1EA41FB-8187-4922-B1B8-F5FE5180F930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1EA41FB-8187-4922-B1B8-F5FE5180F930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1EA41FB-8187-4922-B1B8-F5FE5180F930}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

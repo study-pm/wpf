@@ -35,7 +35,8 @@ namespace DataAccess
             UsersEntities ctx = new UsersEntities();
 
             // Настройка логирования запросов
-            ctx.Database.Log = (s => System.Diagnostics.Debug.WriteLine(s, "Request"));
+            // ctx.Database.Log = (s => System.Diagnostics.Debug.WriteLine(s, "Request"));
+            ctx.Database.Log = (s => Console.WriteLine(s));
 
             ObjectContext context = (ctx as IObjectContextAdapter).ObjectContext;
 
@@ -60,6 +61,7 @@ namespace DataAccess
             if (Users != null && Users.Any())
             {
                 Debug.WriteLine(Users.First()["Name"].ToString());
+                Console.WriteLine("IF");
             }
             else
             {
@@ -89,6 +91,28 @@ namespace DataAccess
 
             var userCount = (from u in ctx.Users select u).Count();
             Debug.WriteLine("Total users: " + userCount.ToString());
+        }
+
+        private void addBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UsersEntities ctx = new UsersEntities();
+                ctx.Users.Add(new User()
+                {
+                    Name = "Вася",
+                    RoleId = 2
+                });
+
+                ctx.SaveChanges();
+                
+                MessageBox.Show("User successfully added");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
     }
 }
