@@ -389,3 +389,26 @@
       - [Использование отслеживания прокси-объектов (proxies objects)](./docs/08_DataAccess.md#использование-отслеживания-прокси-объектов-proxies-objects)
 
 </details>
+
+<details>
+<summary><a href="./docs/09_Resources.md">09. Resources / Ресурсы</a></summary>
+
+  - [Общий обзор ресурсов](./docs/09_Resources.md#общий-обзор-ресурсов)
+    - [StaticResource и DynamicResource](./docs/09_Resources.md#staticresource-и-dynamicresource)
+    - [Другие типы ресурсов](./docs/09_Resources.md#другие-типы-ресурсов)
+    - [Локальные ресурсы и ресурсы приложения](./docs/09_Resources.md#локальные-ресурсы-и-ресурсы-приложения)
+    - [Ресурсы из отделенного кода](./docs/09_Resources.md#ресурсы-из-отделенного-кода)
+  - [Концепция ресурсов в WPF](./docs/09_Resources.md#концепция-ресурсов-в-wpf)
+    - [Определение ресурсов](./docs/09_Resources.md#определение-ресурсов)
+    - [Управление ресурсами в коде C./docs/09_Resources.md#](./docs/09_Resources.md#управление-ресурсами-в-коде-c)
+    - [Разделяемые ресурсы](./docs/09_Resources.md#разделяемые-ресурсы)
+    - [Примеры использования ресурсов](./docs/09_Resources.md#примеры-использования-ресурсов)
+  - [Статические и динамические ресурсы в WPF](./docs/09_Resources.md#статические-и-динамические-ресурсы-в-wpf)
+    - [Иерархия ресурсов](./docs/09_Resources.md#иерархия-ресурсов)
+    - [Установка динамических ресурсов в коде C./docs/09_Resources.md#](./docs/09_Resources.md#установка-динамических-ресурсов-в-коде-c)
+    - [Элементы StaticResource и DynamicResource](./docs/09_Resources.md#элементы-staticresource-и-dynamicresource)
+  - [Словари ресурсов](./docs/09_Resources.md#словари-ресурсов)
+    - [Класс ResourceDictionary](./docs/09_Resources.md#класс-resourcedictionary)
+    - [Загрузка словаря ресурсов](./docs/09_Resources.md#загрузка-словаря-ресурсов)
+
+</details>
