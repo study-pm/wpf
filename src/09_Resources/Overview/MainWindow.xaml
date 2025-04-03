@@ -1,0 +1,41 @@
+﻿<Window x:Class="Overview.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Overview"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <!--<sys:String x:Key="Label">Items Window:</sys:String>-->
+        <sys:String x:Key="strWindow">Hello, Window world!</sys:String>
+        <sys:String x:Key="strHello">Hello, World!</sys:String>
+        <SolidColorBrush x:Key="btnStyle" Color="Cyan" />
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="2"></Setter>
+            <Setter Property="Padding" Value="10 5"></Setter>
+        </Style>
+        <sys:String x:Key="strStatic">Static</sys:String>
+        <sys:String x:Key="strDynamic">Dynamic</sys:String>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Margin="10" Name="pnlMain">
+            <StackPanel.Resources>
+                <!--<sys:String x:Key="Label">Items StackPanel:</sys:String>-->
+                <sys:String x:Key="strPanel">Hello, Panel world!</sys:String>
+            </StackPanel.Resources>
+            <TextBlock Text="{StaticResource strHello}" FontSize="30" />
+            <Button Name="btnClickMe" Click="btnClickMe_Click" Content="Click Me!" Background="{StaticResource btnStyle}">
+            </Button>
+            <Label Content="{StaticResource Label}" />
+            <ListBox Name="lbResult" />
+            <WrapPanel>
+                <Button Content="{StaticResource textSubmit}" Background="{StaticResource greenColor}" />
+                <Button Content="{StaticResource textCancel}" Background="{StaticResource redColor}" />
+                <Button x:Name="staticResBtn" Content="{StaticResource strStatic}" Click="staticResBtn_Click" />
+                <Button x:Name="dynamicResBtn" Content="{DynamicResource strDynamic}" Click="dynamicResBtn_Click" />
+            </WrapPanel>
+        </StackPanel>
+    </Grid>
+</Window>
