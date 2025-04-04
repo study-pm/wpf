@@ -91,6 +91,16 @@ namespace DataAccess
 
             var userCount = (from u in ctx.Users select u).Count();
             Debug.WriteLine("Total users: " + userCount.ToString());
+
+            User usr = (from u in ctx.Users
+                       where u.Name == "john"
+                       select u).FirstOrDefault();
+
+            usr.Name = "John";
+
+            usr = ctx.Users.Where(u => u.Name == "john").FirstOrDefault();
+            usr.Name = "John";
+            ctx.SaveChanges();
         }
 
         private void addBtn_Click(object sender, RoutedEventArgs e)
