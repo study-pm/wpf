@@ -412,3 +412,8 @@
     - [Загрузка словаря ресурсов](./docs/09_Resources.md#загрузка-словаря-ресурсов)
 
 </details>
+
+<details>
+<summary><a href="./docs/10_Bindings.md">10. Bindings / Привязки</a></summary>
+
+</details>
