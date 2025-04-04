@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <TextBlock x:Key="textCancel" Text="Cancel" FontSize="16" />
-    <TextBlock x:Key="textSubmit" Text="Submit" FontSize="16" />
+    <TextBlock x:Key="textCancel" Text="Cancel" FontSize="16" x:Shared="false" />
+    <TextBlock x:Key="textSubmit" Text="Submit" FontSize="16" x:Shared="true" />
+    <TextBlock x:Key="sharedFalse" x:Shared="false">Shared</TextBlock>
 </ResourceDictionary>

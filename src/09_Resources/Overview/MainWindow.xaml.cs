@@ -52,13 +52,18 @@ namespace Overview
             this.Resources["dynamicButtonBrush"] = new SolidColorBrush(Colors.LimeGreen);
             SolidColorBrush buttonBrush = (SolidColorBrush)this.TryFindResource("dynamicButtonBrush");
             buttonBrush.Color = Colors.LimeGreen;
-            //this.Resources["strDynamic"] = "Dynamic Changed";
-            this.Resources["textCancel"] = "Cancel Changed";
+            this.Resources["strDynamic"] = "Dynamic Changed";
+            // this.Resources["textCancel"] = "Cancel Changed";
         }
 
         private void dynamicLocal_Click(object sender, RoutedEventArgs e)
         {
             pnlMain.Resources["strPanel"] = "Changed";
+        }
+
+        private void staticShared_Click(object sender, RoutedEventArgs e)
+        {
+            wrpPnl.Resources["sharedFalse"] = "Shared Changed";
         }
     }
 }

@@ -30,12 +30,18 @@
             </Button>
             <Label Content="{StaticResource Label}" />
             <ListBox Name="lbResult" />
-            <WrapPanel>
+            <WrapPanel Name="wrpPnl">
+                <WrapPanel.Resources>
+                    <!--<sys:String x:Key="sharedFalse" x:Shared="false">Shared false</sys:String>-->
+                </WrapPanel.Resources>
                 <Button Content="{StaticResource textSubmit}" Background="{StaticResource greenColor}" />
                 <Button Content="{StaticResource textCancel}" Background="{StaticResource redColor}" />
                 <Button x:Name="staticResBtn" Content="{StaticResource strStatic}" Click="staticResBtn_Click" />
                 <Button x:Name="dynamicResBtn" Content="{DynamicResource strDynamic}" Click="dynamicResBtn_Click" />
-                <Button x:Name="dynamicLocal" Content="{DynamicResource strPanel}" Click="dynamicLocal_Click"  />
+                <Button x:Name="dynamicLocal" Content="{StaticResource strPanel}" Click="dynamicLocal_Click"  />
+                <Button Content="{DynamicResource strPanel}" Click="dynamicLocal_Click" />
+                <Button x:Name="staticShared" Content="{StaticResource sharedFalse}" Click="staticShared_Click" />
+                <Button x:Name="dynamicShared" Content="{DynamicResource sharedFalse}" Click="staticShared_Click" />
             </WrapPanel>
         </StackPanel>
     </Grid>
