@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameNavigation", "FrameNav
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStartupEvt", "AppStartupEvt\AppStartupEvt.csproj", "{91A05642-A468-4ED6-A004-B73E6662508E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoleNavigation", "RoleNavigation\RoleNavigation.csproj", "{29650DC3-77AC-446C-AFE6-C1DC1FF34ACD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{91A05642-A468-4ED6-A004-B73E6662508E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91A05642-A468-4ED6-A004-B73E6662508E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91A05642-A468-4ED6-A004-B73E6662508E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29650DC3-77AC-446C-AFE6-C1DC1FF34ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29650DC3-77AC-446C-AFE6-C1DC1FF34ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29650DC3-77AC-446C-AFE6-C1DC1FF34ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29650DC3-77AC-446C-AFE6-C1DC1FF34ACD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

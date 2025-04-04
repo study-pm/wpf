@@ -1,0 +1,16 @@
+﻿<Window x:Class="RoleNavigation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RoleNavigation"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <Frame x:Name="mainFrm" Source="Pages/GuestPg.xaml" NavigationUIVisibility="Hidden"></Frame>
+        <DockPanel MaxWidth="400" HorizontalAlignment="Center">
+            <Button x:Name="backBtn" DockPanel.Dock="Left" Width="100" Click="backBtn_Click">Back</Button>
+            <Button x:Name="forwardBtn" DockPanel.Dock="Right" Width="100" Click="forwardBtn_Click">Forward</Button>
+        </DockPanel>
+    </StackPanel>
+</Window>
