@@ -37,9 +37,9 @@ namespace Overview
             lbResult.Items.Add(this.FindResource("strWindow").ToString());
             lbResult.Items.Add(Application.Current.FindResource("strApp").ToString());
 
-            lbResult.Items.Add(pnlMain.FindResource("strPanel").ToString());
-            lbResult.Items.Add(pnlMain.FindResource("strWindow").ToString());
-            lbResult.Items.Add(pnlMain.FindResource("strApp").ToString());
+            lbResult.Items.Add(pnlMain.FindResource("strPanel"));
+            lbResult.Items.Add(pnlMain.FindResource("strWindow"));
+            lbResult.Items.Add(pnlMain.FindResource("strApp"));
         }
 
         private void staticResBtn_Click(object sender, RoutedEventArgs e)
@@ -52,7 +52,13 @@ namespace Overview
             this.Resources["dynamicButtonBrush"] = new SolidColorBrush(Colors.LimeGreen);
             SolidColorBrush buttonBrush = (SolidColorBrush)this.TryFindResource("dynamicButtonBrush");
             buttonBrush.Color = Colors.LimeGreen;
-            this.Resources["strDynamic"] = "Dynamic Changed";
+            //this.Resources["strDynamic"] = "Dynamic Changed";
+            this.Resources["textCancel"] = "Cancel Changed";
+        }
+
+        private void dynamicLocal_Click(object sender, RoutedEventArgs e)
+        {
+            pnlMain.Resources["strPanel"] = "Changed";
         }
     }
 }

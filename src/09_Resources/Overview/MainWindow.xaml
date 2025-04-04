@@ -12,10 +12,6 @@
         <sys:String x:Key="strWindow">Hello, Window world!</sys:String>
         <sys:String x:Key="strHello">Hello, World!</sys:String>
         <SolidColorBrush x:Key="btnStyle" Color="Cyan" />
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="2"></Setter>
-            <Setter Property="Padding" Value="10 5"></Setter>
-        </Style>
         <sys:String x:Key="strStatic">Static</sys:String>
         <sys:String x:Key="strDynamic">Dynamic</sys:String>
     </Window.Resources>
@@ -24,6 +20,10 @@
             <StackPanel.Resources>
                 <!--<sys:String x:Key="Label">Items StackPanel:</sys:String>-->
                 <sys:String x:Key="strPanel">Hello, Panel world!</sys:String>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="2"></Setter>
+                    <Setter Property="Padding" Value="10 5"></Setter>
+                </Style>
             </StackPanel.Resources>
             <TextBlock Text="{StaticResource strHello}" FontSize="30" />
             <Button Name="btnClickMe" Click="btnClickMe_Click" Content="Click Me!" Background="{StaticResource btnStyle}">
@@ -35,6 +35,7 @@
                 <Button Content="{StaticResource textCancel}" Background="{StaticResource redColor}" />
                 <Button x:Name="staticResBtn" Content="{StaticResource strStatic}" Click="staticResBtn_Click" />
                 <Button x:Name="dynamicResBtn" Content="{DynamicResource strDynamic}" Click="dynamicResBtn_Click" />
+                <Button x:Name="dynamicLocal" Content="{DynamicResource strPanel}" Click="dynamicLocal_Click"  />
             </WrapPanel>
         </StackPanel>
     </Grid>
