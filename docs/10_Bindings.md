@@ -22,6 +22,9 @@
       - [Свойство Source](#свойство-source-1)
       - [Свойство RelativeSource](#свойство-relativesource-1)
       - [Свойство DataContext](#свойство-datacontext-1)
+  - [Привязка данных](#привязка-данных)
+    - [Режимы привязки](#режимы-привязки-2)
+    - [Особенности](#особенности)
 
 ### Введение в привязку
 В WPF привязка (binding) является мощным инструментом программирования, без которого не обходится ни одно серьезное приложение. <dfn title="привязка">Привязка</dfn> в WPF — это мощный механизм, позволяющий связывать свойства элементов управления с данными из различных источников. Это позволяет синхронизировать значения свойств двух разных объектов, что упрощает представление и взаимодействие с данными в приложениях.
@@ -737,3 +740,75 @@ Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, Anc
 ```
 
 Когда информация об источнике отсутствует в выражении привязки, WPF проверяет свойство `DataContext` элемента. Если оно равно `null`, WPF ищет в дереве элементов первый контекст данных, отличный от `null`. (Изначально свойства `DataContext` всех элементов равны `null`.) Если подходящий контекст данных обнаружен, то он используется для привязки. Если же нет, то выражение привязки не передает никакого значения целевому свойству.
+
+### Привязка данных
+<dfn title="привязка данных">Привязка данных</dfn> (data binding) в графической системе WPF представляет собою отношение, которое сообщает WPF о необходимости извлечения данных из свойства исходного объекта (Source) и использования её для задания значения некоторого свойства целевого объекта (Target) (и, в некоторых случаях, наоборот).
+
+Объектом-источником может быть как элемент WPF, так и объект ADO.NET или пользовательский объект, хранящий данные.
+
+#### Режимы привязки
+В выражении привязки с помощью параметра `Mode` можно задать одно из следующих пяти значений режима привязки:
+1) `OneWay` – целевое свойство обновляется при изменении исходного свойства.
+
+2) `OneTime` – первоначально значение исходного свойства копируется в целевое свойство, но дальнейшие изменения исходного свойства не учитываются.
+
+3) `TwoWay` — целевое свойство обновляется при изменении исходного свойства, исходное свойство обновляется при изменении целевое свойства.
+
+4) `OneWayToSource` – исходное свойство обновляется при изменении целевое свойства.
+
+5) `Default` – значение по умолчанию. Если целевое свойство устанавливается пользователем (например, `TextBox.Text`, `Slider.Value`, `CheckBox.IsChecked`, …), то это `TwoWay`, в остальных случаях – это `OneWay`.
+
+Пример выражения привязки с параметром Mode: `{Binding ElementName=slider1, Path=Value, Mode=OneTime}`.
+
+#### Особенности
+Свойство `EditingMode` (тип данных `InkCanvasEditingMode`) элемента управления `InkCanvas` нельзя напрямую связать с текстовым свойством выпадающего списка `ComboBox` или списка `ListBox`, т.к. в этом случае будет несовпадение типов. Для привязки данных необходимо, чтобы тип элементов списка совпадал с типом свойства `EditingMode`. Для этой цели необходимо добавить в  ресурсы окна приложения (элемент `Windows.Resources`) массив (элемент `x:Array`) элементов типа `InkCanvasEditingMode` (атрибут `x:Type`), данному ресурсу необходимо задать ключ (атрибут `x:Key`), который необходимо указать в свойстве `ItemSource` списка `ListBox` или выпадающего списка `ComboBox`. В этом случае можно будет осуществить привязку данных между свойством `EditingMode` и выделенным элементом списка:
+```xml
+<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+  <Window.Resources>
+    <x:Array x:Key="MyEditingModes" x:Type="{x:Type InkCanvasEditingMode}">
+      <x:Static Member="InkCanvasEditingMode.Ink"/>
+      <x:Static Member="InkCanvasEditingMode.Select"/>
+      <x:Static Member="InkCanvasEditingMode.EraseByPoint"/>
+      <x:Static Member="InkCanvasEditingMode.EraseByStroke"/>
+    </x:Array>
+  </Window.Resources>
+  <StackPanel>
+    <InkCanvas EditingMode="{Binding ElementName=lbEditingModes, Path=SelectedValue}" />
+    <ListBox x:Name="lbEditingModes" ItemsSource="{StaticResource MyEditingModes}" />
+  </StackPanel>
+</Window>
+```
+
+Аналогичным образом можно задать привязку данных между свойством  `DefaultDrawingAttributes` и выделенным элементом списка (в данном случае массив  `x:Array` будет содержать элементы типа `DrawingAttributes`):
+```xml
+<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+  <Window.Resources>
+    <x:Array x:Key="MyDrawingAttributes" x:Type="{x:Type DrawingAttributes}">
+      <DrawingAttributes Color="Red" Width="3" Height="3"/>
+      <DrawingAttributes Color="Green" Width="10" Height="10"/>
+      <DrawingAttributes Color="Blue" Width="15" Height="15"/>
+    </x:Array>
+  </Window.Resources>
+  <StackPanel>
+    <InkCanvas DefaultDrawingAttributes="{Binding ElementName=lbColors, Path=SelectedValue}" />
+    <ListBox x:Name="lbColors" ItemsSource="{StaticResource MyDrawingAttributes}" />
+  </StackPanel>
+</Window>
+```
+
+Недостатком последнего примера является то, что все элементы в списке выводятся с текстом «System.Windows.Ink.DrawingAttributes». Для придания элементам списка осмысленного содержания, необходимо определить шаблон элементов (`ListBox.ItemTemplate`), в котором определить, каким образом элементы списка будут отображены на экране (например, в виде текстового блока, содержащего поле `Color`):
+```xml
+<ListBox x:Name="lbColors" ItemsSource="{StaticResource MyDrawingAttributes}">
+  <ListBox.ItemTemplate>
+    <DataTemplate>
+      <TextBlock Text="{Binding Path=Color}"></TextBlock>
+    </DataTemplate>
+  </ListBox.ItemTemplate>
+</ListBox>
+```
