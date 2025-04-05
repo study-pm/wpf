@@ -1,18 +1,58 @@
 ## Bindings / Привязки
 
 - [Bindings / Привязки](#bindings--привязки)
+  - [Введение в привязку](#введение-в-привязку)
+    - [Классификация привязок](#классификация-привязок)
+    - [Работа с привязкой в C#](#работа-с-привязкой-в-c)
+    - [Режимы привязки](#режимы-привязки)
+    - [Обновление привязки. UpdateSourceTrigger](#обновление-привязки-updatesourcetrigger)
+    - [Свойство Source](#свойство-source)
+    - [Свойство TargetNullValue](#свойство-targetnullvalue)
+    - [Свойство RelativeSource](#свойство-relativesource)
+    - [Свойство IsAsync](#свойство-isasync)
+    - [Свойство DataContext](#свойство-datacontext)
   - [Привязка элементов](#привязка-элементов)
     - [Связывание элементов](#связывание-элементов)
       - [Ошибки привязки](#ошибки-привязки)
-    - [Режимы привязки](#режимы-привязки)
+    - [Режимы привязки](#режимы-привязки-1)
     - [Создание привязки в коде](#создание-привязки-в-коде)
     - [Множественные привязки](#множественные-привязки)
     - [Обновление привязок](#обновление-привязок)
     - [Привязка к объектам](#привязка-к-объектам)
-      - [Свойство Source](#свойство-source)
-      - [Свойство RelativeSource](#свойство-relativesource)
-      - [Свойство DataContext](#свойство-datacontext)
+      - [Свойство Source](#свойство-source-1)
+      - [Свойство RelativeSource](#свойство-relativesource-1)
+      - [Свойство DataContext](#свойство-datacontext-1)
 
+### Введение в привязку
+В WPF привязка (binding) является мощным инструментом программирования, без которого не обходится ни одно серьезное приложение. <dfn title="привязка">Привязка</dfn> в WPF — это мощный механизм, позволяющий связывать свойства элементов управления с данными из различных источников. Это позволяет синхронизировать значения свойств двух разных объектов, что упрощает представление и взаимодействие с данными в приложениях.
+
+Привязка подразумевает взаимодействие двух объектов: *источника* и *приемника*. Объект-приемник создает привязку к определенному свойству объекта-источника. В случае модификации объекта-источника, объект-приемник также будет модифицирован.
+
+Например, простейшая форма с использованием привязки:
+```xml
+<Window x:Class="BindingApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BindingApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="250" Width="300">
+    <StackPanel>
+        <TextBox x:Name="myTextBox" Height="30" />
+        <TextBlock x:Name="myTextBlock" Text="{Binding ElementName=myTextBox,Path=Text}" Height="30" />
+    </StackPanel>
+</Window>
+```
+
+Для определения привязки используется выражение типа:
+```xml
+{Binding ElementName=Имя_объекта-источника, Path=Свойство_объекта-источника}
+```
+
+То есть в данном случае у нас элемент `TextBox` является источником, а `TextBlock` — приемником привязки. Свойство `Text` элемента `TextBlock` привязывается к свойству `Text` элемента `TextBox`. В итоге при осуществлении ввода в текстовое поле синхронно будут происходить изменения в текстовом блоке.
+
+#### Классификация привязок
 В WPF существует несколько видов привязок, которые позволяют связывать свойства элементов управления с данными из различных источников. Основные виды привязок включают:
 
 1. <dfn title="привязка элементов">Привязка элементов</dfn> — это механизм, позволяющий связывать свойства различных элементов управления между собой. Это позволяет синхронизировать значения свойств элементов, что упрощает создание динамического и отзывчивого пользовательского интерфейса.
@@ -49,6 +89,244 @@
        </TextBlock.Text>
    </TextBlock>
    ```
+
+#### Работа с привязкой в C#
+Ключевым объектом при создании привязки является объект `System.Windows.Data.Binding`.
+
+Определение:
+```cs
+public class Binding : System.Windows.Data.BindingBase
+```
+
+Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.data.binding?view=windowsdesktop-9.0
+
+Используя этот объект мы можем получить уже имеющуюся привязку для элемента:
+```cs
+Binding binding = BindingOperations.GetBinding(myTextBlock, TextBlock.TextProperty);
+```
+
+В данном случае получаем привязку для свойства зависимостей `TextProperty` элемента `myTextBlock`.
+
+Также можно полностью установить привязку в коде C#:
+```cs
+public MainWindow()
+{
+    InitializeComponent();
+
+    Binding binding = new Binding();
+
+    binding.ElementName = "myTextBox"; // элемент-источник
+    binding.Path = new PropertyPath("Text"); // свойство элемента-источника
+    myTextBlock.SetBinding(TextBlock.TextProperty, binding); // установка привязки для элемента-приемника
+}
+```
+
+Если в дальнейшем нам станет не нужна привязка, то мы можем воспользоваться классом **`BindingOperations`** и его методами **`ClearBinding()`** (удаляет одну привязку) и **`ClearAllBindings()`** (удаляет все привязки для данного элемента)
+```cs
+BindingOperations.ClearBinding(myTextBlock, TextBlock.TextProperty);
+```
+
+или
+```cs
+BindingOperations.ClearAllBindings(myTextBlock);
+```
+
+Некоторые свойства класса **`Binding`**:
+
+- **`ElementName`**: имя элемента, к которому создается привязка
+
+- **`IsAsync`**: если установлено в `True`, то использует асинхронный режим получения данных из объекта. По умолчанию равно `False`
+
+- **`Mode`**: режим привязки
+
+- **`Path`**: ссылка на свойство объекта, к которому идет привязка
+
+- **`TargetNullValue`**: устанавливает значение по умолчанию, если привязанное свойство источника привязки имеет значение `null`
+
+- **`RelativeSource`**: создает привязку относительно текущего объекта
+
+- **`Source`**: указывает на объект-источник, если он не является элементом управления.
+
+- **`XPath`**: используется вместо свойства `path` для указания пути к xml-данным
+
+#### Режимы привязки
+Свойство **`Mode`** объекта `Binding`, которое представляет режим привязки, может принимать следующие значения:
+
+- **`OneWay`**: свойство объекта-приемника изменяется после модификации свойства объекта-источника.
+
+- **`OneTime`**: свойство объекта-приемника устанавливается по свойству объекта-источника только один раз. В дальнейшем изменения в источнике никак не влияют на объект-приемник.
+
+- **`TwoWay`**: оба объекта — приемник и источник — могут изменять привязанные свойства друг друга.
+
+- **`OneWayToSource`**: объект-приемник, в котором объявлена привязка, меняет объект-источник.
+
+- **`Default`**: по умолчанию (если меняется свойство `TextBox.Text`, то имеет значение `TwoWay`, в остальных случаях `OneWay`).
+
+Применение режима привязки:
+```xml
+<StackPanel>
+    <TextBox x:Name="textBox1" Height="30" />
+    <TextBox x:Name="textBox2" Height="30" Text="{Binding ElementName=textBox1, Path=Text, Mode=TwoWay}" />
+</StackPanel>
+```
+
+#### Обновление привязки. UpdateSourceTrigger
+Односторонняя привязка от источника к приемнику практически мгновенно изменяет свойство приемника. Но если мы используем двустороннюю привязку в случае с текстовыми полями (как в примере выше), то при изменении приемника свойство источника не изменяется мгновенно. Так, в примере выше, чтобы текстовое поле-источник изменилось, нам надо перевести фокус с текстового поля-приемника. И в данном случае в дело вступает свойство **`UpdateSourceTrigger`** класса `Binding`, которое задает, как будет происходить обновление. Это свойство в качестве принимает одно из значений перечисления `UpdateSourceTrigger`:
+
+- `PropertyChanged`: источник привязки обновляется сразу после обновления свойства в приемнике
+
+- `LostFocus`: источник привязки обновляется только после потери фокуса приемником
+
+- `Explicit`: источник не обновляется до тех пор, пока не будет вызван метод `BindingExpression.UpdateSource()`
+
+- `Default`: значение по умолчанию. Для большинства свойств это значение `PropertyChanged`. А для свойства `Text` элемента `TextBox` это значение `LostFocus`
+
+В данном случае речь идет об обновлении источника привязки после изменения приемника в режимах `OneWayToSource` или `TwoWay`. То есть чтобы у нас оба текстовых поля, которые связаны режимом `TwoWay`, моментально обновлялись после изменения одного из них, надо использовать значение `UpdateSourceTrigger.PropertyChanged`:
+```xml
+<StackPanel>
+    <TextBox x:Name="textBox1" Height="30" />
+    <TextBox x:Name="textBox2" Height="30"
+        Text="{Binding ElementName=textBox1, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+</StackPanel>
+```
+
+#### Свойство Source
+Свойство `Source` позволяет установить привязку даже к тем объектам, которые не являются элементами управления WPF. Например, определим класс `Phone`:
+```cs
+class Phone
+{
+    public string Title { get; set; }
+    public string Company { get; set; }
+    public int Price { get; set; }
+}
+```
+
+Теперь создадим объект этого класса и определим к нему привязку:
+```xml
+<Window x:Class="BindingApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BindingApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="150" Width="300">
+    <Window.Resources>
+        <local:Phone x:Key="nexusPhone" Title="Nexus X5" Company="Google" Price="25000" />
+    </Window.Resources>
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Модель:" Foreground="White"/>
+        <TextBlock x:Name="titleTextBlock" Text="{Binding Source={StaticResource nexusPhone}, Path=Title}"
+                        Foreground="White" Grid.Column="1"/>
+        <TextBlock Text="Цена:" Foreground="White" Grid.Row="1"/>
+        <TextBlock x:Name="priceTextBlock" Text="{Binding Source={StaticResource nexusPhone}, Path=Price}"
+                        Foreground="White" Grid.Column="1" Grid.Row="1"/>
+    </Grid>
+</Window>
+```
+
+#### Свойство TargetNullValue
+На случай, если свойство в источнике привязки вдруг имеет значение `null`, то есть оно не установлено, мы можем задать некоторое значение по умолчанию. Например:
+```xml
+<Window.Resources>
+    <local:Phone x:Key="nexusPhone" Company="Google" Price="25000" />
+</Window.Resources>
+<StackPanel>
+    <TextBlock x:Name="titleTextBlock"
+        Text="{Binding Source={StaticResource nexusPhone}, Path=Title, TargetNullValue=Текст по умолчанию}" />
+</StackPanel>
+```
+
+#### Свойство RelativeSource
+Свойство **`RelativeSource`** позволяет установить привязку относительно элемента-источника, который связан какими-нибудь отношениями с элементом-приемником. Например, элемент-источник может быть одним из внешних контейнеров для элемента-приемника. Либо источником и приемником может быть один и тот же элемент.
+
+Для установки этого свойства используется одноименный объект **`RelativeSource`**. У этого объекта есть свойство **`Mode`**, которое задает способ привязки. Оно принимает одно из значений перечисления **`RelativeSourceMode`**:
+
+- `Self`: привязка осуществляется к свойству этого же элемента. То есть элемент-источник привязки в то же время является и приемником привязки.
+
+- `FindAncestor`: привязка осуществляется к свойству элемента-контейнера.
+
+Например, совместим источник и приемник привязке в самом элементе:
+```xml
+<TextBox Text="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+```
+
+Здесь текст и фоновый цвет текстового поля связаны двусторонней привязкой. В итоге мы можем увидеть в поле числовое значение цвета, поменять его, и вместе с ним изменится и фон поля.
+
+Привязка к свойствам контейнера:
+```xml
+<Grid Background="Black">
+    <TextBlock Foreground="White"
+        Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=Background}" />
+</Grid>
+```
+
+При использовании режима `FindAncestor`, то есть привязке к контейнеру, необходимо еще указывать параметр **`AncestorType`** и передавать ему тип контейнера в виде выражения `AncestorType={x:Type Тип_элемента-контейнера}`. При этом в качестве контейнера мы могли бы выбрать любой контейнер в дереве элементов, в частности, в данном случае кроме `Grid` таким контейнером также является элемент `Window`.
+
+#### Свойство IsAsync
+Свойство `IsAsync` класса `Binding` в WPF используется для указания, следует ли получать и задавать значения привязки асинхронно. Это означает, что если `IsAsync` установлено в `true`, привязка будет выполняться в асинхронном режиме, что может быть полезно для предотвращения блокировки интерфейса пользователя при работе с медленными операциями, такими как загрузка данных из внешних источников.
+
+Однако, стоит отметить, что использование `IsAsync` может не всегда быть самым эффективным или правильным решением для всех сценариев. Например, если источник данных доступен быстро, использование асинхронной привязки может не дать заметных преимуществ и может даже привести к дополнительной сложности.
+
+Пример использования `IsAsync` в XAML:
+```xml
+<Run Text="{Binding Source={StaticResource nexusPhone}, Path=Discount, IsAsync=True}" />
+```
+
+В коде-behind это можно установить так:
+```cs
+var binding = new Binding("Discount") { IsAsync = true };
+```
+
+Несмотря на то, что `IsAsync` может быть полезен в определенных ситуациях, его применение должно быть тщательно обосновано, чтобы избежать ненужной сложности и потенциальных проблем с синхронизацией данных.
+
+Кроме того, стоит отметить, что для более сложных асинхронных операций, таких как загрузка данных из внешних источников, могут быть более подходящими другие механизмы, такие как использование `ObjectDataProvider` с `IsAsynchronous=true` или реализация асинхронных команд в MVVM-паттерне.
+
+#### Свойство DataContext
+У объекта `FrameworkElement`, от которого наследуются элементы управления, есть интересное свойство `DataContext`. Оно позволяет задавать для элемента и вложенных в него элементов некоторый контекст данных. Тогда вложенные элементы могут использовать объект `Binding` для привязки к конкретным свойствам этого контекста. Например, используем ранее определенный класс `Phone` и создадим контекст данных из объекта этого класса:
+```xml
+<Window x:Class="BindingApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BindingApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="150" Width="300">
+    <Window.Resources>
+        <local:Phone x:Key="nexusPhone" Title="Nexus X5" Company="Google" Price="25000" />
+    </Window.Resources>
+    <Grid Background="Black" DataContext="{StaticResource nexusPhone}" TextBlock.Foreground="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Модель" />
+        <TextBlock Text="{Binding Title}" Grid.Row="1" />
+        <TextBlock Text="Производитель" Grid.Column="1"/>
+        <TextBlock Text="{Binding Company}" Grid.Column="1" Grid.Row="1" />
+        <TextBlock Text="Цена" Grid.Column="2" />
+        <TextBlock Text="{Binding Price}" Grid.Column="2" Grid.Row="1" />
+    </Grid>
+</Window>
+```
+
+![Picture 10.4](./img/67d423945040133e8429f1a8-10.4.png)
+
+Таким образом мы задаем свойству `DataContext` некоторый динамический или статический ресурс. Затем осуществляем привязку к этому ресурсу.
 
 ### Привязка элементов
 
