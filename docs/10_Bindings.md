@@ -25,6 +25,7 @@
   - [Привязка данных](#привязка-данных)
     - [Режимы привязки](#режимы-привязки-2)
     - [Особенности](#особенности)
+    - [Привязка к данным в отделенном коде](#привязка-к-данным-в-отделенном-коде)
   - [Интерфейс INotifyPropertyChanged](#интерфейс-inotifypropertychanged)
 
 ### Введение в привязку
@@ -813,6 +814,117 @@ Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, Anc
   </ListBox.ItemTemplate>
 </ListBox>
 ```
+
+#### Привязка к данным в отделенном коде
+Чтобы привязать разметку к данным из CodeBehind в WPF, вы можете использовать несколько подходов:
+
+1. **Привязка через `DataContext`**. Один из наиболее распространенных способов привязать данные к разметке — это использовать свойство `DataContext`. Вы можете задать `DataContext` для окна или любого другого элемента в CodeBehind и затем использовать привязку в XAML.
+
+    C#:
+    ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            // Создание объекта с данными
+            var data = new MyData { Name = "John", Age = 30 };
+
+            // Установка DataContext
+            DataContext = data;
+        }
+    }
+
+    public class MyData
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+    ```
+
+    XAML:
+    ```xml
+    <Window x:Class="MyApp.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            Title="MainWindow" Height="350" Width="525">
+        <StackPanel>
+            <TextBlock Text="{Binding Name}" />
+            <TextBlock Text="{Binding Age}" />
+        </StackPanel>
+    </Window>
+    ```
+
+2. **Привязка с помощью объекта `Binding`**. Вы также можете создать привязку программно, используя объект `Binding`. Это может быть полезно, когда вам нужно динамически изменять привязку или когда вы не можете использовать XAML.
+
+    C#:
+    ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            // Создание объекта с данными
+            var data = new MyData { Name = "John", Age = 30 };
+
+            // Создание привязки
+            Binding binding = new Binding("Name");
+            binding.Source = data;
+
+            // Применение привязки
+            txtName.SetBinding(TextBlock.TextProperty, binding);
+        }
+    }
+
+    public class MyData
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+    ```
+
+    XAML:
+    ```xml
+    <Window x:Class="MyApp.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            Title="MainWindow" Height="350" Width="525">
+        <StackPanel>
+            <TextBlock x:Name="txtName" />
+        </StackPanel>
+    </Window>
+    ```
+
+3. **Использование `INotifyPropertyChanged`**. Если ваши данные могут изменяться во время выполнения приложения, вы должны реализовать интерфейс `INotifyPropertyChanged`, чтобы уведомлять привязку об изменениях.
+
+    C#:
+    ```cs
+    public class MyData : INotifyPropertyChanged
+    {
+        private string _name;
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+    ```
+
+    Этот подход позволяет поддерживать актуальность данных в интерфейсе при их изменении.
 
 ### Интерфейс INotifyPropertyChanged
 В прошлой теме использовался объект `Phone` для привязки к текстовым блокам. Однако если мы изменим его, содержимое текстовых блоков не изменится. Например, добавим в окно приложения кнопку:
