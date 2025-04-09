@@ -22,6 +22,8 @@
     - [Управление журналом навигации](#управление-журналом-навигации)
     - [Добавление в журнал специальных элементов](#добавление-в-журнал-специальных-элементов)
   - [Страничные функции](#страничные-функции)
+  - [Особенности реализации навигационного функционала](#особенности-реализации-навигационного-функционала)
+    - [Доступ к объектам главного окна со страниц](#доступ-к-объектам-главного-окна-со-страниц)
 
 ### Основные подходы к навигации
 В WPF существуют несколько видов навигации, которые можно использовать для создания приложений с разными моделями взаимодействия. Основные виды навигации включают:
@@ -848,3 +850,99 @@ this.NavigationService.Navigate(pageFunction);
 Обычно метод `OnReturn()` обозначает конец задачи. После этого у пользователя не должно быть возможности возврата обратно к `PageFunction`. Для этого можно воспользоваться методом `NavigationService.RemoveBackEntry()`, но имеется более простой подход. Каждый класс `PageFunction` также имеет свойство по имени `RemoveFromJournal`. Если установить это свойство в `true`, страница автоматически удаляется из хронологии при вызове метода `OnReturn()`.
 
 Добавление в приложение класса `PageFunction` даст возможность использовать другую топологию навигации, например, назначить одну страницу центральным ядром и позволить пользователям выполнять различные задачи через страничные функции.
+
+### Особенности реализации навигационного функционала
+
+#### Доступ к объектам главного окна со страниц
+Страницам, загружаемым во фрейм главного окна, можно получить доступ к переменным родительского окна. Вот несколько способов сделать это:
+
+1. **Использование статических переменных**: Если переменные родительского окна объявлены как статические, то к ним можно получить доступ из любой части приложения.
+
+    ```cs
+    public partial class MainWindow : Window
+    {
+        public static string SomeVariable { get; set; }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+    }
+
+    // В любой другой части приложения
+    public partial class SomePage : Page
+    {
+        public SomePage()
+        {
+            InitializeComponent();
+            string value = MainWindow.SomeVariable;
+        }
+    }
+    ```
+
+2. **Передача ссылки на родительское окно**: Можно передать ссылку на родительское окно в страницу при ее создании.
+
+    ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void NavigateToPage(string pageName)
+        {
+            if (pageName == "SomePage")
+            {
+                SomePage page = new SomePage(this); // Передаем ссылку на родительское окно
+                Mainfrm.Navigate(page);
+            }
+        }
+    }
+
+    public partial class SomePage : Page
+    {
+        private MainWindow _parentWindow;
+
+        public SomePage(MainWindow parentWindow)
+        {
+            InitializeComponent();
+            _parentWindow = parentWindow;
+        }
+
+        // Теперь можно использовать переменные родительского окна
+        private void SomeMethod()
+        {
+            string value = _parentWindow.SomeVariable;
+        }
+    }
+    ```
+
+3. **Использование `DataContext`**: Если страница загружается во фрейм, то она наследует `DataContext` родительского окна. Если переменные родительского окна находятся в его `DataContext`, то к ним можно получить доступ из страницы.
+
+    ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = new ViewModel(); // ViewModel содержит переменные
+        }
+    }
+
+    public partial class SomePage : Page
+    {
+        public SomePage()
+        {
+            InitializeComponent();
+        }
+
+        private void SomeMethod()
+        {
+            ViewModel vm = (ViewModel)DataContext;
+            string value = vm.SomeVariable;
+        }
+    }
+    ```
+
+Эти подходы позволяют страницам, загружаемым во фрейм главного окна, получить доступ к переменным родительского окна.
