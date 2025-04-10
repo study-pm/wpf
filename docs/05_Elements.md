@@ -20,6 +20,10 @@
     - [Popup и ToolTip](#popup-и-tooltip)
     - [Скрытие окна](#скрытие-окна)
   - [Image / Изображение](#image--изображение)
+    - [Свойство Source](#свойство-source)
+    - [Свойство Stretch](#свойство-stretch)
+    - [Программное создание и динамическая загрузка изображений](#программное-создание-и-динамическая-загрузка-изображений)
+    - [Прочие особенности](#прочие-особенности)
   - [InkCanvas / Полотно](#inkcanvas--полотно)
     - [Режимы рисования](#режимы-рисования)
     - [Настройка внешнего вида](#настройка-внешнего-вида)
@@ -806,9 +810,35 @@ public class Image : System.Windows.FrameworkElement, System.Windows.Markup.IUri
 
 Описание: https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=windowsdesktop-9.0
 
+**`Image`** является весьма универсальным элементом, содержащим множество полезных опций и методов. Но сперва рассмотрим наиболее общий пример встраивания изображения в окно WPF приложения:
+
+```xml
+<Image Source="https://upload.wikimedia.org/wikipedia/commons/3/30/Googlelogo.png" />
+```
+
+Свойство **`Source`**, используемое в данном примере для указания изображения для вывода, — вероятно одно из самых важных свойств данного элемента. Поэтому с ним стоит разобраться более обстоятельно.
+
+#### Свойство Source
 Свойство **`Source`** позволяет задать путь к изображению, например:
 ```xml
 <Image Source="myPhoto.jpg" />
+```
+
+Как видно из первого примера, свойство **`Source`** позволяет легко указать, какое именно изображение должно быть отображено внутри элемента `Image` — в том конкретном примере было использовано изображение из удаленного источника, которое элемент `Image` автоматически подгрузит и отобразит сразу, как только оно станет доступным. Этот пример прекрасно демонстрирует универсальность элемента `Image`, но в большинстве случаев необходимо встраивать изображение в само приложение, а не загружать его из удаленного источника. Это может быть достигнуто с той же легкостью.
+
+Как известно, в проект можно добавлять файлы ресурсов — они могут существовать в рамках текущего проекта в Visual Studio и отображаться в *Обозревателе Решений* (*Solution Explorer*), равно как и любой другой относящийся к WPF файл (окна, пользовательские элементы управления и др.). Характерным примером такого файла ресурса как раз является изображение, которое можно просто скопировать в соответствующую папку проекта с последующим включением его в проект. Впоследствии этот файл будет скомпилирован в ваше приложение (если только специально не указать VS не делать этого), после чего станет доступным с помощью формата URL, используемого для указания местоположения ресурсов. Таким образом, предполагая наличие изображения с названием "google.png" внутри каталога под именем "Images", можно определить следующий синтаксис доступа:
+```xml
+<Image Source="/WpfTutorialSamples;component/Images/google.png" />
+```
+
+URI подобного вида, часто называемые "**Pack URI**", — сами по себе отдельная тема с множеством нюансов, но в данный момент можно обратить внимание на то, что эта сущность глобально состоит из двух компонентов:
+
+- первая часть (*/WpfTutorialSamples;component*), в которой имя сборки (в данном случае **WpfTutorialSamples**) объединено со словом the word "component"
+- вторая часть, в которой определен относительный путь ресурса: */Images/google.png*
+
+Используя данный синтаксис, можно легко ссылаться на ресурсы, включенные в приложение. Для упрощения **фреймворк WPF также принимает обычный относительный URL** — и в большинстве случаев этого будет достаточно, если только работа с ресурсами приложения не предполагает каких-то сложных сценариев. Тот же код с использованием простого относительного URL мог бы выглядеть так:
+```xml
+<Image Source="/Images/google.png" />
 ```
 
 Путь может быть как локальным, так и сетевым. Соответственно, могут быть разные варианты указания источника изображения.
@@ -858,19 +888,53 @@ public class Image : System.Windows.FrameworkElement, System.Windows.Markup.IUri
 
 - `ImageDrawing`: Используется для отображения изображений в виде рисунков. Позволяет рисовать изображение (`ImageSource`) в определенном месте и размере. Он используется для включения изображений в векторные рисунки.
 
-Свойство **`Stretch`** определяет, как изображение будет масштабироваться внутри элемента `Image`. Возможные значения:
-
-- `None`: Изображение отображается в натуральном размере.
-
-- `Uniform`: Масштабируется, сохраняя пропорции.
-
-- `Fill`: Заполняет все пространство, не сохраняя пропорции.
-
-- `UniformToFill`: Заполняет пространство, сохраняя пропорции
+#### Свойство Stretch
+Пожалуй, вторым по значимости после `Source` является свойство **`Stretch`**. Оно определяет, как изображение будет масштабироваться внутри элемента `Image` и то, как ведет себя загруженное изображение, когда его размеры не совпадают с размерами элемента **`Image`**. Это распространенная ситуация, поскольку размеры окон могут меняться пользователем, что обычно влечет за собой изменение размеров элементов `Image` (за исключением случаев сугубо статичной компоновки).
 
 ```xml
 <Image Source="myPhoto.jpg" Stretch="Uniform" />
 ```
+
+Как видно из следующего примера, свойство **`Stretch`** может оказывать значительное влияние на то, как отображается картинка:
+
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.ImageControlStretchSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:WpfTutorialSamples.Basic_controls"
+    mc:Ignorable="d"
+    Title="ImageControlStretchSample" Height="450" Width="600">
+    <Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Label Grid.Column="0" HorizontalAlignment="Center" FontWeight="Bold">Uniform</Label>
+    <Label Grid.Column="1" HorizontalAlignment="Center" FontWeight="Bold">UniformToFill</Label>
+    <Label Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold">Fill</Label>
+    <Label Grid.Column="3" HorizontalAlignment="Center" FontWeight="Bold">None</Label>
+    <Image Source="/Images/white_bengal_tiger.jpg" Stretch="Uniform" Grid.Column="0" Grid.Row="1" Margin="5" />
+    <Image Source="/Images/white_bengal_tiger.jpg" Stretch="UniformToFill" Grid.Column="1" Grid.Row="1" Margin="5" />
+    <Image Source="/Images/white_bengal_tiger.jpg" Stretch="Fill" Grid.Column="2" Grid.Row="1" Margin="5" />
+    <Image Source="/Images/white_bengal_tiger.jpg" Stretch="None" Grid.Column="3" Grid.Row="1" Margin="5" />
+    </Grid>
+</Window>
+```
+
+Удивительно, но все четыре элемента `Image` отображают одно и то же изображение, но с разным значением свойства `Stretch`. Вот как работают различные режимы:
+
+- **`Uniform`**: Масштабируется, сохраняя пропорции. Это значение устанавливается по умолчанию. Изображение будет автоматически смасштабировано так, чтобы целиком уместиться в элементе `Image`. [Соотношение сторон](https://en.wikipedia.org/wiki/Aspect_ratio_(image)) изображения при этом не изменится.
+- **`UniformToFill`**: Заполняет пространство, сохраняя пропорции. Изображение будет смасштабировано так, чтобы полностью заполнять элемент `Image`. Соотношение сторон изображения также будет сохранено.
+- **`Fill`**: Заполняет все пространство, не сохраняя пропорции. The image will be scaled to fit the area of the `Image` control. Aspect ratio might NOT be preserved, because the height and width of the image are scaled independently.
+- **`None`**: Изображение отображается в натуральном размере. Если изоражение меньше элемента `Image`, то никаких изменений не происходит. Если же оно больше, то изображение будет просто обрезано так, чтобы уместиться в элементе `Image`, при этом будет видна лишь часть изображения.
 
 **`Clip`** позволяет вырезать определенную часть изображения с помощью объекта `RectangleGeometry`:
 ```xml
@@ -881,28 +945,7 @@ public class Image : System.Windows.FrameworkElement, System.Windows.Markup.IUri
 </Image>
 ```
 
-Также элемент позволяет проводить некоторые простейшие трансформации с изображениями. Например, с помощью объекта **`FormatConvertedBitmap`** и его свойства **`DestinationFormat`** можно получить новое изображение:
-```xml
-<Grid Background="Black">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="2.5*" />
-        <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Image Grid.Column="0" x:Name="mainImage">
-        <Image.Source>
-            <FormatConvertedBitmap Source="3.jpg"
-                DestinationFormat="Gray32Float" />
-        </Image.Source>
-    </Image>
-    <StackPanel Grid.Column="1">
-        <Image Source="1.jpg" />
-        <Image Source="2.jpg" />
-        <Image Source="4.jpg" />
-        <Image Source="3.jpg" />
-    </StackPanel>
-</Grid>
-```
-
+#### Программное создание и динамическая загрузка изображений
 Элемент `Image` можно создавать и настраивать программно, используя классы `BitmapImage` и `Uri` для задания источника изображения:
 ```cs
 Assembly assembly = Assembly.GetExecutingAssembly();
@@ -926,10 +969,77 @@ stkPnl.Children.Add(image);
 ...
 ```
 
+Установка `Source` для изображения напрямую в XAML сработает во множестве случаев, но иногда требуется загрузить изображение динамически, например, в зависимости от выбора пользователя. Это возможно сделать из отделенного кода (Code-behind). Вот пример того, как можно загрузить изображение, находящееся на компьютере пользователя, основываясь на его выборе файла в диалоге `OpenFileDialog`:
+```cs
+private void BtnLoadFromFile_Click(object sender, RoutedEventArgs e)
+{
+    OpenFileDialog openFileDialog = new OpenFileDialog();
+    if(openFileDialog.ShowDialog() == true)
+    {
+    Uri fileUri = new Uri(openFileDialog.FileName);
+    imgDynamic.Source = new BitmapImage(fileUri);
+    }
+}
+```
+
+Обратите внимание на создание экземпляра **`BitmapImage`**, в который передается объект **`Uri`**, определенный выбранным в диалоге пути файла. Тот же прием можно использовать для загрузки изображения, добавленного в приложение как ресурс:
+```cs
+private void BtnLoadFromResource_Click(object sender, RoutedEventArgs e)
+{
+    Uri resourceUri = new Uri("/Images/white_bengal_tiger.jpg", UriKind.Relative);
+    imgDynamic.Source = new BitmapImage(resourceUri);
+}
+```
+
+В этом случае используется тот же относительный путь, который фигурировал в одном из предыдущих примерах. Главное здесь — при создании экземпляра **`Uri`** не забыть передать значение перечисления **`UriKind.Relative`**, чтобы определить передаваемый путь не как абсолютный. Ниже приведен исходный код XAML, относящийся к отделенному коду рассматриваемого примера:
+```xml
+<Window x:Class="WpfTutorialSamples.Basic_controls.ImageControlCodeBehindSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:WpfTutorialSamples.Basic_controls"
+    mc:Ignorable="d"
+    Title="ImageControlCodeBehindSample" Height="300" Width="400">
+    <StackPanel>
+    <WrapPanel Margin="10" HorizontalAlignment="Center">
+        <Button Name="btnLoadFromFile" Margin="0,0,20,0" Click="BtnLoadFromFile_Click">Load from File...</Button>
+        <Button Name="btnLoadFromResource" Click="BtnLoadFromResource_Click">Load from Resource</Button>
+    </WrapPanel>
+    <Image Name="imgDynamic" Margin="10"  />
+    </StackPanel>
+</Window>
+```
+
+#### Прочие особенности
+Также элемент позволяет проводить некоторые простейшие трансформации с изображениями. Например, с помощью объекта **`FormatConvertedBitmap`** и его свойства **`DestinationFormat`** можно получить новое изображение:
+```xml
+<Grid Background="Black">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="2.5*" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Image Grid.Column="0" x:Name="mainImage">
+        <Image.Source>
+            <FormatConvertedBitmap Source="3.jpg"
+                DestinationFormat="Gray32Float" />
+        </Image.Source>
+    </Image>
+    <StackPanel Grid.Column="1">
+        <Image Source="1.jpg" />
+        <Image Source="2.jpg" />
+        <Image Source="4.jpg" />
+        <Image Source="3.jpg" />
+    </StackPanel>
+</Grid>
+```
+
 Ограничения:
 - Элемент `Image` не поддерживает анимацию многокадровых изображений и не позволяет редактировать изображения напрямую. Для редактирования изображений можно использовать другие классы, такие как `WriteableBitmap` или `FormatConvertedBitmap`.
 
-Элемент `Image` может быть использован внутри `InkCanvas`, что позволяет рисовать поверх изображения
+Таким образом, элемент `Image` позволяет легко показывать изображения в приложении, будь то из удаленного источника, встроенного ресурса или локального расположения на компьютере.
+
+Кроме того, элемент `Image` может быть использован внутри `InkCanvas`, что позволяет рисовать поверх изображения.
 
 ### InkCanvas / Полотно
 `InkCanvas` в WPF — это элемент управления, который позволяет пользователям создавать и редактировать рукописные аннотации с помощью стилуса или мыши. Он обеспечивает поддержку перьевого ввода и может быть использован для создания приложений, требующих рукописного ввода, таких как цифровые доски или графические редакторы.
